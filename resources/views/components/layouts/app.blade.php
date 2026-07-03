@@ -12,10 +12,15 @@
     <div class="min-h-screen">
         <header class="border-b border-zinc-200 bg-white">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-                <a href="{{ route('profil-ormada.index') }}" class="text-lg font-semibold">SI Ormada</a>
+                <a href="{{ route('dashboard') }}" class="text-lg font-semibold">SI Ormada</a>
                 <nav class="flex items-center gap-2 text-sm">
+                    <a href="{{ route('dashboard') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Dashboard</a>
                     <a href="{{ route('profil-ormada.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Profil Ormada</a>
                     <a href="{{ route('anggota-ormada.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Anggota</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="rounded-md px-3 py-2 text-left hover:bg-zinc-100">Keluar</button>
+                    </form>
                 </nav>
             </div>
         </header>
