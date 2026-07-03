@@ -1,0 +1,51 @@
+<x-layouts.app title="Profil Ormada">
+    <x-page-header title="Profil Ormada" description="Daftar ormada yang terdaftar. Pemda dan admin dapat melihat ringkasan seluruh ormada.">
+        @if (auth()->user()->isAdmin())
+            <x-button-link href="{{ route('profil-ormada.create') }}">Tambah Profil</x-button-link>
+        @endif
+    </x-page-header>
+
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        @forelse ($profilOrmadas as $profil)
+            <article class="rounded-lg border border-zinc-200 bg-white p-5">
+                <div class="flex items-start gap-4">
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-sm font-semibold text-zinc-600">
+                        @if ($profil->logo)
+                            <img src="{{ asset('storage/'.$profil->logo) }}" alt="Logo {{ $profil->nama_universitas }}" class="h-14 w-14 rounded-md object-cover">
+                        @else
+                            {{ strtoupper(substr($profil->nama_universitas, 0, 2)) }}
+                        @endif
+                    </div>
+                    <div class="min-w-0">
+                        <h2 class="font-semibold text-zinc-950">{{ $profil->nama_universitas }}</h2>
+                        <p class="mt-1 text-sm text-zinc-600">{{ $profil->alamat_universitas }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded-md bg-zinc-50 p-3">
+                        <p class="text-zinc-500">Anggota</p>
+                        <p class="mt-1 text-lg font-semibold">{{ $profil->anggota_count }}</p>
+                    </div>
+                    <div class="rounded-md bg-zinc-50 p-3">
+                        <p class="text-zinc-500">Pengurus</p>
+                        <p class="mt-1 text-lg font-semibold">{{ $profil->pengurus_count }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center gap-2">
+                    <x-button-link href="{{ route('profil-ormada.show', $profil) }}" variant="secondary">Detail</x-button-link>
+                    @if (auth()->user()->isAdmin())
+                        <x-button-link href="{{ route('profil-ormada.edit', $profil) }}" variant="secondary">Edit</x-button-link>
+                    @endif
+                </div>
+            </article>
+        @empty
+            <div class="rounded-lg border border-dashed border-zinc-300 bg-white p-8 text-sm text-zinc-600 md:col-span-2 xl:col-span-3">
+                Belum ada profil ormada.
+            </div>
+        @endforelse
+    </div>
+
+    <div class="mt-6">{{ $profilOrmadas->links() }}</div>
+</x-layouts.app>
