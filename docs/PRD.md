@@ -34,7 +34,11 @@ Pengurus ormada mengelola profil ormada, data anggota, agenda ormada, postingan,
 
 ### Pemda
 
-Pemda melihat data ormada, menindaklanjuti aspirasi, memproses proposal, membuat agenda/pengumuman, membuka volunteer, dan membuat program kolaborasi.
+Pemda melihat data ormada sampai detail anggota, menindaklanjuti aspirasi, memproses proposal, membuat agenda/pengumuman, membuka volunteer, dan membuat program kolaborasi.
+
+### Masyarakat Umum
+
+Masyarakat umum dapat melihat halaman utama publik berisi ringkasan informasi ormada, agenda, berita, pengumuman, dan prestasi tanpa mengakses detail data personal anggota.
 
 ## Ruang Lingkup Fitur
 
@@ -58,6 +62,7 @@ Kebutuhan utama:
 - Membuat dan memperbarui profil ormada.
 - Mengisi nama universitas, alamat universitas, jumlah mahasiswa, logo, dan deskripsi.
 - Pemda dapat melihat daftar profil ormada.
+- Masyarakat umum dapat melihat ringkasan profil ormada yang bersifat publik.
 
 ### Manajemen Anggota Ormada
 
@@ -69,6 +74,8 @@ Kebutuhan utama:
 - Mencatat NIM, program studi, nomor HP, status aktif, jabatan, dan masa jabatan.
 - Menandai anggota sebagai pengurus dengan nilai `YA` atau `TIDAK`.
 - Mencatat status `fungsionaris`, `mahasiswa_biasa`, `demisioner`, atau `alumni`.
+- Pemda dapat melihat daftar dan detail anggota ormada untuk kebutuhan pendataan.
+- Masyarakat umum hanya dapat melihat statistik agregat anggota, bukan detail anggota.
 
 ### Proposal Bantuan
 
@@ -133,6 +140,37 @@ Kebutuhan utama:
 - Kategori agenda terdiri dari `ormada` dan `pemda`.
 - Agenda dapat ditampilkan dalam daftar atau kalender sederhana.
 
+### Halaman Utama Publik
+
+Masyarakat umum dapat membuka halaman publik tanpa login.
+
+Kebutuhan utama:
+
+- Menampilkan jumlah ormada terdaftar.
+- Menampilkan total anggota terdata secara agregat.
+- Menampilkan ringkasan persebaran ormada per universitas.
+- Menampilkan daftar beberapa profil ormada dalam bentuk ringkas.
+- Menampilkan berita, pengumuman, dan prestasi dari setiap ormada.
+- Menampilkan aspirasi yang bersifat publik atau sudah layak ditampilkan.
+- Menampilkan kalender agenda berisi agenda ormada dan Pemda.
+- Tidak menampilkan NIM, nomor HP, detail status personal, riwayat jabatan personal, atau detail anggota per orang.
+
+Konten profil ormada yang tampil untuk masyarakat umum:
+
+- Nama universitas.
+- Logo ormada.
+- Alamat universitas secara umum.
+- Deskripsi singkat.
+- Total mahasiswa universitas atau total anggota secara agregat.
+
+Konten profil ormada yang tidak tampil untuk masyarakat umum:
+
+- Daftar anggota.
+- Detail anggota.
+- Nomor HP anggota.
+- NIM anggota.
+- Riwayat jabatan anggota.
+
 ## Kebutuhan Non-Fungsional
 
 - Aplikasi berbasis web dan responsif.
@@ -143,6 +181,7 @@ Kebutuhan utama:
 - Akses data dibatasi sesuai peran.
 - Validasi input dilakukan di server.
 - Operasi hapus harus mempertimbangkan relasi data karena foreign key memakai `ON DELETE CASCADE`.
+- Data personal anggota hanya dapat diakses oleh pengurus pemilik data, Pemda, dan admin sistem.
 
 ## Alur Utama
 
@@ -177,7 +216,8 @@ Kebutuhan utama:
 - Pengurus ormada dapat mengelola profil dan anggota tanpa mengakses data ormada lain.
 - Proposal dapat diajukan, diproses, diberi catatan, dan dipantau statusnya.
 - Aspirasi dapat dikirim oleh ormada dan ditanggapi oleh Pemda.
-- Pemda dapat melihat ringkasan data ormada, anggota, proposal, aspirasi, dan agenda.
+- Pemda dapat melihat ringkasan dan detail data ormada serta anggota.
+- Masyarakat umum dapat melihat halaman utama publik tanpa detail personal anggota.
 - Sistem memiliki validasi dan pembatasan akses untuk setiap peran.
 
 ## Batasan dan Asumsi
@@ -197,4 +237,3 @@ Kebutuhan utama:
 5. Aspirasi dan tanggapan Pemda.
 6. Postingan dan agenda.
 7. Volunteer dan kolaborasi.
-

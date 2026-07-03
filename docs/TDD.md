@@ -43,10 +43,16 @@ Aplikasi memakai pola MVC Laravel:
 
 ### `pemda`
 
-- Melihat data seluruh ormada.
+- Melihat data seluruh ormada sampai detail anggota.
 - Memproses proposal.
 - Menanggapi aspirasi.
 - Membuat volunteer, kolaborasi, agenda kategori pemda, dan postingan.
+
+### `public`
+
+- Mengakses dashboard umum tanpa login.
+- Melihat ringkasan ormada, total anggota agregat, profil ormada ringkas, berita/pengumuman/prestasi dari ormada, aspirasi publik, dan kalender agenda.
+- Tidak dapat melihat detail personal anggota seperti NIM, nomor HP, status personal, atau riwayat jabatan individu.
 
 ## Desain Database
 
@@ -257,10 +263,15 @@ Rekomendasi controller:
 - `AspirasiController`
 - `PostinganController`
 - `AgendaController`
+- `PublicDashboardController`
 
 ## Rancangan Route Web
 
 ```php
+Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
+Route::get('/publik/agenda', [PublicDashboardController::class, 'agenda'])->name('public.agenda');
+Route::get('/publik/postingan/{postingan}', [PublicDashboardController::class, 'postingan'])->name('public.postingan.show');
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -298,10 +309,11 @@ Tambahkan middleware peran, misalnya `role:admin,pemda`.
 Aturan akses utama:
 
 - Pengurus ormada hanya boleh mengubah profil dan anggota milik admin yang sedang login.
-- Pemda boleh melihat semua profil dan anggota, tetapi tidak mengubah data internal ormada kecuali fitur memang diizinkan.
+- Pemda boleh melihat semua profil dan detail anggota, tetapi tidak mengubah data internal ormada kecuali fitur memang diizinkan.
 - Pemda boleh mengubah status proposal dan tanggapan aspirasi.
 - Pengurus ormada boleh membuat proposal dan aspirasi.
 - Admin sistem boleh mengakses semua modul.
+- Masyarakat umum hanya boleh mengakses halaman utama publik dan data agregat tanpa detail personal anggota.
 
 ## Validasi Input
 
@@ -414,6 +426,33 @@ Data yang ditampilkan:
 - Agenda Pemda terdekat.
 - Program kolaborasi aktif.
 
+### Halaman Utama Publik
+
+Data yang ditampilkan:
+
+- Jumlah ormada terdaftar.
+- Total anggota terdata secara agregat.
+- Jumlah pengurus aktif secara agregat.
+- Daftar profil ormada ringkas.
+- Berita, pengumuman, dan prestasi terbaru dari setiap ormada.
+- Aspirasi publik atau aspirasi yang sudah boleh ditampilkan.
+- Kalender agenda ormada dan Pemda.
+
+Query data yang disarankan:
+
+- `ProfilOrmada::withCount('anggota')->latest()->limit(...)` untuk profil ormada ringkas.
+- `Postingan::with('admin.profilOrmada')->latest()->paginate(...)` untuk berita/pengumuman/prestasi.
+- `Aspirasi::with('profilOrmada')->whereNotNull('tanggapan_pemda')->latest()->limit(...)` untuk aspirasi publik awal.
+- `Agenda::where('waktu_selesai', '>=', now())->orderBy('waktu_mulai')->get()` untuk kalender agenda.
+
+Data yang tidak boleh ditampilkan:
+
+- NIM.
+- Nomor HP.
+- Detail anggota per orang.
+- Riwayat jabatan personal.
+- Tanggal personal seperti tanggal masuk kuliah, lulus, demisioner, atau masa jabatan individu.
+
 ## Data Migration
 
 SQL awal dapat dikonversi menjadi migration Laravel:
@@ -457,6 +496,8 @@ Minimal test:
 - User tidak bisa login dengan kredensial salah.
 - Pengurus ormada bisa membuat anggota pada profilnya.
 - Pengurus ormada tidak bisa mengubah anggota milik ormada lain.
+- Pemda bisa melihat detail anggota ormada.
+- Masyarakat umum tidak bisa mengakses detail anggota ormada.
 - Pengurus ormada bisa mengajukan proposal.
 - Pemda bisa mengubah status proposal.
 - Pengurus ormada tidak bisa mengubah status proposal.
@@ -495,4 +536,3 @@ Minimal test:
 9. Implementasi postingan dan agenda.
 10. Implementasi volunteer dan kolaborasi.
 11. Tambahkan feature test dan unit test.
-
