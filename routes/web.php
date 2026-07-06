@@ -5,6 +5,7 @@ use App\Http\Controllers\AnggotaOrmadaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilOrmadaController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\PublicDashboardController;
 
 Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
@@ -24,4 +25,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('anggota-ormada', AnggotaOrmadaController::class)
         ->parameters(['anggota-ormada' => 'anggotaOrmada']);
+
+    Route::resource('proposal', ProposalController::class);
+    Route::patch('/proposal/{proposal}/status', [ProposalController::class, 'updateStatus'])
+        ->name('proposal.update-status');
 });

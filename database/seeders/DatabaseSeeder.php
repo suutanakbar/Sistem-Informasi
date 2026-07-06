@@ -19,8 +19,24 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@ormada.test',
         ], [
             'nama' => 'Admin Sistem',
-            'kata_sandi' => 'password',
+            'kata_sandi' => bcrypt('password'),
             'peran' => 'admin',
+        ]);
+
+        Admin::updateOrCreate([
+            'email' => 'pemda@temanggung.go.id',
+        ], [
+            'nama' => 'Pemda Temanggung',
+            'kata_sandi' => bcrypt('password'),
+            'peran' => 'pemda',
+        ]);
+
+        Admin::updateOrCreate([
+            'email' => 'pengurus@ormada.test',
+        ], [
+            'nama' => 'Pengurus Ormada',
+            'kata_sandi' => bcrypt('password'),
+            'peran' => 'pengurus_ormada',
         ]);
     }
 }
