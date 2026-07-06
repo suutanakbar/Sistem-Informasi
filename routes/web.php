@@ -5,10 +5,9 @@ use App\Http\Controllers\AnggotaOrmadaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilOrmadaController;
+use App\Http\Controllers\PublicDashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
