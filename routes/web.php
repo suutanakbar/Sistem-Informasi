@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnggotaOrmadaController;
+use App\Http\Controllers\AspirasiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilOrmadaController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\PublicDashboardController;
 
 Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
+Route::get('/publik/aspirasi', [PublicDashboardController::class, 'aspirasi'])->name('public.aspirasi');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -29,4 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('proposal', ProposalController::class);
     Route::patch('/proposal/{proposal}/status', [ProposalController::class, 'updateStatus'])
         ->name('proposal.update-status');
+
+    Route::resource('aspirasi', AspirasiController::class);
+    Route::patch('/aspirasi/{aspirasi}/tanggapan', [AspirasiController::class, 'updateTanggapan'])
+        ->name('aspirasi.update-tanggapan');
 });

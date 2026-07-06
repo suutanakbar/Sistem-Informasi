@@ -1,0 +1,207 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Aspirasi;
+use App\Models\Admin;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+
+class AspirasiController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $user = $request->user();
+        $query = Aspirasi::query()->with(['profilOrmada', 'profilOrmada.admin']);
+
+        // Filter berdasarkan role
+        if ($user->isPengurusOrmada()) {
+            // Pengurus hanya melihat aspirasi dari profilnya
+            $profil = $user->profilOrmada()->first();
+            if (!$profil) {
+                abort(403, 'Anda belum memiliki profil ormada');
+            }
+            $query->where('profil_ormada_id', $profil->id);
+        } elseif ($user->isPemda()) {
+            // Pemda melihat semua aspirasi
+            // Bisa filter by status
+            $status = $request->query('status');
+            if ($status) {
+                $query->where('status', $status);
+            }
+        }
+        // Admin melihat semua
+
+        $aspirasis = $query->latest('dibuat_pada')->paginate(12);
+
+        $statusOptions = ['belum_ditanggapi', 'sedang_diproses', 'selesai', 'ditolak'];
+
+        return view('aspirasi.index', compact('aspirasis', 'statusOptions'));
+    }
+
+    public function create(Request $request): View
+    {
+        $user = $request->user();
+        abort_unless($user->isPengurusOrmada() || $user->isAdmin(), 403);
+
+        // Jika pengurus, ambil profil ormada-nya
+        if ($user->isPengurusOrmada()) {
+            $profil = $user->profilOrmada()->first();
+            if (!$profil) {
+                abort(403, 'Anda belum memiliki profil ormada');
+            }
+        }
+
+        return view('aspirasi.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        abort_unless($user->isPengurusOrmada() || $user->isAdmin(), 403);
+
+        $validated = $this->validateAspirasi($request);
+        
+        // Set profil ormada
+        if ($user->isPengurusOrmada()) {
+            $profil = $user->profilOrmada()->first();
+            $validated['profil_ormada_id'] = $profil->id;
+        } else {
+            // Admin bisa pilih profil ormada (opsional)
+            $validated['profil_ormada_id'] = $request->input('profil_ormada_id');
+        }
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            $validated['file'] = $request->file('file')->store('aspirasi', 'public');
+        }
+
+        $aspirasi = Aspirasi::create($validated);
+
+        return redirect()
+            ->route('aspirasi.show', $aspirasi)
+            ->with('status', 'Aspirasi berhasil diajukan.');
+    }
+
+    public function show(Request $request, Aspirasi $aspirasi): View
+    {
+        $user = $request->user();
+        
+        // Authorization
+        $this->authorizeAspirasiAccess($user, $aspirasi);
+
+        $aspirasi->load('profilOrmada', 'profilOrmada.admin');
+
+        return view('aspirasi.show', compact('aspirasi'));
+    }
+
+    public function edit(Request $request, Aspirasi $aspirasi): View
+    {
+        $user = $request->user();
+        
+        // Hanya pemilik atau admin yang bisa edit
+        abort_unless(
+            $user->isAdmin() || 
+            ($user->isPengurusOrmada() && $aspirasi->profil_ormada_id === $user->profilOrmada()->first()?->id),
+            403
+        );
+
+        return view('aspirasi.edit', compact('aspirasi'));
+    }
+
+    public function update(Request $request, Aspirasi $aspirasi): RedirectResponse
+    {
+        $user = $request->user();
+        
+        // Hanya pemilik atau admin yang bisa edit
+        abort_unless(
+            $user->isAdmin() || 
+            ($user->isPengurusOrmada() && $aspirasi->profil_ormada_id === $user->profilOrmada()->first()?->id),
+            403
+        );
+
+        $validated = $this->validateAspirasi($request, $aspirasi);
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            if ($aspirasi->file) {
+                Storage::disk('public')->delete($aspirasi->file);
+            }
+            $validated['file'] = $request->file('file')->store('aspirasi', 'public');
+        }
+
+        $aspirasi->update($validated);
+
+        return redirect()
+            ->route('aspirasi.show', $aspirasi)
+            ->with('status', 'Aspirasi berhasil diperbarui.');
+    }
+
+    public function destroy(Request $request, Aspirasi $aspirasi): RedirectResponse
+    {
+        $user = $request->user();
+        
+        // Hanya pemilik atau admin yang bisa hapus
+        abort_unless(
+            $user->isAdmin() || 
+            ($user->isPengurusOrmada() && $aspirasi->profil_ormada_id === $user->profilOrmada()->first()?->id),
+            403
+        );
+
+        // Delete file if exists
+        if ($aspirasi->file) {
+            Storage::disk('public')->delete($aspirasi->file);
+        }
+
+        $aspirasi->delete();
+
+        return redirect()
+            ->route('aspirasi.index')
+            ->with('status', 'Aspirasi berhasil dihapus.');
+    }
+
+    public function updateTanggapan(Request $request, Aspirasi $aspirasi): RedirectResponse
+    {
+        $user = $request->user();
+        
+        // Hanya Pemda atau Admin yang bisa menanggapi
+        abort_unless($user->isPemda() || $user->isAdmin(), 403);
+
+        $validated = $request->validate([
+            'tanggapan_pemda' => ['required', 'string'],
+            'status' => ['required', 'in:belum_ditanggapi,sedang_diproses,selesai,ditolak'],
+        ]);
+
+        $validated['tanggal_tanggapan'] = now();
+
+        $aspirasi->update($validated);
+
+        return back()->with('status', 'Tanggapan berhasil disimpan.');
+    }
+
+    private function validateAspirasi(Request $request, ?Aspirasi $aspirasi = null): array
+    {
+        $rules = [
+            'topik_aspirasi' => ['required', 'string', 'max:255'],
+            'detail_aspirasi' => ['required', 'string'],
+            'file' => [$aspirasi ? 'nullable' : 'nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
+        ];
+
+        return $request->validate($rules);
+    }
+
+    private function authorizeAspirasiAccess(Admin $user, Aspirasi $aspirasi): void
+    {
+        $profilId = $aspirasi->profil_ormada_id;
+        $userProfilId = $user->profilOrmada()->first()?->id;
+
+        abort_unless(
+            $user->isAdmin() ||
+            $user->isPemda() ||
+            ($user->isPengurusOrmada() && $profilId === $userProfilId),
+            403
+        );
+    }
+}

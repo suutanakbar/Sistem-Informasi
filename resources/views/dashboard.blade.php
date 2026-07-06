@@ -26,6 +26,7 @@
             <x-button-link href="{{ route('profil-ormada.index') }}" variant="secondary">Profil Ormada</x-button-link>
             <x-button-link href="{{ route('anggota-ormada.index') }}" variant="secondary">Anggota Ormada</x-button-link>
             <x-button-link href="{{ route('proposal.index') }}" variant="secondary">Proposal</x-button-link>
+            <x-button-link href="{{ route('aspirasi.index') }}" variant="secondary">Aspirasi</x-button-link>
         </div>
     </section>
 </x-layouts.app>

@@ -18,6 +18,7 @@
                     <a href="{{ route('profil-ormada.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Profil Ormada</a>
                     <a href="{{ route('anggota-ormada.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Anggota</a>
                     <a href="{{ route('proposal.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Proposal</a>
+                    <a href="{{ route('aspirasi.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Aspirasi</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="rounded-md px-3 py-2 text-left hover:bg-zinc-100">Keluar</button>
