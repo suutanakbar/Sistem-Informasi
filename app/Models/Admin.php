@@ -41,6 +41,11 @@ class Admin extends Authenticatable
         return $this->kata_sandi;
     }
 
+    public function getAuthPasswordName(): string
+    {
+        return 'kata_sandi';
+    }
+
     public function profilOrmada(): HasOne
     {
         return $this->hasOne(ProfilOrmada::class);

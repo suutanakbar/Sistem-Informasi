@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('profil_ormada')) {
+            return;
+        }
+
         Schema::create('profil_ormada', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_id')->constrained('admin')->cascadeOnDelete();
