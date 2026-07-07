@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('agenda', function (Blueprint $table) {
+            if (!Schema::hasColumn('agenda', 'is_published')) {
+                $table->boolean('is_published')->default(false)->after('kategori');
+            }
+            if (!Schema::hasColumn('agenda', 'tanggal_publish')) {
+                $table->timestamp('tanggal_publish')->nullable()->after('is_published');
+            }
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('agenda', function (Blueprint $table) {
+            $table->dropColumn(['is_published', 'tanggal_publish']);
+        });
+    }
+};

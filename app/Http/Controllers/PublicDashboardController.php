@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agenda;
 use App\Models\AnggotaOrmada;
 use App\Models\Aspirasi;
+use App\Models\Postingan;
 use App\Models\ProfilOrmada;
 use Illuminate\View\View;
 
@@ -26,6 +28,17 @@ class PublicDashboardController extends Controller
                 ->latest('dibuat_pada')
                 ->limit(6)
                 ->get(),
+            'postingans' => Postingan::query()
+                ->with('admin')
+                ->published()
+                ->limit(6)
+                ->get(),
+            'agendas' => Agenda::query()
+                ->with('admin')
+                ->published()
+                ->upcoming()
+                ->limit(6)
+                ->get(),
         ]);
     }
 
@@ -37,5 +50,28 @@ class PublicDashboardController extends Controller
             ->paginate(12);
 
         return view('public.aspirasi', compact('aspirasis'));
+    }
+
+    public function postingan(): View
+    {
+        $postingans = Postingan::query()
+            ->with('admin')
+            ->published()
+            ->limit(12)
+            ->get();
+
+        return view('public.postingan', compact('postingans'));
+    }
+
+    public function agenda(): View
+    {
+        $agendas = Agenda::query()
+            ->with('admin')
+            ->published()
+            ->upcoming()
+            ->limit(12)
+            ->get();
+
+        return view('public.agenda', compact('agendas'));
     }
 }

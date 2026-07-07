@@ -160,6 +160,89 @@
                 </div>
             </section>
             @endif
+
+            @if($postingans->isNotEmpty())
+            <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold">Berita & Pengumuman</h2>
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">Informasi terbaru dari ormada dan Pemda Temanggung.</p>
+                    </div>
+                    <a href="{{ route('public.postingan') }}" class="text-sm font-medium text-blue-600 hover:text-blue-800">
+                        Lihat Semua →
+                    </a>
+                </div>
+
+                <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    @foreach($postingans as $postingan)
+                    <article class="rounded-lg border border-zinc-200 bg-white overflow-hidden hover:shadow-md transition-shadow">
+                        @if($postingan->foto)
+                        <img src="{{ asset('storage/'.$postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-48 object-cover">
+                        @endif
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                    {{ ucfirst($postingan->jenis_konten) }}
+                                </span>
+                            </div>
+                            <h3 class="font-semibold text-sm leading-6">{{ $postingan->judul }}</h3>
+                            <p class="mt-2 text-sm text-zinc-600 line-clamp-2">
+                                {{ Str::limit($postingan->isi_konten, 100) }}
+                            </p>
+                            <p class="mt-3 text-xs text-zinc-400">
+                                {{ $postingan->tanggal_publish->diffForHumans() }}
+                            </p>
+                        </div>
+                    </article>
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+            @if($agendas->isNotEmpty())
+            <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold">Agenda Kegiatan</h2>
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">Jadwal kegiatan yang akan datang.</p>
+                    </div>
+                    <a href="{{ route('public.agenda') }}" class="text-sm font-medium text-blue-600 hover:text-blue-800">
+                        Lihat Semua →
+                    </a>
+                </div>
+
+                <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    @foreach($agendas as $agenda)
+                    <article class="rounded-lg border border-zinc-200 bg-white p-5 hover:shadow-md transition-shadow">
+                        @if($agenda->gambar_poster)
+                        <img src="{{ asset('storage/'.$agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-40 object-cover rounded-lg mb-3">
+                        @endif
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                                {{ ucfirst(str_replace('_', ' ', $agenda->kategori)) }}
+                            </span>
+                            @if($agenda->kuota_volunteer)
+                            <span class="px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full">
+                                Volunteer
+                            </span>
+                            @endif
+                        </div>
+                        <h3 class="font-semibold text-sm leading-6">{{ $agenda->nama_agenda }}</h3>
+                        <p class="mt-2 text-sm text-zinc-600 line-clamp-2">
+                            {{ Str::limit($agenda->deskripsi_agenda, 100) }}
+                        </p>
+                        <div class="mt-3 flex items-center text-xs text-zinc-500">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            {{ $agenda->tempat }}
+                        </div>
+                    </article>
+                    @endforeach
+                </div>
+            </section>
+            @endif
         </main>
 
         <footer class="border-t border-zinc-200 bg-white">
