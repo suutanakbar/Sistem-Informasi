@@ -74,4 +74,17 @@ class PublicDashboardController extends Controller
 
         return view('public.agenda', compact('agendas'));
     }
+
+    public function showAgenda(Agenda $agenda): View
+    {
+        // Only show published agendas to public
+        abort_if(!$agenda->is_published, 404);
+
+        $agenda->load('admin', 'volunteers');
+        
+        // Count accepted volunteers
+        $volunteerDiterima = $agenda->volunteers()->where('status', 'diterima')->count();
+
+        return view('public.agenda-show', compact('agenda', 'volunteerDiterima'));
+    }
 }

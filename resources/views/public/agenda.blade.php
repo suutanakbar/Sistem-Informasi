@@ -23,10 +23,12 @@
                         </span>
                         @endif
                     </div>
+                <a href="{{ route('public.agenda.show', $agenda) }}" class="block hover:text-blue-600">
                     <h3 class="font-semibold text-gray-900 mb-2">{{ $agenda->nama_agenda }}</h3>
-                    <p class="text-sm text-gray-600 line-clamp-3 mb-3">
-                        {{ Str::limit($agenda->deskripsi_agenda, 150) }}
-                    </p>
+                </a>
+                <p class="text-sm text-gray-600 line-clamp-3 mb-3">
+                    {{ Str::limit($agenda->deskripsi_agenda, 150) }}
+                </p>
                     <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -39,6 +41,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                         <span>{{ $agenda->tempat }}</span>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{{ route('public.agenda.show', $agenda) }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                            Lihat Detail →
+                        </a>
                     </div>
                 </div>
             </article>

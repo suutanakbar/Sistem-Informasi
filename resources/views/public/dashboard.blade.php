@@ -227,7 +227,9 @@
                             </span>
                             @endif
                         </div>
-                        <h3 class="font-semibold text-sm leading-6">{{ $agenda->nama_agenda }}</h3>
+                        <a href="{{ route('public.agenda.show', $agenda) }}" class="block hover:text-blue-600">
+                            <h3 class="font-semibold text-sm leading-6">{{ $agenda->nama_agenda }}</h3>
+                        </a>
                         <p class="mt-2 text-sm text-zinc-600 line-clamp-2">
                             {{ Str::limit($agenda->deskripsi_agenda, 100) }}
                         </p>
@@ -237,6 +239,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                             {{ $agenda->tempat }}
+                        </div>
+                        <div class="mt-2">
+                            <a href="{{ route('public.agenda.show', $agenda) }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                Lihat Detail →
+                            </a>
                         </div>
                     </article>
                     @endforeach
