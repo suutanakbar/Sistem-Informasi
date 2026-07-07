@@ -3,9 +3,9 @@
         @if (auth()->user()->isAdmin() || auth()->id() === $profilOrmada->admin_id)
             <x-button-link href="{{ route('profil-ormada.edit', $profilOrmada) }}">Edit Profil</x-button-link>
         @endif
-        <x-button-link href="{{ route('anggota-ormada.index', ['profil_ormada_id' => $profilOrmada->id]) }}" variant="secondary">Lihat Anggota</x-button-link>
     </x-page-header>
 
+    <!-- Profil Section -->
     <div class="grid gap-6 lg:grid-cols-[1fr_320px]">
         <section class="rounded-lg border border-zinc-200 bg-white p-6">
             <div class="flex flex-col gap-5 sm:flex-row">
@@ -43,35 +43,94 @@
         </aside>
     </div>
 
+    <!-- Anggota Section -->
     <section class="mt-6 rounded-lg border border-zinc-200 bg-white">
-        <div class="border-b border-zinc-200 px-5 py-4">
-            <h2 class="font-semibold">Anggota terbaru</h2>
+        <div class="border-b border-zinc-200 px-5 py-4 flex justify-between items-center">
+            <h2 class="font-semibold text-lg">Daftar Anggota</h2>
+            @if(auth()->user()->isAdmin() || auth()->user()->isPengurusOrmada())
+            <a href="{{ route('anggota-ormada.create') }}" class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700">
+                + Tambah Anggota
+            </a>
+            @endif
         </div>
+
+        <!-- Search and Filter -->
+        <div class="px-5 py-3 bg-gray-50 border-b border-zinc-200">
+            <form method="GET" action="{{ route('profil-ormada.show', $profilOrmada) }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
+                    <label for="search" class="block text-sm font-medium text-gray-700">Cari</label>
+                    <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Nama, NIM, atau Program Studi..."
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                </div>
+                <div>
+                    <label for="status_aktif" class="block text-sm font-medium text-gray-700">Status</label>
+                    <select name="status_aktif" id="status_aktif" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="">Semua Status</option>
+                        <option value="fungsionaris" {{ request('status_aktif') === 'fungsionaris' ? 'selected' : '' }}>Fungsionaris</option>
+                        <option value="mahasiswa_biasa" {{ request('status_aktif') === 'mahasiswa_biasa' ? 'selected' : '' }}>Mahasiswa Biasa</option>
+                        <option value="demisioner" {{ request('status_aktif') === 'demisioner' ? 'selected' : '' }}>Demisioner</option>
+                        <option value="alumni" {{ request('status_aktif') === 'alumni' ? 'selected' : '' }}>Alumni</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Anggota Table -->
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-zinc-200 text-sm">
                 <thead class="bg-zinc-50 text-left text-zinc-600">
                     <tr>
                         <th class="px-5 py-3">Nama</th>
-                        <th class="px-5 py-3">NIM</th>
                         <th class="px-5 py-3">Program Studi</th>
-                        <th class="px-5 py-3">Status</th>
+                        <th class="px-5 py-3 text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100">
-                    @forelse ($anggotaRingkas as $anggota)
+                    @forelse($anggotaList as $anggota)
                         <tr>
-                            <td class="px-5 py-3"><a class="font-medium hover:underline" href="{{ route('anggota-ormada.show', $anggota) }}">{{ $anggota->nama_lengkap }}</a></td>
-                            <td class="px-5 py-3">{{ $anggota->nim }}</td>
+                            <td class="px-5 py-3 font-medium">{{ $anggota->nama_lengkap }}</td>
                             <td class="px-5 py-3">{{ $anggota->program_studi }}</td>
-                            <td class="px-5 py-3">{{ str_replace('_', ' ', $anggota->status_aktif) }}</td>
+                            <td class="px-5 py-3 text-right text-sm font-medium">
+                                @auth
+                                    <a href="{{ route('anggota-ormada.show', $anggota) }}" class="text-indigo-600 hover:text-indigo-900">
+                                        Detail
+                                    </a>
+                                    @if(auth()->user()->isAdmin() || auth()->user()->isPengurusOrmada())
+                                    <span class="mx-2">|</span>
+                                    <a href="{{ route('anggota-ormada.edit', $anggota) }}" class="text-green-600 hover:text-green-900">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('anggota-ormada.destroy', $anggota) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900 ml-2">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                    @endif
+                                @endauth
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-5 py-6 text-zinc-500">Belum ada anggota.</td>
+                            <td colspan="3" class="px-5 py-6 text-center text-zinc-500">
+                                Belum ada anggota.
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
+        @if($anggotaList->hasPages())
+        <div class="mt-4 px-4 py-3">
+            {{ $anggotaList->links() }}
+        </div>
+        @endif
     </section>
 </x-layouts.app>

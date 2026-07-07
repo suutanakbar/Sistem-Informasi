@@ -79,6 +79,9 @@ class AnggotaOrmadaController extends Controller
 
     public function show(Request $request, AnggotaOrmada $anggotaOrmada): View
     {
+        // Must be authenticated (admin, pengurus, or pemda)
+        abort_unless($request->user(), 403);
+
         $this->authorizeAnggotaAccess($request, $anggotaOrmada);
 
         $anggotaOrmada->load('profilOrmada.admin');
@@ -88,23 +91,34 @@ class AnggotaOrmadaController extends Controller
 
     public function edit(Request $request, AnggotaOrmada $anggotaOrmada): View
     {
-        $this->authorizeAnggotaMutation($request, $anggotaOrmada);
+        // Only admin and pengurus can edit, not pemda
+        $user = $request->user();
+        abort_unless($user->isAdmin() || $user->isPengurusOrmada(), 403);
 
-        $profilOrmadas = $request->user()->isAdmin()
+        // Ensure they own this profil or is admin
+        abort_unless($user->isAdmin() || $anggotaOrmada->profilOrmada?->admin_id === $user->id, 403);
+
+        $profilOrmadas = $user->isAdmin()
             ? ProfilOrmada::orderBy('nama_universitas')->get()
-            : collect([$request->user()->profilOrmada()->first()]);
+            : collect([$user->profilOrmada()->first()]);
 
         return view('anggota_ormada.edit', compact('anggotaOrmada', 'profilOrmadas'));
     }
 
     public function update(Request $request, AnggotaOrmada $anggotaOrmada): RedirectResponse
     {
-        $this->authorizeAnggotaMutation($request, $anggotaOrmada);
+        $user = $request->user();
+        
+        // Only admin and pengurus can update, not pemda
+        abort_unless($user->isAdmin() || $user->isPengurusOrmada(), 403);
+
+        // Ensure they own this profil or is admin
+        abort_unless($user->isAdmin() || $anggotaOrmada->profilOrmada?->admin_id === $user->id, 403);
 
         $validated = $this->validateAnggota($request);
 
-        if ($request->user()->isPengurusOrmada()) {
-            $validated['profil_ormada_id'] = $request->user()->profilOrmada()->firstOrFail()->id;
+        if ($user->isPengurusOrmada()) {
+            $validated['profil_ormada_id'] = $user->profilOrmada()->firstOrFail()->id;
         }
 
         $anggotaOrmada->update($validated);
@@ -116,12 +130,18 @@ class AnggotaOrmadaController extends Controller
 
     public function destroy(Request $request, AnggotaOrmada $anggotaOrmada): RedirectResponse
     {
-        $this->authorizeAnggotaMutation($request, $anggotaOrmada);
+        $user = $request->user();
+        
+        // Only admin and pengurus can delete, not pemda
+        abort_unless($user->isAdmin() || $user->isPengurusOrmada(), 403);
+
+        // Ensure they own this profil or is admin
+        abort_unless($user->isAdmin() || $anggotaOrmada->profilOrmada?->admin_id === $user->id, 403);
 
         $anggotaOrmada->delete();
 
         return redirect()
-            ->route('anggota-ormada.index')
+            ->route('profil-ormada.show', $anggotaOrmada->profilOrmada)
             ->with('status', 'Anggota ormada berhasil dihapus.');
     }
 

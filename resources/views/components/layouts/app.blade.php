@@ -16,7 +16,6 @@
                 <nav class="flex items-center gap-2 text-sm">
                     <a href="{{ route('dashboard') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Dashboard</a>
                     <a href="{{ route('profil-ormada.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Profil Ormada</a>
-                    <a href="{{ route('anggota-ormada.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Anggota</a>
                     <a href="{{ route('proposal.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Proposal</a>
                     <a href="{{ route('aspirasi.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Aspirasi</a>
                     <a href="{{ route('postingan.index') }}" class="rounded-md px-3 py-2 hover:bg-zinc-100">Postingan</a>

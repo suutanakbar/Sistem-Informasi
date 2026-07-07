@@ -95,10 +95,11 @@ class PublicDashboardTest extends TestCase
             'no_hp' => '089999999999',
         ]);
 
-        $this->get(route('anggota-ormada.index'))
+        // Test that guest cannot access profil-ormada pages (requires auth)
+        $this->get(route('profil-ormada.index'))
             ->assertRedirect(route('login'));
 
-        $this->get(route('anggota-ormada.show', $anggota))
+        $this->get(route('profil-ormada.show', $profil))
             ->assertRedirect(route('login'));
     }
 }

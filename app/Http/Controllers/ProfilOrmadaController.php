@@ -86,7 +86,19 @@ class ProfilOrmadaController extends Controller
             ->limit(8)
             ->get();
 
-        return view('profil_ormada.show', compact('profilOrmada', 'anggotaRingkas'));
+        // Load all anggota for management tab
+        $search = $request->string('search')->toString();
+        $statusAktif = $request->string('status_aktif')->toString();
+        $isPengurus = $request->string('is_pengurus')->toString();
+
+        $anggotaQuery = $profilOrmada->anggota()
+            ->search($search)
+            ->when($statusAktif, fn ($query) => $query->where('status_aktif', $statusAktif))
+            ->when($isPengurus, fn ($query) => $query->where('is_pengurus', $isPengurus));
+
+        $anggotaList = $anggotaQuery->latest('dibuat_pada')->paginate(15)->withQueryString();
+
+        return view('profil_ormada.show', compact('profilOrmada', 'anggotaRingkas', 'anggotaList'));
     }
 
     public function edit(Request $request, ProfilOrmada $profilOrmada): View

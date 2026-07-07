@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
         ->parameters(['profil-ormada' => 'profilOrmada']);
 
     Route::resource('anggota-ormada', AnggotaOrmadaController::class)
+        ->except(['index'])
         ->parameters(['anggota-ormada' => 'anggotaOrmada']);
 
     Route::resource('proposal', ProposalController::class);

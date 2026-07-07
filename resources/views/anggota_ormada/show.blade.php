@@ -1,40 +1,106 @@
-<x-layouts.app title="Detail Anggota">
-    <x-page-header title="{{ $anggotaOrmada->nama_lengkap }}" description="{{ $anggotaOrmada->profilOrmada?->nama_universitas }}">
-        @if (auth()->user()->isAdmin() || auth()->id() === $anggotaOrmada->profilOrmada?->admin_id)
-            <x-button-link href="{{ route('anggota-ormada.edit', $anggotaOrmada) }}">Edit Anggota</x-button-link>
+<x-layouts.app title="Detail Anggota Ormada">
+    <x-page-header title="{{ $anggotaOrmada->nama_lengkap }}" description="{{ $anggotaOrmada->profilOrmada->nama_universitas }}">
+        @if(auth()->user()->isAdmin() || auth()->user()->isPengurusOrmada())
+        <x-button-link href="{{ route('anggota-ormada.edit', $anggotaOrmada) }}">Edit Anggota</x-button-link>
         @endif
-        <x-button-link href="{{ route('anggota-ormada.index') }}" variant="secondary">Kembali</x-button-link>
     </x-page-header>
 
-    <section class="rounded-lg border border-zinc-200 bg-white p-6">
-        <dl class="grid gap-5 md:grid-cols-2">
-            @foreach ([
-                'NIM' => $anggotaOrmada->nim,
-                'Program studi' => $anggotaOrmada->program_studi,
-                'Status aktif' => str_replace('_', ' ', $anggotaOrmada->status_aktif),
-                'Pengurus' => $anggotaOrmada->is_pengurus,
-                'Jabatan' => $anggotaOrmada->jabatan ?: '-',
-                'Nomor HP' => $anggotaOrmada->no_hp ?: '-',
-                'Tanggal masuk kuliah' => $anggotaOrmada->tanggal_masuk_kuliah?->format('d M Y') ?: '-',
-                'Tanggal lulus kuliah' => $anggotaOrmada->tanggal_lulus_kuliah?->format('d M Y') ?: '-',
-                'Tanggal mulai jabatan' => $anggotaOrmada->tanggal_mulai_jabatan?->format('d M Y') ?: '-',
-                'Tanggal akhir jabatan' => $anggotaOrmada->tanggal_akhir_jabatan?->format('d M Y') ?: '-',
-                'Tanggal demisioner' => $anggotaOrmada->tanggal_demisioner?->format('d M Y') ?: '-',
-                'Tanggal lulus' => $anggotaOrmada->tanggal_lulus?->format('d M Y') ?: '-',
-            ] as $label => $value)
-                <div>
-                    <dt class="text-sm font-medium text-zinc-500">{{ $label }}</dt>
-                    <dd class="mt-1 text-zinc-950">{{ $value }}</dd>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Informasi Anggota</h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">Detail lengkap data anggota ormada.</p>
+        </div>
+        <div class="border-t border-gray-200">
+            <dl>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Nama Lengkap</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->nama_lengkap }}</dd>
                 </div>
-            @endforeach
-        </dl>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">NIM</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->nim }}</dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Program Studi</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->program_studi }}</dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Status Aktif</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+                        @php
+                        $statusColors = [
+                            'fungsionaris' => 'bg-purple-100 text-purple-800',
+                            'mahasiswa_biasa' => 'bg-blue-100 text-blue-800',
+                            'demisioner' => 'bg-red-100 text-red-800',
+                            'alumni' => 'bg-green-100 text-green-800',
+                        ];
+                        @endphp
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$anggotaOrmada->status_aktif] ?? 'bg-gray-100 text-gray-800' }}">
+                            {{ ucfirst(str_replace('_', ' ', $anggotaOrmada->status_aktif)) }}
+                        </span>
+                    </dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Pengurus</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->is_pengurus === 'YA' ? 'Ya' : 'Tidak' }}</dd>
+                </div>
+                @if($anggotaOrmada->jabatan)
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Jabatan</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->jabatan }}</dd>
+                </div>
+                @endif
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">No HP</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->no_hp ?? '-' }}</dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Tanggal Masuk Kuliah</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->tanggal_masuk_kuliah ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_masuk_kuliah)->format('d/m/Y') : '-' }}</dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Tanggal Lulus Kuliah</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->tanggal_lulus_kuliah ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_lulus_kuliah)->format('d/m/Y') : '-' }}</dd>
+                </div>
+                @if($anggotaOrmada->tanggal_mulai_jabatan)
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Tanggal Mulai Jabatan</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_mulai_jabatan)->format('d/m/Y') }}</dd>
+                </div>
+                @endif
+                @if($anggotaOrmada->tanggal_akhir_jabatan)
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Tanggal Akhir Jabatan</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_akhir_jabatan)->format('d/m/Y') }}</dd>
+                </div>
+                @endif
+                @if($anggotaOrmada->tanggal_demisioner)
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Tanggal Demisioner</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_demisioner)->format('d/m/Y') }}</dd>
+                </div>
+                @endif
+                @if($anggotaOrmada->tanggal_lulus)
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Tanggal Lulus</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_lulus)->format('d/m/Y') }}</dd>
+                </div>
+                @endif
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Ormada</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+                        <a href="{{ route('profil-ormada.show', $anggotaOrmada->profilOrmada) }}" class="text-indigo-600 hover:text-indigo-900">
+                            {{ $anggotaOrmada->profilOrmada->nama_universitas }}
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
 
-        @if (auth()->user()->isAdmin() || auth()->id() === $anggotaOrmada->profilOrmada?->admin_id)
-            <form method="POST" action="{{ route('anggota-ormada.destroy', $anggotaOrmada) }}" class="mt-8" onsubmit="return confirm('Hapus anggota ini?')">
-                @csrf
-                @method('DELETE')
-                <button class="rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50">Hapus Anggota</button>
-            </form>
-        @endif
-    </section>
+    <div class="mt-6">
+        <a href="{{ route('profil-ormada.show', $anggotaOrmada->profilOrmada) }}" class="text-indigo-600 hover:text-indigo-900">
+            &larr; Kembali ke Profil Ormada
+        </a>
+    </div>
 </x-layouts.app>
