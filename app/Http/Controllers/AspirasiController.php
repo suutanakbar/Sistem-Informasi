@@ -38,7 +38,9 @@ class AspirasiController extends Controller
 
         $statusOptions = ['belum_ditanggapi', 'sedang_diproses', 'selesai', 'ditolak'];
 
-        return view('aspirasi.index', compact('aspirasis', 'statusOptions'));
+        $view = $user->isPemda() ? 'pemda.aspirasi.index' : 'admin.aspirasi.index';
+        
+        return view($view, compact('aspirasis', 'statusOptions'));
     }
 
     public function create(Request $request): View
@@ -54,7 +56,9 @@ class AspirasiController extends Controller
             }
         }
 
-        return view('aspirasi.create');
+        $view = $user->isPemda() ? 'pemda.aspirasi.create' : 'admin.aspirasi.create';
+        
+        return view($view);
     }
 
     public function store(Request $request): RedirectResponse
@@ -94,7 +98,9 @@ class AspirasiController extends Controller
 
         $aspirasi->load('profilOrmada', 'profilOrmada.admin');
 
-        return view('aspirasi.show', compact('aspirasi'));
+        $view = $user->isPemda() ? 'pemda.aspirasi.show' : 'admin.aspirasi.show';
+        
+        return view($view, compact('aspirasi'));
     }
 
     public function edit(Request $request, Aspirasi $aspirasi): View
@@ -108,7 +114,9 @@ class AspirasiController extends Controller
             403
         );
 
-        return view('aspirasi.edit', compact('aspirasi'));
+        $view = $user->isPemda() ? 'pemda.aspirasi.edit' : 'admin.aspirasi.edit';
+        
+        return view($view, compact('aspirasi'));
     }
 
     public function update(Request $request, Aspirasi $aspirasi): RedirectResponse

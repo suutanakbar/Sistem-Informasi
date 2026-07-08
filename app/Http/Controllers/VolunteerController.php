@@ -9,10 +9,26 @@ use Illuminate\Http\RedirectResponse;
 
 class VolunteerController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $volunteers = Volunteer::with(['agenda', 'profilOrmada'])->get();
-        return view('volunteer.index', compact('volunteers'));
+        $user = $request->user();
+        $query = Volunteer::with(['agenda.admin']);
+
+        // Filter berdasarkan role
+        if ($user->isPemda()) {
+            // Pemda melihat semua volunteer
+        } elseif ($user->isPengurusOrmada()) {
+            // Pengurus hanya melihat volunteer untuk agenda miliknya
+            $query->whereHas('agenda', function ($q) use ($user) {
+                $q->where('admin_id', $user->id);
+            });
+        }
+
+        $volunteers = $query->latest('dibuat_pada')->get();
+
+        $layout = $user->isPemda() ? 'layouts.pemda' : 'layouts.admin';
+
+        return view('volunteer.index', compact('volunteers', 'layout'));
     }
 
     public function updateStatus(Request $request, Volunteer $volunteer): RedirectResponse

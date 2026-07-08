@@ -4,8 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? config('app.name', 'Ormada') }}</title>
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if (file_exists(public_path('build/manifest.json')))
+        @php
+            $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+            $cssFile = $manifest['resources/css/app.css']['file'] ?? null;
+        @endphp
+        @if($cssFile)
+            <link rel="stylesheet" href="{{ asset('build/' . $cssFile) }}">
+        @endif
+        <script type="module" src="{{ asset('build/' . ($manifest['resources/js/app.js']['file'] ?? 'app.js')) }}"></script>
     @endif
 </head>
 <body class="bg-zinc-50 text-zinc-950 theme-admin">

@@ -1,4 +1,9 @@
-<x-layouts.admin title="Daftar Proposal" headerTitle="Proposal">
+@php
+    $isPemda = ($layout ?? 'admin') === 'pemda';
+    $headerTitle = 'Proposal';
+    $layoutTag = $isPemda ? 'layouts.pemda' : 'layouts.admin';
+@endphp
+<x-layouts.{{ $layoutTag }} title="Daftar Proposal" headerTitle="{{ $headerTitle }}">
     <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-6">
@@ -112,4 +117,4 @@
         </div>
     </div>
 </div>
-</x-layouts.admin>
+</x-layouts.{{ $layoutTag }}>

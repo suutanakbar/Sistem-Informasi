@@ -33,7 +33,15 @@ class PostinganController extends Controller
 
         $jenisOptions = ['berita', 'pengumuman', 'prestasi'];
 
-        return view('postingan.index', compact('postingans', 'jenisOptions'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.postingan.index';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.postingan.index';
+        } else {
+            $view = 'admin.postingan.index';
+        }
+        
+        return view($view, compact('postingans', 'jenisOptions'));
     }
 
     public function create(Request $request): View
@@ -41,7 +49,15 @@ class PostinganController extends Controller
         $user = $request->user();
         abort_unless($user->isPengurusOrmada() || $user->isPemda() || $user->isAdmin(), 403);
 
-        return view('postingan.create');
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.postingan.create';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.postingan.create';
+        } else {
+            $view = 'admin.postingan.create';
+        }
+        
+        return view($view);
     }
 
     public function store(Request $request): RedirectResponse
@@ -84,7 +100,15 @@ class PostinganController extends Controller
 
         $postingan->load('admin');
 
-        return view('postingan.show', compact('postingan'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.postingan.show';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.postingan.show';
+        } else {
+            $view = 'admin.postingan.show';
+        }
+        
+        return view($view, compact('postingan'));
     }
 
     public function edit(Request $request, Postingan $postingan): View
@@ -99,7 +123,15 @@ class PostinganController extends Controller
             403
         );
 
-        return view('postingan.edit', compact('postingan'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.postingan.edit';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.postingan.edit';
+        } else {
+            $view = 'admin.postingan.edit';
+        }
+        
+        return view($view, compact('postingan'));
     }
 
     public function update(Request $request, Postingan $postingan): RedirectResponse

@@ -34,7 +34,15 @@ class AgendaController extends Controller
 
         $kategoriOptions = ['kegiatan_ormada', 'kegiatan_pemda', 'baksos', 'pendidikan', 'kesehatan', 'lingkungan', 'lainnya'];
 
-        return view('agenda.index', compact('agendas', 'kategoriOptions'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.agenda.index';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.agenda.index';
+        } else {
+            $view = 'admin.agenda.index';
+        }
+        
+        return view($view, compact('agendas', 'kategoriOptions'));
     }
 
     public function create(Request $request): View
@@ -42,7 +50,15 @@ class AgendaController extends Controller
         $user = $request->user();
         abort_unless($user->isPengurusOrmada() || $user->isPemda() || $user->isAdmin(), 403);
 
-        return view('agenda.create');
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.agenda.create';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.agenda.create';
+        } else {
+            $view = 'admin.agenda.create';
+        }
+        
+        return view($view);
     }
 
     public function store(Request $request): RedirectResponse
@@ -94,7 +110,15 @@ class AgendaController extends Controller
         // Hitung jumlah volunteer yang sudah diterima
         $volunteerDiterima = $agenda->volunteers()->where('status', 'diterima')->count();
 
-        return view('agenda.show', compact('agenda', 'volunteerDiterima'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.agenda.show';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.agenda.show';
+        } else {
+            $view = 'admin.agenda.show';
+        }
+        
+        return view($view, compact('agenda', 'volunteerDiterima'));
     }
 
     public function edit(Request $request, Agenda $agenda): View
@@ -109,7 +133,15 @@ class AgendaController extends Controller
             403
         );
 
-        return view('agenda.edit', compact('agenda'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.agenda.edit';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.agenda.edit';
+        } else {
+            $view = 'admin.agenda.edit';
+        }
+        
+        return view($view, compact('agenda'));
     }
 
     public function update(Request $request, Agenda $agenda): RedirectResponse

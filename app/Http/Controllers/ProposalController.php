@@ -34,7 +34,15 @@ class ProposalController extends Controller
         $statusOptions = ['diajukan', 'diproses_pemda', 'dana_cair', 'ditolak'];
         $jenisBantuanOptions = ['dana', 'izin', 'tempat', 'fasilitas'];
 
-        return view('proposal.index', compact('proposals', 'statusOptions', 'jenisBantuanOptions'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.proposal.index';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.proposal.index';
+        } else {
+            $view = 'admin.proposal.index';
+        }
+        
+        return view($view, compact('proposals', 'statusOptions', 'jenisBantuanOptions'));
     }
 
     public function create(Request $request): View
@@ -45,7 +53,15 @@ class ProposalController extends Controller
 
         $dinasTujuanList = Admin::where('peran', 'pemda')->get(['id', 'nama']);
 
-        return view('proposal.create', compact('dinasTujuanList'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.proposal.create';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.proposal.create';
+        } else {
+            $view = 'admin.proposal.create';
+        }
+        
+        return view($view, compact('dinasTujuanList'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -76,7 +92,15 @@ class ProposalController extends Controller
 
         $proposal->load('pengaju', 'dinasTujuan');
 
-        return view('proposal.show', compact('proposal'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.proposal.show';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.proposal.show';
+        } else {
+            $view = 'admin.proposal.show';
+        }
+        
+        return view($view, compact('proposal'));
     }
 
     public function edit(Request $request, Proposal $proposal): View
@@ -87,7 +111,15 @@ class ProposalController extends Controller
 
         $dinasTujuanList = Admin::where('peran', 'pemda')->get(['id', 'nama']);
 
-        return view('proposal.edit', compact('proposal', 'dinasTujuanList'));
+        if ($user->isPengurusOrmada()) {
+            $view = 'pengurus.proposal.edit';
+        } elseif ($user->isPemda()) {
+            $view = 'pemda.proposal.edit';
+        } else {
+            $view = 'admin.proposal.edit';
+        }
+        
+        return view($view, compact('proposal', 'dinasTujuanList'));
     }
 
     public function update(Request $request, Proposal $proposal): RedirectResponse

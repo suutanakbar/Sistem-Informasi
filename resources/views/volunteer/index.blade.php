@@ -1,4 +1,9 @@
-<x-layouts.pemda title="Kelola Volunteer" headerTitle="Kelola Volunteer">
+@php
+    $isPemda = ($layout ?? 'admin') === 'pemda';
+    $headerTitle = 'Kelola Volunteer';
+    $layoutTag = $isPemda ? 'layouts.pemda' : 'layouts.admin';
+@endphp
+<x-layouts.{{ $layoutTag }} title="Kelola Volunteer" headerTitle="{{ $headerTitle }}">
     <div class="space-y-6">
         <div class="flex items-center justify-between">
             <div>
@@ -33,10 +38,10 @@
                                 {{ $volunteer->no_telepon }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500">
-                                {{ $volunteer->agenda->nama ?? 'N/A' }}
+                                {{ $volunteer->agenda->nama_agenda ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500">
-                                {{ $volunteer->profilOrmada->nama_ormada ?? 'Umum' }}
+                                {{ $volunteer->agenda->admin->nama ?? 'Umum' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($volunteer->status === 'menunggu')
@@ -75,4 +80,4 @@
             </table>
         </div>
     </div>
-</x-layouts.pemda>
+</x-layouts.{{ $layoutTag }}>

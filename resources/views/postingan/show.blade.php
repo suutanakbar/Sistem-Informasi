@@ -1,4 +1,9 @@
-<x-layouts.admin title="{{ $postingan->judul }}" headerTitle="Detail Postingan">
+@php
+    $isPemda = ($layout ?? 'admin') === 'pemda';
+    $headerTitle = 'Detail Postingan';
+    $layoutTag = $isPemda ? 'layouts.pemda' : 'layouts.admin';
+@endphp
+<x-layouts.{{ $layoutTag }} title="{{ $postingan->judul }}" headerTitle="{{ $headerTitle }}">
     <div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6 flex justify-between items-center">
@@ -70,4 +75,4 @@
         @endcan
     </div>
 </div>
-</x-layouts.admin>
+</x-layouts.{{ $layoutTag }}>
