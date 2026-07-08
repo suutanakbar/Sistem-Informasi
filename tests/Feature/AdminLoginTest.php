@@ -12,18 +12,18 @@ class AdminLoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_login_using_email_and_kata_sandi(): void
+    public function test_admin_can_login_using_email_and_password(): void
     {
         $admin = Admin::create([
             'nama' => 'Admin Sistem',
             'email' => 'admin@example.test',
-            'kata_sandi' => 'password',
+            'password' => bcrypt('password'),
             'peran' => 'admin',
         ]);
 
         $this->post(route('login'), [
             'email' => 'admin@example.test',
-            'kata_sandi' => 'password',
+            'password' => 'password',
         ])
             ->assertRedirect(route('dashboard'));
 
@@ -36,28 +36,28 @@ class AdminLoginTest extends TestCase
         Admin::create([
             'nama' => 'Pengurus',
             'email' => 'pengurus@example.test',
-            'kata_sandi' => 'password',
+            'password' => bcrypt('password'),
             'peran' => 'pengurus_ormada',
         ]);
 
         $this->from(route('login'))
             ->post(route('login'), [
                 'email' => 'pengurus@example.test',
-                'kata_sandi' => 'salah',
+                'password' => 'salah',
             ])
             ->assertSessionHasErrors('email');
 
         $this->assertGuest();
     }
 
-    public function test_login_rehashes_old_kata_sandi_without_password_column(): void
+    public function test_login_rehashes_old_password_without_password_column(): void
     {
         Hash::setRounds(10);
 
         $admin = Admin::create([
             'nama' => 'Konservasi Bersenyum',
             'email' => 'konservasi.bersenyum@example.test',
-            'kata_sandi' => 'password',
+            'password' => bcrypt('password'),
             'peran' => 'pengurus_ormada',
         ]);
 
@@ -65,21 +65,21 @@ class AdminLoginTest extends TestCase
 
         $this->post(route('login'), [
             'email' => 'konservasi.bersenyum@example.test',
-            'kata_sandi' => 'password',
+            'password' => 'password',
         ])
             ->assertRedirect(route('dashboard'));
 
         $this->assertAuthenticatedAs($admin);
-        $this->assertTrue(Hash::needsRehash($admin->kata_sandi));
-        $this->assertFalse(Hash::needsRehash($admin->fresh()->kata_sandi));
+        $this->assertTrue(Hash::needsRehash($admin->password));
+        $this->assertFalse(Hash::needsRehash($admin->fresh()->password));
     }
 
-    public function test_login_rehashes_imported_dummy_hash_on_kata_sandi(): void
+    public function test_login_rehashes_imported_dummy_hash_on_password(): void
     {
         DB::table('admin')->insert([
             'nama' => 'Pengurus Konservasi Bersenyum',
             'email' => 'konservasi.bersenyum@gmail.com',
-            'kata_sandi' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'peran' => 'pengurus_ormada',
             'dibuat_pada' => now(),
             'diperbarui_pada' => now(),
@@ -89,14 +89,14 @@ class AdminLoginTest extends TestCase
 
         $this->post(route('login'), [
             'email' => 'konservasi.bersenyum@gmail.com',
-            'kata_sandi' => 'password',
+            'password' => 'password',
         ])
             ->assertRedirect(route('dashboard'));
 
         $this->assertAuthenticatedAs($admin);
         $this->assertDatabaseMissing('admin', [
             'email' => 'konservasi.bersenyum@gmail.com',
-            'kata_sandi' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
         ]);
     }
 
@@ -105,7 +105,7 @@ class AdminLoginTest extends TestCase
         $admin = Admin::create([
             'nama' => 'Pemda',
             'email' => 'pemda@example.test',
-            'kata_sandi' => 'password',
+            'password' => bcrypt('password'),
             'peran' => 'pemda',
         ]);
 

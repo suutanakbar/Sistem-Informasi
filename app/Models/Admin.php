@@ -20,31 +20,18 @@ class Admin extends Authenticatable
     protected $fillable = [
         'nama',
         'email',
-        'kata_sandi',
+        'password',
         'peran',
         'terakhir_masuk',
     ];
 
-    protected $hidden = [
-        'kata_sandi',
-    ];
+    protected $hidden = [];
 
     protected function casts(): array
     {
         return [
             'terakhir_masuk' => 'datetime',
-            'kata_sandi' => 'hashed',
         ];
-    }
-
-    public function getAuthPassword(): string
-    {
-        return $this->kata_sandi;
-    }
-
-    public function getAuthPasswordName(): string
-    {
-        return 'kata_sandi';
     }
 
     public function profilOrmada(): HasOne

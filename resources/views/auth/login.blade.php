@@ -48,7 +48,7 @@
                     <span class="text-sm font-medium text-zinc-700">Kata sandi</span>
                     <input
                         type="password"
-                        name="kata_sandi"
+                        name="password"
                         required
                         autocomplete="current-password"
                         class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2"

@@ -26,21 +26,21 @@ class ProposalTest extends TestCase
         $this->admin = Admin::create([
             'nama' => 'Admin Sistem',
             'email' => 'admin@test.com',
-            'kata_sandi' => bcrypt('password'),
+            'password' => bcrypt('password'),
             'peran' => 'admin',
         ]);
 
         $this->pemda = Admin::create([
             'nama' => 'Pemda Test',
             'email' => 'pemda@test.com',
-            'kata_sandi' => bcrypt('password'),
+            'password' => bcrypt('password'),
             'peran' => 'pemda',
         ]);
 
         $this->pengurus = Admin::create([
             'nama' => 'Pengurus Ormada',
             'email' => 'pengurus@test.com',
-            'kata_sandi' => bcrypt('password'),
+            'password' => bcrypt('password'),
             'peran' => 'pengurus_ormada',
         ]);
 
@@ -220,7 +220,7 @@ class ProposalTest extends TestCase
         $pengurusLain = Admin::create([
             'nama' => 'Pengurus Lain',
             'email' => 'pengurus_lain@test.com',
-            'kata_sandi' => bcrypt('password'),
+            'password' => bcrypt('password'),
             'peran' => 'pengurus_ormada',
         ]);
 

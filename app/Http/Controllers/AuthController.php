@@ -23,14 +23,14 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'kata_sandi' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
         $remember = $request->boolean('remember');
 
         if (! Auth::attempt([
             'email' => $credentials['email'],
-            'password' => $credentials['kata_sandi'],
+            'password' => $credentials['password'],
         ], $remember)) {
             throw ValidationException::withMessages([
                 'email' => 'Email atau kata sandi tidak sesuai.',

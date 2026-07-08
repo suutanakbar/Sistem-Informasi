@@ -16,7 +16,7 @@ class AdminFactory extends Factory
         return [
             'nama' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'kata_sandi' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('password'),
             'peran' => fake()->randomElement(['admin', 'pemda', 'pengurus_ormada']),
             'terakhir_masuk' => now(),
         ];

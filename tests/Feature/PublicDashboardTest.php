@@ -17,7 +17,7 @@ class PublicDashboardTest extends TestCase
         $pengurus = Admin::create([
             'nama' => 'Pengurus Ormada',
             'email' => 'pengurus-public@example.test',
-            'kata_sandi' => 'password',
+            'password' => 'password',
             'peran' => 'pengurus_ormada',
         ]);
 
@@ -58,7 +58,7 @@ class PublicDashboardTest extends TestCase
         $admin = Admin::create([
             'nama' => 'Admin',
             'email' => 'admin-public@example.test',
-            'kata_sandi' => 'password',
+            'password' => 'password',
             'peran' => 'admin',
         ]);
 
@@ -74,7 +74,7 @@ class PublicDashboardTest extends TestCase
         $pengurus = Admin::create([
             'nama' => 'Pengurus Ormada',
             'email' => 'pengurus-private@example.test',
-            'kata_sandi' => 'password',
+            'password' => 'password',
             'peran' => 'pengurus_ormada',
         ]);
 
