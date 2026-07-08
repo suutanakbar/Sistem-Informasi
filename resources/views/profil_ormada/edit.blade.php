@@ -1,4 +1,4 @@
-<x-layouts.app title="Edit Profil Ormada">
+<x-layouts.admin title="Edit Profil Ormada" headerTitle="Edit Profil Ormada">
     <x-page-header title="Edit Profil Ormada" description="Perbarui identitas ormada dan logo bila diperlukan.">
         <x-button-link href="{{ route('profil-ormada.show', $profilOrmada) }}" variant="secondary">Kembali</x-button-link>
     </x-page-header>
@@ -8,4 +8,4 @@
         @method('PUT')
         @include('profil_ormada.partials.form', ['profilOrmada' => $profilOrmada])
     </form>
-</x-layouts.app>
+</x-layouts.admin>

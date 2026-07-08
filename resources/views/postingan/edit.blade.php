@@ -1,4 +1,4 @@
-<x-layouts.app title="Edit Postingan">
+<x-layouts.admin title="Edit Postingan" headerTitle="Edit Postingan">
     <div class="py-6">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6">
@@ -83,4 +83,4 @@
         </div>
     </div>
 </div>
-</x-layouts.app>
+</x-layouts.admin>

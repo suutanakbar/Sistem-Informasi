@@ -1,4 +1,4 @@
-<x-layouts.app title="Detail Profil Ormada">
+<x-layouts.admin title="Detail Profil Ormada" headerTitle="Detail Profil Ormada">
     <x-page-header title="{{ $profilOrmada->nama_universitas }}" description="{{ $profilOrmada->alamat_universitas }}">
         @if (auth()->user()->isAdmin() || auth()->id() === $profilOrmada->admin_id)
             <x-button-link href="{{ route('profil-ormada.edit', $profilOrmada) }}">Edit Profil</x-button-link>
@@ -133,4 +133,4 @@
         </div>
         @endif
     </section>
-</x-layouts.app>
+</x-layouts.admin>

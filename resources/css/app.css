@@ -9,3 +9,22 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Role-based theming */
+.theme-admin {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --sidebar-bg: #1e40af;
+}
+
+.theme-pemda {
+    --primary-color: #10b981;
+    --primary-hover: #059669;
+    --sidebar-bg: #065f46;
+}
+
+.theme-pengurus {
+    --primary-color: #f97316;
+    --primary-hover: #ea580c;
+    --sidebar-bg: #9a3412;
+}

@@ -13,24 +13,42 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
+        if ($user->isAdmin()) {
+            return view('dashboard.admin', [
+                'totalOrmada' => ProfilOrmada::count(),
+                'totalAnggota' => AnggotaOrmada::count(),
+                'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
+                'totalAlumni' => AnggotaOrmada::where('status_aktif', 'alumni')->count(),
+                'totalDemisioner' => AnggotaOrmada::where('status_aktif', 'demisioner')->count(),
+            ]);
+        }
+
+        if ($user->isPemda()) {
+            return view('dashboard.pemda', [
+                'totalOrmada' => ProfilOrmada::count(),
+                'totalAnggota' => AnggotaOrmada::where('status_aktif', 'aktif')->count(),
+                'agendaMendatang' => \App\Models\Agenda::where('tanggal_mulai', '>=', now())->count(),
+                'proposalMenunggu' => \App\Models\Proposal::where('status', 'menunggu')->count(),
+            ]);
+        }
+
         if ($user->isPengurusOrmada()) {
             $profil = $user->profilOrmada()->withCount([
                 'anggota',
                 'anggota as pengurus_count' => fn ($query) => $query->where('is_pengurus', 'YA'),
                 'anggota as alumni_count' => fn ($query) => $query->where('status_aktif', 'alumni'),
-                'anggota as demisioner_count' => fn ($query) => $query->where('status_aktif', 'demisioner'),
             ])->first();
 
-            return view('dashboard', [
+            return view('dashboard.pengurus', [
                 'profil' => $profil,
-                'totalOrmada' => $profil ? 1 : 0,
                 'totalAnggota' => $profil?->anggota_count ?? 0,
                 'totalPengurus' => $profil?->pengurus_count ?? 0,
                 'totalAlumni' => $profil?->alumni_count ?? 0,
-                'totalDemisioner' => $profil?->demisioner_count ?? 0,
+                'totalProposal' => \App\Models\Proposal::where('admin_id', $user->id)->count(),
             ]);
         }
 
+        // Fallback to default dashboard
         return view('dashboard', [
             'profil' => null,
             'totalOrmada' => ProfilOrmada::count(),

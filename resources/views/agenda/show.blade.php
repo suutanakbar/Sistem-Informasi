@@ -1,4 +1,4 @@
-<x-layouts.app title="{{ $agenda->nama_agenda }}">
+<x-layouts.admin title="{{ $agenda->nama_agenda }}" headerTitle="Detail Agenda">
     <div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6 flex justify-between items-center">
@@ -152,4 +152,4 @@
         @endcan
     </div>
 </div>
-</x-layouts.app>
+</x-layouts.admin>

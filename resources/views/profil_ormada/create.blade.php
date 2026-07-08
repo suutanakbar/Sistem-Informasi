@@ -1,4 +1,4 @@
-<x-layouts.app title="Tambah Profil Ormada">
+<x-layouts.admin title="Tambah Profil Ormada" headerTitle="Tambah Profil Ormada">
     <x-page-header title="Tambah Profil Ormada" description="Lengkapi identitas ormada berdasarkan universitas.">
         <x-button-link href="{{ route('profil-ormada.index') }}" variant="secondary">Kembali</x-button-link>
     </x-page-header>
@@ -7,4 +7,4 @@
         @csrf
         @include('profil_ormada.partials.form')
     </form>
-</x-layouts.app>
+</x-layouts.admin>

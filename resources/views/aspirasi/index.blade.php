@@ -1,4 +1,4 @@
-<x-layouts.app title="Daftar Aspirasi">
+<x-layouts.admin title="Daftar Aspirasi" headerTitle="Aspirasi">
     <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-6">
@@ -92,4 +92,4 @@
         </div>
     </div>
 </div>
-</x-layouts.app>
+</x-layouts.admin>

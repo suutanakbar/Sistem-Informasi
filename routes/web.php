@@ -10,6 +10,7 @@ use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfilOrmadaController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\PublicDashboardController;
+use App\Http\Controllers\VolunteerController;
 
 Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
 Route::get('/publik/aspirasi', [PublicDashboardController::class, 'aspirasi'])->name('public.aspirasi');
@@ -30,33 +31,49 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::resource('profil-ormada', ProfilOrmadaController::class)
-        ->except(['destroy'])
-        ->parameters(['profil-ormada' => 'profilOrmada']);
+    // Admin routes - full access
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('profil-ormada', ProfilOrmadaController::class)
+            ->except(['destroy'])
+            ->parameters(['profil-ormada' => 'profilOrmada']);
+        
+        Route::resource('anggota-ormada', AnggotaOrmadaController::class)
+            ->except(['index'])
+            ->parameters(['anggota-ormada' => 'anggotaOrmada']);
+        
+        Route::resource('admin', \App\Http\Controllers\AdminController::class);
+    });
 
-    Route::resource('anggota-ormada', AnggotaOrmadaController::class)
-        ->except(['index'])
-        ->parameters(['anggota-ormada' => 'anggotaOrmada']);
+    // Pemda and Admin routes
+    Route::middleware('role:pemda,admin')->group(function () {
+        Route::resource('agenda', AgendaController::class);
+        Route::patch('/agenda/{agenda}/publish', [AgendaController::class, 'publish'])
+            ->name('agenda.publish');
+        Route::get('/agenda/{agenda}/volunteer', [AgendaController::class, 'listVolunteer'])
+            ->name('agenda.volunteer');
+        
+        Route::get('/volunteer', [VolunteerController::class, 'index'])
+            ->name('volunteer.index');
+        Route::patch('/volunteer/{volunteer}/status', [VolunteerController::class, 'updateStatus'])
+            ->name('volunteer.update-status');
+        
+        Route::resource('postingan', PostinganController::class);
+        Route::patch('/postingan/{postingan}/publish', [PostinganController::class, 'publish'])
+            ->name('postingan.publish');
+        
+        Route::resource('proposal', ProposalController::class);
+        Route::patch('/proposal/{proposal}/status', [ProposalController::class, 'updateStatus'])
+            ->name('proposal.update-status');
+        
+        Route::resource('aspirasi', AspirasiController::class);
+        Route::patch('/aspirasi/{aspirasi}/tanggapan', [AspirasiController::class, 'updateTanggapan'])
+            ->name('aspirasi.update-tanggapan');
+    });
 
-    Route::resource('proposal', ProposalController::class);
-    Route::patch('/proposal/{proposal}/status', [ProposalController::class, 'updateStatus'])
-        ->name('proposal.update-status');
-
-    Route::resource('aspirasi', AspirasiController::class);
-    Route::patch('/aspirasi/{aspirasi}/tanggapan', [AspirasiController::class, 'updateTanggapan'])
-        ->name('aspirasi.update-tanggapan');
-
-    // Postingan Routes
-    Route::resource('postingan', PostinganController::class);
-    Route::patch('/postingan/{postingan}/publish', [PostinganController::class, 'publish'])
-        ->name('postingan.publish');
-
-    // Agenda Routes
-    Route::resource('agenda', AgendaController::class);
-    Route::patch('/agenda/{agenda}/publish', [AgendaController::class, 'publish'])
-        ->name('agenda.publish');
-    Route::get('/agenda/{agenda}/volunteer', [AgendaController::class, 'listVolunteer'])
-        ->name('agenda.volunteer');
-    Route::patch('/volunteer/{volunteer}/status', [AgendaController::class, 'updateStatusVolunteer'])
-        ->name('volunteer.update-status');
+    // All authenticated users can view
+    Route::get('/profil-ormada', [ProfilOrmadaController::class, 'index'])
+        ->name('profil-ormada.index');
+    
+    Route::get('/anggota-ormada', [AnggotaOrmadaController::class, 'index'])
+        ->name('anggota-ormada.index');
 });

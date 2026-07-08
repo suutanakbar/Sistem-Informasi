@@ -1,4 +1,4 @@
-<x-layouts.app title="Edit Proposal">
+<x-layouts.admin title="Edit Proposal" headerTitle="Edit Proposal">
     <div class="py-6">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6">
@@ -98,4 +98,4 @@
         </div>
     </div>
 </div>
-</x-layouts.app>
+</x-layouts.admin>

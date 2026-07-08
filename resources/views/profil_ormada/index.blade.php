@@ -1,4 +1,4 @@
-<x-layouts.app title="Profil Ormada">
+<x-layouts.admin title="Profil Ormada" headerTitle="Profil Ormada">
     <x-page-header title="Profil Ormada" description="Daftar ormada yang terdaftar. Pemda dan admin dapat melihat ringkasan seluruh ormada.">
         @if (auth()->user()->isAdmin())
             <x-button-link href="{{ route('profil-ormada.create') }}">Tambah Profil</x-button-link>
@@ -48,4 +48,4 @@
     </div>
 
     <div class="mt-6">{{ $profilOrmadas->links() }}</div>
-</x-layouts.app>
+</x-layouts.admin>
