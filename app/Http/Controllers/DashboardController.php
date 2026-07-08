@@ -27,8 +27,8 @@ class DashboardController extends Controller
             return view('dashboard.pemda', [
                 'totalOrmada' => ProfilOrmada::count(),
                 'totalAnggota' => AnggotaOrmada::where('status_aktif', 'aktif')->count(),
-                'agendaMendatang' => \App\Models\Agenda::where('tanggal_mulai', '>=', now())->count(),
-                'proposalMenunggu' => \App\Models\Proposal::where('status', 'menunggu')->count(),
+                'agendaMendatang' => \App\Models\Agenda::where('waktu_mulai', '>=', now())->count(),
+                'proposalMenunggu' => \App\Models\Proposal::where('status', 'diajukan')->count(),
             ]);
         }
 
