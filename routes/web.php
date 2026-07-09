@@ -46,8 +46,8 @@ Route::middleware('auth')->group(function () {
         ->except(['index'])
         ->parameters(['anggota-ormada' => 'anggotaOrmada']);
 
-    // Pemda and Admin routes
-    Route::middleware('role:pemda,admin')->group(function () {
+    // Pemda, Admin, and Pengurus routes
+    Route::middleware('role:pemda,admin,pengurus_ormada')->group(function () {
         Route::resource('agenda', AgendaController::class);
         Route::patch('/agenda/{agenda}/publish', [AgendaController::class, 'publish'])
             ->name('agenda.publish');

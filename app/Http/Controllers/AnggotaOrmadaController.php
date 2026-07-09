@@ -11,32 +11,18 @@ use Illuminate\View\View;
 
 class AnggotaOrmadaController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): RedirectResponse
     {
         $user = $request->user();
 
-        $query = AnggotaOrmada::query()
-            ->with(['profilOrmada.admin'])
-            ->search($request->string('search')->toString())
-            ->when($request->filled('status_aktif'), fn (Builder $query) => $query->where('status_aktif', $request->status_aktif))
-            ->when($request->filled('is_pengurus'), fn (Builder $query) => $query->where('is_pengurus', $request->is_pengurus));
-
         if ($user->isPengurusOrmada()) {
             $profil = $user->profilOrmada()->first();
-            abort_if(! $profil, 403, 'Lengkapi profil ormada terlebih dahulu.');
-            $query->where('profil_ormada_id', $profil->id);
-            $profilOrmadas = collect([$profil]);
-        } else {
-            $query->when($request->filled('profil_ormada_id'), fn (Builder $query) => $query->where('profil_ormada_id', $request->profil_ormada_id));
-            $profilOrmadas = ProfilOrmada::orderBy('nama_universitas')->get();
+            if ($profil) {
+                return redirect()->route('profil-ormada.show', $profil);
+            }
         }
 
-        $anggotaOrmadas = $query
-            ->latest('dibuat_pada')
-            ->paginate(15)
-            ->withQueryString();
-
-        return view('anggota_ormada.index', compact('anggotaOrmadas', 'profilOrmadas'));
+        return redirect()->route('profil-ormada.index');
     }
 
     public function create(Request $request): View

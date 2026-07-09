@@ -1,6 +1,6 @@
 <x-layouts.app title="Tambah Anggota Ormada">
     <x-page-header title="Tambah Anggota Ormada" description="Isi form berikut untuk menambahkan anggota baru">
-        <x-button-link href="{{ route('anggota-ormada.index') }}" variant="secondary">Kembali</x-button-link>
+        <x-button-link href="{{ route('profil-ormada.index') }}" variant="secondary">Kembali</x-button-link>
     </x-page-header>
 
     <div class="bg-white shadow sm:rounded-lg">
@@ -156,7 +156,7 @@
                 </div>
 
                 <div class="mt-6 flex justify-end gap-3">
-                    <x-button-link href="{{ route('anggota-ormada.index') }}" variant="secondary">Batal</x-button-link>
+                    <x-button-link href="{{ route('profil-ormada.index') }}" variant="secondary">Batal</x-button-link>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                         Simpan
                     </button>
