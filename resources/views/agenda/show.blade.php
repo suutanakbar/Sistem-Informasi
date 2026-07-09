@@ -137,22 +137,94 @@
 
         @can('manageVolunteer', $agenda)
         @if($agenda->kuota_volunteer)
-        <div class="bg-white shadow sm:rounded-lg mt-6">
-            <div class="px-4 py-5 sm:p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium text-gray-900">Kelola Volunteer</h3>
-                    <a href="{{ route('agenda.volunteer', $agenda) }}" class="text-blue-600 hover:text-blue-800 text-sm">
-                        Lihat Semua →
-                    </a>
-                </div>
-                <p class="text-sm text-gray-600">
-                    Total pendaftar: {{ $agenda->volunteers()->count() }} | 
-                    Menunggu: {{ $agenda->volunteers()->where('status', 'pending')->count() }} | 
-                    Diterima: {{ $volunteerDiterima }} | 
-                    Ditolak: {{ $agenda->volunteers()->where('status', 'ditolak')->count() }}
-                </p>
+        <section class="mt-6 rounded-lg border border-zinc-200 bg-white">
+            <div class="border-b border-zinc-200 px-5 py-4">
+                <h2 class="font-semibold text-lg">Daftar Volunteer</h2>
             </div>
-        </div>
+
+            <!-- Search and Filter -->
+            <div class="px-5 py-3 bg-gray-50 border-b border-zinc-200">
+                <form method="GET" action="{{ route('agenda.show', $agenda) }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label for="search_volunteer" class="block text-sm font-medium text-gray-700">Cari Volunteer</label>
+                        <input type="text" name="search_volunteer" id="search_volunteer" value="{{ request('search_volunteer') }}" placeholder="Nama, Email, atau No. Telepon..."
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    </div>
+                    <div>
+                        <label for="status_volunteer" class="block text-sm font-medium text-gray-700">Status</label>
+                        <select name="status_volunteer" id="status_volunteer" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <option value="">Semua Status</option>
+                            <option value="menunggu" {{ request('status_volunteer') === 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                            <option value="diterima" {{ request('status_volunteer') === 'diterima' ? 'selected' : '' }}>Diterima</option>
+                            <option value="ditolak" {{ request('status_volunteer') === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Volunteer Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-zinc-200 text-sm">
+                    <thead class="bg-zinc-50 text-left text-zinc-600">
+                        <tr>
+                            <th class="px-5 py-3">Nama</th>
+                            <th class="px-5 py-3">Email</th>
+                            <th class="px-5 py-3">No. Telepon</th>
+                            <th class="px-5 py-3">Status</th>
+                            <th class="px-5 py-3 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-100">
+                        @forelse($volunteers as $volunteer)
+                            <tr>
+                                <td class="px-5 py-3 font-medium">{{ $volunteer->nama }}</td>
+                                <td class="px-5 py-3">{{ $volunteer->email }}</td>
+                                <td class="px-5 py-3">{{ $volunteer->no_telepon }}</td>
+                                <td class="px-5 py-3">
+                                    @if($volunteer->status === 'menunggu')
+                                        <span class="inline-flex rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">Menunggu</span>
+                                    @elseif($volunteer->status === 'diterima')
+                                        <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">Diterima</span>
+                                    @else
+                                        <span class="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-800">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td class="px-5 py-3 text-right text-sm font-medium">
+                                    @if($volunteer->status === 'menunggu')
+                                        <form action="{{ route('volunteer.update-status', $volunteer) }}" method="POST" class="inline-block" onsubmit="return confirm('Terima volunteer ini?')">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="diterima">
+                                            <button type="submit" class="text-green-600 hover:text-green-900">Terima</button>
+                                        </form>
+                                        <form action="{{ route('volunteer.update-status', $volunteer) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Tolak volunteer ini?')">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="ditolak">
+                                            <button type="submit" class="text-red-600 hover:text-red-900">Tolak</button>
+                                        </form>
+                                    @else
+                                        <span class="text-zinc-400">-</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-5 py-6 text-center text-zinc-500">
+                                    Belum ada pendaftar volunteer.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            @if($volunteers->hasPages())
+            <div class="mt-4 px-4 py-3">
+                {{ $volunteers->links() }}
+            </div>
+            @endif
+        </section>
         @endif
         @endcan
     </div>

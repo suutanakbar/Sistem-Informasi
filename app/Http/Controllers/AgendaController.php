@@ -105,10 +105,28 @@ class AgendaController extends Controller
         // Authorization
         $this->authorizeAgendaAccess($user, $agenda);
 
-        $agenda->load('admin', 'volunteers');
+        $agenda->load('admin');
 
         // Hitung jumlah volunteer yang sudah diterima
         $volunteerDiterima = $agenda->volunteers()->where('status', 'diterima')->count();
+
+        // Filter volunteers jika ada parameter search
+        $volunteersQuery = $agenda->volunteers()->latest('dibuat_pada');
+        
+        if ($request->has('search_volunteer')) {
+            $search = $request->search_volunteer;
+            $volunteersQuery->where(function($query) use ($search) {
+                $query->where('nama', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%")
+                      ->orWhere('no_hp', 'like', "%{$search}%");
+            });
+        }
+        
+        if ($request->has('status_volunteer') && $request->status_volunteer) {
+            $volunteersQuery->where('status', $request->status_volunteer);
+        }
+
+        $volunteers = $volunteersQuery->paginate(20, ['*'], 'volunteer_page');
 
         if ($user->isPengurusOrmada()) {
             $view = 'pengurus.agenda.show';
@@ -118,7 +136,7 @@ class AgendaController extends Controller
             $view = 'admin.agenda.show';
         }
         
-        return view($view, compact('agenda', 'volunteerDiterima'));
+        return view($view, compact('agenda', 'volunteerDiterima', 'volunteers'));
     }
 
     public function edit(Request $request, Agenda $agenda): View

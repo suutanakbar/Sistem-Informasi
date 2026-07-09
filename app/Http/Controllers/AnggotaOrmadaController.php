@@ -86,6 +86,14 @@ class AnggotaOrmadaController extends Controller
 
         $anggotaOrmada->load('profilOrmada.admin');
 
+        $user = $request->user();
+        
+        if ($user->isPemda()) {
+            return view('pemda.anggota_ormada.show', compact('anggotaOrmada'));
+        } elseif ($user->isPengurusOrmada()) {
+            return view('pengurus.anggota_ormada.show', compact('anggotaOrmada'));
+        }
+
         return view('anggota_ormada.show', compact('anggotaOrmada'));
     }
 

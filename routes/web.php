@@ -33,16 +33,18 @@ Route::middleware('auth')->group(function () {
 
     // Admin routes - full access
     Route::middleware('role:admin')->group(function () {
-        Route::resource('profil-ormada', ProfilOrmadaController::class)
-            ->except(['destroy'])
-            ->parameters(['profil-ormada' => 'profilOrmada']);
-        
-        Route::resource('anggota-ormada', AnggotaOrmadaController::class)
-            ->except(['index'])
-            ->parameters(['anggota-ormada' => 'anggotaOrmada']);
-        
         Route::resource('admin', \App\Http\Controllers\AdminController::class);
     });
+
+    // Profil Ormada routes - accessible by admin, pemda, and pengurus
+    Route::resource('profil-ormada', ProfilOrmadaController::class)
+        ->except(['destroy'])
+        ->parameters(['profil-ormada' => 'profilOrmada']);
+
+    // Anggota Ormada routes - accessible by admin and pengurus
+    Route::resource('anggota-ormada', AnggotaOrmadaController::class)
+        ->except(['index'])
+        ->parameters(['anggota-ormada' => 'anggotaOrmada']);
 
     // Pemda and Admin routes
     Route::middleware('role:pemda,admin')->group(function () {
@@ -70,9 +72,6 @@ Route::middleware('auth')->group(function () {
             ->name('aspirasi.update-tanggapan');
     });
 
-    // All authenticated users can view
-    Route::get('/profil-ormada', [ProfilOrmadaController::class, 'index'])
-        ->name('profil-ormada.index');
     
     Route::get('/anggota-ormada', [AnggotaOrmadaController::class, 'index'])
         ->name('anggota-ormada.index');

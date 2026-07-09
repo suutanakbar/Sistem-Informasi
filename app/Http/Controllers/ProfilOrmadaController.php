@@ -31,6 +31,10 @@ class ProfilOrmadaController extends Controller
             ->latest('dibuat_pada')
             ->paginate(12);
 
+        if ($user->isPemda()) {
+            return view('pemda.profil_ormada.index', compact('profilOrmadas'));
+        }
+
         return view('profil_ormada.index', compact('profilOrmadas'));
     }
 
@@ -46,7 +50,11 @@ class ProfilOrmadaController extends Controller
             return redirect()->route('profil-ormada.edit', $profil);
         }
 
-        return view('profil_ormada.create');
+        if ($user->isAdmin()) {
+            return view('profil_ormada.create');
+        }
+
+        return view('pengurus.profil_ormada.create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -98,12 +106,26 @@ class ProfilOrmadaController extends Controller
 
         $anggotaList = $anggotaQuery->latest('dibuat_pada')->paginate(15)->withQueryString();
 
+        $user = $request->user();
+        
+        if ($user->isPemda()) {
+            return view('pemda.profil_ormada.show', compact('profilOrmada', 'anggotaRingkas', 'anggotaList'));
+        } elseif ($user->isPengurusOrmada()) {
+            return view('pengurus.profil_ormada.show', compact('profilOrmada', 'anggotaRingkas', 'anggotaList'));
+        }
+
         return view('profil_ormada.show', compact('profilOrmada', 'anggotaRingkas', 'anggotaList'));
     }
 
     public function edit(Request $request, ProfilOrmada $profilOrmada): View
     {
         $this->authorizeProfilMutation($request, $profilOrmada);
+
+        $user = $request->user();
+        
+        if ($user->isPengurusOrmada()) {
+            return view('pengurus.profil_ormada.edit', compact('profilOrmada'));
+        }
 
         return view('profil_ormada.edit', compact('profilOrmada'));
     }

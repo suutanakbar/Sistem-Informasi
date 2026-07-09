@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? config('app.name', 'Ormada') }}</title>
-    <link rel="stylesheet" href="{{ asset('build/assets/app-C2rQ5F9J.css') }}">
-    <script type="module" src="{{ asset('build/assets/app-CIomGrQN.js') }}"></script>
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
 </head>
 <body class="bg-zinc-50 text-zinc-950 theme-pemda">
     <div class="flex min-h-screen">
