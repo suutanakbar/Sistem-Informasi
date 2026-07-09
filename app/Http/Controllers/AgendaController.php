@@ -48,11 +48,9 @@ class AgendaController extends Controller
     public function create(Request $request): View
     {
         $user = $request->user();
-        abort_unless($user->isPengurusOrmada() || $user->isPemda() || $user->isAdmin(), 403);
+        $this->authorize('create', Agenda::class);
 
-        if ($user->isPengurusOrmada()) {
-            $view = 'pengurus.agenda.create';
-        } elseif ($user->isPemda()) {
+        if ($user->isPemda()) {
             $view = 'pemda.agenda.create';
         } else {
             $view = 'admin.agenda.create';
@@ -64,7 +62,7 @@ class AgendaController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $user = $request->user();
-        abort_unless($user->isPengurusOrmada() || $user->isPemda() || $user->isAdmin(), 403);
+        $this->authorize('create', Agenda::class);
 
         $validated = $this->validateAgenda($request);
         
@@ -142,18 +140,9 @@ class AgendaController extends Controller
     public function edit(Request $request, Agenda $agenda): View
     {
         $user = $request->user();
-        
-        // Hanya pemilik atau admin/pemda yang bisa edit
-        abort_unless(
-            $user->isAdmin() || 
-            $user->isPemda() || 
-            ($user->isPengurusOrmada() && $agenda->admin_id === $user->id),
-            403
-        );
+        $this->authorize('update', $agenda);
 
-        if ($user->isPengurusOrmada()) {
-            $view = 'pengurus.agenda.edit';
-        } elseif ($user->isPemda()) {
+        if ($user->isPemda()) {
             $view = 'pemda.agenda.edit';
         } else {
             $view = 'admin.agenda.edit';
@@ -165,14 +154,7 @@ class AgendaController extends Controller
     public function update(Request $request, Agenda $agenda): RedirectResponse
     {
         $user = $request->user();
-        
-        // Hanya pemilik atau admin/pemda yang bisa edit
-        abort_unless(
-            $user->isAdmin() || 
-            $user->isPemda() || 
-            ($user->isPengurusOrmada() && $agenda->admin_id === $user->id),
-            403
-        );
+        $this->authorize('update', $agenda);
 
         $validated = $this->validateAgenda($request, $agenda);
 
@@ -209,14 +191,7 @@ class AgendaController extends Controller
     public function destroy(Request $request, Agenda $agenda): RedirectResponse
     {
         $user = $request->user();
-        
-        // Hanya pemilik atau admin/pemda yang bisa hapus
-        abort_unless(
-            $user->isAdmin() || 
-            $user->isPemda() || 
-            ($user->isPengurusOrmada() && $agenda->admin_id === $user->id),
-            403
-        );
+        $this->authorize('delete', $agenda);
 
         // Delete poster if exists
         if ($agenda->gambar_poster) {

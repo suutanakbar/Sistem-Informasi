@@ -1,16 +1,11 @@
 <x-layouts.pengurus title="{{ $agenda->nama_agenda }}" headerTitle="Detail Agenda">
     <div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-6 flex justify-between items-center">
+        <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-900">Detail Agenda</h1>
-            <div class="flex gap-2">
-                <a href="{{ route('agenda.edit', $agenda) }}" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700">
-                    Edit Agenda
-                </a>
-                <a href="{{ route('agenda.index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
-                    Kembali
-                </a>
-            </div>
+            <a href="{{ route('agenda.index') }}" class="text-orange-600 hover:text-orange-800 text-sm mt-2 inline-block">
+                ← Kembali ke Daftar Agenda
+            </a>
         </div>
 
         <div class="bg-white shadow sm:rounded-lg mb-6">
@@ -84,30 +79,6 @@
                         <p>{{ $agenda->tempat }}</p>
                     </div>
                 </div>
-
-                @if($agenda->kuota_volunteer)
-                <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
-                    <h3 class="text-lg font-semibold text-orange-900 mb-2">Pendaftaran Volunteer</h3>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <p class="text-orange-700">Kuota</p>
-                            <p class="font-semibold">{{ $agenda->kuota_volunteer }} orang</p>
-                        </div>
-                        <div>
-                            <p class="text-orange-700">Terdaftar</p>
-                            <p class="font-semibold">{{ $volunteerDiterima }} orang</p>
-                        </div>
-                        <div>
-                            <p class="text-orange-700">Deadline</p>
-                            <p class="font-semibold">{{ $agenda->deadline_pendaftaran->format('d F Y H:i') }}</p>
-                        </div>
-                        <div>
-                            <p class="text-orange-700">Sisa Kuota</p>
-                            <p class="font-semibold">{{ $agenda->kuota_volunteer - $volunteerDiterima }} orang</p>
-                        </div>
-                    </div>
-                </div>
-                @endif
             </div>
         </div>
 

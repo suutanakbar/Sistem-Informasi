@@ -49,20 +49,6 @@
             <p class="mt-2 text-sm text-zinc-500">Agenda kegiatan yang dibuat oleh Pemerintah Daerah. Anda dapat melihat detail dan mendaftar volunteer.</p>
         </section>
 
-        <!-- Volunteer Section -->
-        <section class="rounded-lg border border-zinc-200 bg-white p-6">
-            <div class="flex items-center justify-between">
-                <h2 class="font-semibold">Volunteer</h2>
-                <a href="{{ route('volunteer.index') }}" class="text-sm text-orange-600 hover:text-orange-700">Lihat Semua</a>
-            </div>
-            <p class="mt-2 text-sm text-zinc-500">Daftar volunteer yang tersedia dan status pendaftaran Anda.</p>
-            <div class="mt-4">
-                <a href="{{ route('volunteer.index') }}" class="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700">
-                    Lihat & Daftar Volunteer
-                </a>
-            </div>
-        </section>
-
         <!-- My Postingan -->
         <section class="rounded-lg border border-zinc-200 bg-white p-6">
             <div class="flex items-center justify-between">

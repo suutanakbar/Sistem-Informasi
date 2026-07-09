@@ -9,27 +9,20 @@ class AgendaPolicy
 {
     public function create(Admin $user): bool
     {
-        return $user->isPengurusOrmada() || $user->isPemda() || $user->isAdmin();
+        // Hanya Admin dan Pemda yang bisa membuat agenda
+        return $user->isAdmin() || $user->isPemda();
     }
 
     public function update(Admin $user, Agenda $agenda): bool
     {
-        if ($user->isAdmin() || $user->isPemda()) {
-            return true;
-        }
-
-        // Pengurus ormada bisa edit agenda miliknya
-        return $agenda->admin_id === $user->id;
+        // Hanya Admin dan Pemda yang bisa edit agenda
+        return $user->isAdmin() || $user->isPemda();
     }
 
     public function delete(Admin $user, Agenda $agenda): bool
     {
-        if ($user->isAdmin() || $user->isPemda()) {
-            return true;
-        }
-
-        // Pengurus ormada bisa hapus agenda miliknya
-        return $agenda->admin_id === $user->id;
+        // Hanya Admin dan Pemda yang bisa hapus agenda
+        return $user->isAdmin() || $user->isPemda();
     }
 
     public function publish(Admin $user, Agenda $agenda): bool

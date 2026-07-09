@@ -1,11 +1,9 @@
 <x-layouts.pengurus title="Agenda Saya" headerTitle="Agenda Saya">
     <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center mb-6">
+        <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-900">Agenda Saya</h1>
-            <a href="{{ route('agenda.create') }}" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700">
-                Buat Agenda
-            </a>
+            <p class="text-sm text-gray-600 mt-1">Lihat dan kelola agenda yang Anda buat</p>
         </div>
 
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -49,12 +47,9 @@
                     <div class="flex items-center justify-between text-xs text-gray-500">
                         <span>{{ $agenda->dibuat_pada->format('d M Y') }}</span>
                     </div>
-                    <div class="mt-3 flex gap-2">
+                    <div class="mt-3">
                         <a href="{{ route('agenda.show', $agenda) }}" class="text-orange-600 hover:text-orange-800 text-sm">
-                            Detail
-                        </a>
-                        <a href="{{ route('agenda.edit', $agenda) }}" class="text-blue-600 hover:text-blue-800 text-sm ml-3">
-                            Edit
+                            Lihat Detail →
                         </a>
                     </div>
                 </div>
