@@ -1,75 +1,81 @@
-<x-layouts.app title="Aspirasi Ormada">
-    <div class="py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Aspirasi Ormada</h1>
-            <p class="mt-2 text-sm text-gray-600">Ruang aspirasi mahasiswa daerah untuk menyampaikan suara mereka kepada Pemda Temanggung.</p>
-        </div>
+@extends('layouts.public')
+@section('title', 'Aspirasi Ormada - SI Ormada Temanggung')
+@section('content')
+            <!-- Page Header -->
+            <section class="hero-gradient text-white py-12 sm:py-16">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto">
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">Aspirasi Ormada</h2>
+                        <p class="mt-4 text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto">Ruang aspirasi mahasiswa daerah untuk menyampaikan suara mereka kepada Pemda Temanggung.</p>
+                    </div>
+                </div>
+            </section>
 
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            @forelse($aspirasis as $aspirasi)
-            <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow">
-                <div class="p-6">
-                    <div class="flex items-start gap-3">
-                        @if($aspirasi->profilOrmada->logo)
-                        <img src="{{ asset('storage/' . $aspirasi->profilOrmada->logo) }}" 
-                             alt="{{ $aspirasi->profilOrmada->nama_universitas }}" 
-                             class="w-12 h-12 rounded-full object-cover flex-shrink-0">
-                        @else
-                        <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                            <span class="text-gray-500 text-xs font-semibold">
-                                {{ substr($aspirasi->profilOrmada->nama_universitas, 0, 2) }}
-                            </span>
-                        </div>
-                        @endif
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <h3 class="font-semibold text-gray-900 truncate">{{ $aspirasi->topik_aspirasi }}</h3>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-1">
-                                {{ $aspirasi->profilOrmada->nama_universitas }}
-                            </p>
-                            <div class="mt-2">
-                                @if(!$aspirasi->tanggapan_pemda)
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
-                                    <span class="w-1.5 h-1.5 bg-yellow-600 rounded-full mr-1.5"></span>
-                                    Menunggu Tanggapan
-                                </span>
+            <!-- Aspirasi List -->
+            <section class="bg-gray-50 py-12 sm:py-16">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        @forelse($aspirasis as $aspirasi)
+                        <article class="content-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                            <div class="flex items-start gap-4">
+                                @if($aspirasi->profilOrmada->logo)
+                                <img src="{{ asset('storage/' . $aspirasi->profilOrmada->logo) }}" 
+                                     alt="{{ $aspirasi->profilOrmada->nama_universitas }}" 
+                                     class="h-12 w-12 rounded-full object-cover flex-shrink-0 shadow-sm">
                                 @else
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                                    <span class="w-1.5 h-1.5 bg-green-600 rounded-full mr-1.5"></span>
-                                    Sudah Ditanggapi
-                                </span>
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-700 text-sm font-bold text-white shadow-sm">
+                                    {{ strtoupper(substr($aspirasi->profilOrmada->nama_universitas, 0, 2)) }}
+                                </div>
                                 @endif
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-bold text-base leading-6 text-gray-900">{{ $aspirasi->topik_aspirasi }}</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ $aspirasi->profilOrmada->nama_universitas }}</p>
+                                    <div class="mt-2">
+                                        @if(!$aspirasi->tanggapan_pemda)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200">
+                                            <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-1.5"></span>
+                                            Menunggu Tanggapan
+                                        </span>
+                                        @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold bg-green-100 text-green-800 rounded-full border border-green-200">
+                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
+                                            Sudah Ditanggapi
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                            <p class="text-sm text-gray-500 mt-2 line-clamp-3">
+                            <p class="mt-4 text-sm text-gray-600 leading-relaxed">
                                 {{ Str::limit($aspirasi->detail_aspirasi, 120) }}
                             </p>
                             @if($aspirasi->tanggapan_pemda)
-                            <div class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-3">
-                                <p class="text-xs font-semibold text-blue-800 mb-1">Tanggapan Pemda:</p>
+                            <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                                <p class="text-xs font-semibold text-blue-900 mb-1">Tanggapan Pemda:</p>
                                 <p class="text-sm text-gray-700">
-                                    {{ Str::limit($aspirasi->tanggapan_pemda, 150) }}
+                                    {{ Str::limit($aspirasi->tanggapan_pemda, 100) }}
                                 </p>
                             </div>
                             @endif
-                            <div class="mt-3 text-xs text-gray-400">
-                                {{ $aspirasi->dibuat_pada->diffForHumans() }}
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <p class="text-xs text-gray-400">{{ $aspirasi->dibuat_pada->diffForHumans() }}</p>
                             </div>
+                        </article>
+                        @empty
+                        <div class="col-span-full text-center py-12">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <p class="mt-4 text-sm text-gray-500">Belum ada aspirasi.</p>
                         </div>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-8">
+                        {{ $aspirasis->links() }}
                     </div>
                 </div>
-            </div>
-            @empty
-            <div class="col-span-full text-center py-12">
-                <p class="text-gray-500">Belum ada aspirasi.</p>
-            </div>
-            @endforelse
-        </div>
-
-        <div class="mt-8">
-            {{ $aspirasis->links() }}
-        </div>
+            </section>
+        </main>
     </div>
-</div>
-</x-layouts.app>
+</body>
+</html>

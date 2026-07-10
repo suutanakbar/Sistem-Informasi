@@ -11,12 +11,14 @@ class PostinganFactory extends Factory
 {
     public function definition(): array
     {
+        $jenisKonten = fake()->randomElement(['berita', 'pengumuman', 'prestasi']);
+
         return [
             'admin_id' => Admin::factory(),
             'judul' => fake()->sentence(),
             'isi_konten' => fake()->paragraphs(3, true),
-            'foto' => null,
-            'jenis_konten' => fake()->randomElement(['berita', 'pengumuman', 'prestasi']),
+            'foto' => 'postingan/placeholder.jpg',
+            'jenis_konten' => $jenisKonten,
             'is_published' => false,
             'tanggal_publish' => null,
         ];
