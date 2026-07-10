@@ -9,8 +9,8 @@ class AgendaPolicy
 {
     public function create(Admin $user): bool
     {
-        // Hanya Admin dan Pemda yang bisa membuat agenda
-        return $user->isAdmin() || $user->isPemda();
+        // Admin, Pemda, dan Pengurus Ormada bisa membuat agenda
+        return $user->isAdmin() || $user->isPemda() || $user->isPengurusOrmada();
     }
 
     public function update(Admin $user, Agenda $agenda): bool
@@ -21,8 +21,8 @@ class AgendaPolicy
 
     public function delete(Admin $user, Agenda $agenda): bool
     {
-        // Hanya Admin dan Pemda yang bisa hapus agenda
-        return $user->isAdmin() || $user->isPemda();
+        // Admin bisa hapus semua, pengurus bisa hapus miliknya
+        return $user->isAdmin() || $agenda->admin_id === $user->id;
     }
 
     public function publish(Admin $user, Agenda $agenda): bool

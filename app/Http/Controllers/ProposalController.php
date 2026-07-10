@@ -165,8 +165,7 @@ class ProposalController extends Controller
     public function destroy(Request $request, Proposal $proposal): RedirectResponse
     {
         $user = $request->user();
-
-        $this->authorizeProposalMutation($user, $proposal);
+        $this->authorize('delete', $proposal);
 
         if ($proposal->file_proposal) {
             Storage::disk('public')->delete($proposal->file_proposal);

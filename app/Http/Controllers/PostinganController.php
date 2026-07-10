@@ -175,14 +175,7 @@ class PostinganController extends Controller
     public function destroy(Request $request, Postingan $postingan): RedirectResponse
     {
         $user = $request->user();
-        
-        // Hanya pemilik atau admin/pemda yang bisa hapus
-        abort_unless(
-            $user->isAdmin() || 
-            $user->isPemda() || 
-            ($user->isPengurusOrmada() && $postingan->admin_id === $user->id),
-            403
-        );
+        $this->authorize('delete', $postingan);
 
         // Delete foto if exists
         if ($postingan->foto) {

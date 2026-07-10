@@ -43,6 +43,15 @@
                         <a href="{{ route('postingan.edit', $postingan) }}" class="text-blue-600 hover:text-blue-800 text-sm ml-3">
                             Edit
                         </a>
+                        @can('delete', $postingan)
+                        <form method="POST" action="{{ route('postingan.destroy', $postingan) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus postingan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm ml-3">
+                                Hapus
+                            </button>
+                        </form>
+                        @endcan
                     </div>
                 </div>
             </div>

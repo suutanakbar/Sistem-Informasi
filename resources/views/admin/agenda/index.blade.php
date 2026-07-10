@@ -85,6 +85,15 @@
                         <a href="{{ route('agenda.edit', $agenda) }}" class="text-indigo-600 hover:text-indigo-800 text-sm ml-3">
                             Edit
                         </a>
+                        @can('delete', $agenda)
+                        <form method="POST" action="{{ route('agenda.destroy', $agenda) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus agenda ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm ml-3">
+                                Hapus
+                            </button>
+                        </form>
+                        @endcan
                         @if(!$agenda->is_published)
                         <form method="POST" action="{{ route('agenda.publish', $agenda) }}" class="inline">
                             @csrf

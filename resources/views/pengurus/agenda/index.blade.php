@@ -47,10 +47,19 @@
                     <div class="flex items-center justify-between text-xs text-gray-500">
                         <span>{{ $agenda->dibuat_pada->format('d M Y') }}</span>
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-3 flex gap-2">
                         <a href="{{ route('agenda.show', $agenda) }}" class="text-orange-600 hover:text-orange-800 text-sm">
                             Lihat Detail →
                         </a>
+                        @can('delete', $agenda)
+                        <form method="POST" action="{{ route('agenda.destroy', $agenda) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus agenda ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                                Hapus
+                            </button>
+                        </form>
+                        @endcan
                     </div>
                 </div>
             </div>

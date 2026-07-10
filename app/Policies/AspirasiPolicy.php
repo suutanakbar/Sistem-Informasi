@@ -29,6 +29,7 @@ class AspirasiPolicy
 
     public function delete(Admin $user, Aspirasi $aspirasi): bool
     {
+        // Admin bisa hapus semua, pengurus bisa hapus miliknya
         if ($user->isAdmin()) {
             return true;
         }

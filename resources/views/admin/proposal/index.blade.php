@@ -92,6 +92,15 @@
                             @can('update', $proposal)
                             <a href="{{ route('proposal.edit', $proposal) }}" class="text-indigo-600 hover:text-indigo-900 ml-3">Edit</a>
                             @endcan
+                            @can('delete', $proposal)
+                            <form method="POST" action="{{ route('proposal.destroy', $proposal) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus proposal ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-900 ml-3">
+                                    Hapus
+                                </button>
+                            </form>
+                            @endcan
                         </td>
                     </tr>
                     @empty

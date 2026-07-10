@@ -24,12 +24,8 @@ class PostinganPolicy
 
     public function delete(Admin $user, Postingan $postingan): bool
     {
-        if ($user->isAdmin() || $user->isPemda()) {
-            return true;
-        }
-
-        // Pengurus ormada bisa hapus postingan miliknya
-        return $postingan->admin_id === $user->id;
+        // Admin bisa hapus semua, pengurus bisa hapus miliknya
+        return $user->isAdmin() || $postingan->admin_id === $user->id;
     }
 
     public function publish(Admin $user, Postingan $postingan): bool

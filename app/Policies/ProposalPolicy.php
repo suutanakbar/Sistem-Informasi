@@ -19,6 +19,7 @@ class ProposalPolicy
 
     public function delete(Admin $user, Proposal $proposal): bool
     {
+        // Admin bisa hapus semua, pengurus bisa hapus miliknya
         return $user->isAdmin() || $proposal->admin_id === $user->id;
     }
 }

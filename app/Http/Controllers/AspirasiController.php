@@ -166,13 +166,7 @@ class AspirasiController extends Controller
     public function destroy(Request $request, Aspirasi $aspirasi): RedirectResponse
     {
         $user = $request->user();
-        
-        // Hanya pemilik atau admin yang bisa hapus
-        abort_unless(
-            $user->isAdmin() || 
-            ($user->isPengurusOrmada() && $aspirasi->profil_ormada_id === $user->profilOrmada()->first()?->id),
-            403
-        );
+        $this->authorize('delete', $aspirasi);
 
         // Delete file if exists
         if ($aspirasi->file) {

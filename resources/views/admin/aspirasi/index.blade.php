@@ -72,6 +72,15 @@
                             @can('update', $aspirasi)
                             <a href="{{ route('aspirasi.edit', $aspirasi) }}" class="text-indigo-600 hover:text-indigo-900 ml-3">Edit</a>
                             @endcan
+                            @can('delete', $aspirasi)
+                            <form method="POST" action="{{ route('aspirasi.destroy', $aspirasi) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus aspirasi ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-900 ml-3">
+                                    Hapus
+                                </button>
+                            </form>
+                            @endcan
                         </td>
                     </tr>
                     @empty
