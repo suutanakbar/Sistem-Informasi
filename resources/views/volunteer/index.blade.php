@@ -1,9 +1,7 @@
 @php
-    $isPemda = ($layout ?? 'admin') === 'pemda';
     $headerTitle = 'Kelola Volunteer';
-    $layoutTag = $isPemda ? 'layouts.pemda' : 'layouts.admin';
 @endphp
-<x-layouts.{{ $layoutTag }} title="Kelola Volunteer" headerTitle="{{ $headerTitle }}">
+<x-layouts.pemda title="Kelola Volunteer" headerTitle="{{ $headerTitle }}">
     <div class="space-y-6">
         <div class="flex items-center justify-between">
             <div>
@@ -80,4 +78,4 @@
             </table>
         </div>
     </div>
-</x-layouts.{{ $layoutTag }}>
+</x-layouts.pemda>

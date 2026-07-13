@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </section>
-
+            
             <!-- Agenda Detail -->
             <section class="bg-gray-50 py-12 sm:py-16">
                 <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -179,7 +179,4 @@
                     </div>
                 </div>
             </section>
-        </main>
-    </div>
-</body>
-</html>
+        @endsection
