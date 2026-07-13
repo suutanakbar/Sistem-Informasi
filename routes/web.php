@@ -19,6 +19,8 @@ Route::get('/publik/postingan/{postingan}', [PublicDashboardController::class, '
 Route::get('/publik/postingan/filter', [PublicDashboardController::class, 'filterPostingan'])->name('public.postingan.filter');
 Route::get('/publik/agenda', [PublicDashboardController::class, 'agenda'])->name('public.agenda');
 Route::get('/publik/agenda/{agenda}', [PublicDashboardController::class, 'showAgenda'])->name('public.agenda.show');
+Route::get('/publik/aspirasi/{aspirasi}', [PublicDashboardController::class, 'showAspirasi'])->name('public.aspirasi.show');
+Route::get('/publik/ormada/{profilOrmada}', [PublicDashboardController::class, 'showOrmada'])->name('public.ormada.show');
 
 // Public volunteer registration (no auth required)
 Route::post('/agenda/{agenda}/daftar-volunteer', [AgendaController::class, 'daftarVolunteer'])

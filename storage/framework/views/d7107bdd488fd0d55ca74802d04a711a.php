@@ -78,38 +78,62 @@
                     </div>
 
                     <?php if($profilOrmadas->isNotEmpty()): ?>
-                        <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                            <?php $__currentLoopData = $profilOrmadas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $profil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <article class="content-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                                    <div class="flex items-start gap-4">
-                                        <?php if($profil->logo): ?>
-                                            <img src="<?php echo e(asset('storage/'.$profil->logo)); ?>" alt="Logo <?php echo e($profil->nama_universitas); ?>" class="h-16 w-16 rounded-lg object-cover shadow-sm">
-                                        <?php else: ?>
-                                            <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-lg font-bold text-white shadow-sm">
-                                                <?php echo e(strtoupper(substr($profil->nama_universitas, 0, 2))); ?>
+                        <div class="relative mt-8">
+                            <!-- Carousel Container -->
+                            <div class="overflow-hidden">
+                                <div id="ormadaCarousel" class="flex transition-transform duration-500 ease-in-out">
+                                    <?php $__currentLoopData = $profilOrmadas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $profil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="w-full md:w-1/2 lg:w-1/4 flex-shrink-0 px-3">
+                                        <a href="<?php echo e(route('public.ormada.show', $profil)); ?>" class="block bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer h-full">
+                                            <div class="text-center mb-4">
+                                                <?php if($profil->logo): ?>
+                                                    <img src="<?php echo e(asset('storage/'.$profil->logo)); ?>" alt="Logo <?php echo e($profil->nama_universitas); ?>" class="h-16 w-16 mx-auto rounded-xl object-cover shadow-md">
+                                                <?php else: ?>
+                                                    <div class="flex h-16 w-16 mx-auto items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-xl font-bold text-white shadow-md">
+                                                        <?php echo e(strtoupper(substr($profil->nama_universitas, 0, 2))); ?>
 
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
-                                        <?php endif; ?>
-                                        <div class="min-w-0 flex-1">
-                                            <h3 class="font-bold text-base leading-6 text-gray-900"><?php echo e($profil->nama_universitas); ?></h3>
-                                            <p class="mt-1 text-xs text-gray-500 line-clamp-2"><?php echo e($profil->alamat_universitas); ?></p>
-                                        </div>
+                                            
+                                            <h3 class="text-center font-bold text-lg text-gray-900 mb-2"><?php echo e($profil->nama_universitas); ?></h3>
+                                            
+                                            <div class="space-y-3 mt-4">
+                                                <div class="text-center">
+                                                    <p class="text-xs text-gray-600 mb-1">Total Anggota</p>
+                                                    <p class="text-2xl font-bold text-blue-700"><?php echo e(number_format($profil->anggota_count)); ?></p>
+                                                </div>
+                                                <div class="text-center">
+                                                    <p class="text-xs text-gray-600 mb-1">Mahasiswa Univ.</p>
+                                                    <p class="text-lg font-semibold text-indigo-700"><?php echo e(number_format($profil->total_mahasiswa_univ)); ?></p>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+                            </div>
 
-                                    <p class="mt-4 text-sm text-gray-600 line-clamp-3"><?php echo e($profil->deskripsi ?: 'Belum ada deskripsi profil.'); ?></p>
+                            <!-- Navigation Buttons -->
+                            <?php if($profilOrmadas->count() > 4): ?>
+                            <button id="ormadaPrevBtn" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white hover:bg-gray-50 text-gray-800 p-3 rounded-full shadow-lg border border-gray-200 transition z-10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                            </button>
+                            <button id="ormadaNextBtn" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white hover:bg-gray-50 text-gray-800 p-3 rounded-full shadow-lg border border-gray-200 transition z-10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                            <?php endif; ?>
 
-                                    <div class="mt-5 grid grid-cols-2 gap-3">
-                                        <div class="rounded-lg bg-blue-50 p-3 border border-blue-100">
-                                            <p class="text-xs text-blue-700 font-medium">Mahasiswa Univ.</p>
-                                            <p class="mt-1 text-xl font-bold text-blue-900"><?php echo e(number_format($profil->total_mahasiswa_univ)); ?></p>
-                                        </div>
-                                        <div class="rounded-lg bg-blue-50 p-3 border border-blue-100">
-                                            <p class="text-xs text-blue-700 font-medium">Anggota</p>
-                                            <p class="mt-1 text-xl font-bold text-blue-900"><?php echo e(number_format($profil->anggota_count)); ?></p>
-                                        </div>
-                                    </div>
-                                </article>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <!-- Dots Indicator -->
+                            <?php if($profilOrmadas->count() > 4): ?>
+                            <div class="flex justify-center gap-2 mt-6" id="ormadaDots">
+                                <!-- Dots will be generated by JavaScript -->
+                            </div>
+                            <?php endif; ?>
                         </div>
                     <?php else: ?>
                         <div class="mt-8 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
@@ -285,10 +309,10 @@
                     <?php if($agendas->isNotEmpty()): ?>
                     <?php $featuredAgenda = $agendas[$agendaIndex] ?? $agendas->first(); ?>
                     <div class="relative">
-                        <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
+                        <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition" id="agendaCard">
                             <div class="grid md:grid-cols-2 gap-0">
                                 <!-- Left Side - Visual -->
-                                <div class="relative bg-gray-100">
+                                <div class="relative bg-gray-100" id="agendaImage">
                                     <?php if($featuredAgenda->gambar_poster): ?>
                                     <img src="<?php echo e(asset('storage/'.$featuredAgenda->gambar_poster)); ?>" alt="<?php echo e($featuredAgenda->nama_agenda); ?>" class="w-full h-64 md:h-full object-cover">
                                     <?php else: ?>
@@ -307,32 +331,32 @@
                                 </div>
 
                                 <!-- Right Side - Information -->
-                                <div class="p-6 md:p-8 flex flex-col">
+                                <div class="p-6 md:p-8 flex flex-col" id="agendaInfo">
                                     <!-- Badge and Time -->
                                     <div class="flex items-start justify-between mb-4">
-                                        <span class="px-3 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full border border-purple-200">
+                                        <span class="px-3 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full border border-purple-200" id="agendaBadge">
                                             <?php echo e(ucfirst(str_replace('_', ' ', $featuredAgenda->kategori))); ?>
 
                                         </span>
-                                        <span class="text-xs text-gray-500">
+                                        <span class="text-xs text-gray-500" id="agendaTime">
                                             <?php echo e($featuredAgenda->waktu_mulai->format('d M Y')); ?> • <?php echo e($featuredAgenda->waktu_mulai->format('H:i')); ?> WIB
                                         </span>
                                     </div>
 
                                     <!-- Title - Main Focus -->
-                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight" id="agendaTitle">
                                         <?php echo e($featuredAgenda->nama_agenda); ?>
 
                                     </h3>
 
                                     <!-- Description -->
-                                    <p class="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
+                                    <p class="text-sm text-gray-600 leading-relaxed mb-6 flex-1" id="agendaDescription">
                                         <?php echo e(Str::limit($featuredAgenda->deskripsi_agenda, 200)); ?>
 
                                     </p>
 
                                     <!-- Info Cards -->
-                                    <div class="grid grid-cols-3 gap-3 mb-6">
+                                    <div class="grid grid-cols-3 gap-3 mb-6" id="agendaInfoCards">
                                         <!-- Waktu -->
                                         <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                                             <div class="flex items-center gap-2 mb-1">
@@ -341,7 +365,7 @@
                                                 </svg>
                                                 <span class="text-xs text-gray-500">Waktu</span>
                                             </div>
-                                            <p class="text-xs font-semibold text-gray-900">
+                                            <p class="text-xs font-semibold text-gray-900" id="agendaWaktu">
                                                 <?php echo e($featuredAgenda->waktu_mulai->format('H:i')); ?>
 
                                             </p>
@@ -356,7 +380,7 @@
                                                 </svg>
                                                 <span class="text-xs text-gray-500">Tempat</span>
                                             </div>
-                                            <p class="text-xs font-semibold text-gray-900 line-clamp-2">
+                                            <p class="text-xs font-semibold text-gray-900 line-clamp-2" id="agendaTempat">
                                                 <?php echo e(Str::limit($featuredAgenda->tempat, 15)); ?>
 
                                             </p>
@@ -370,7 +394,7 @@
                                                 </svg>
                                                 <span class="text-xs text-gray-500">Kuota</span>
                                             </div>
-                                            <p class="text-xs font-semibold text-gray-900">
+                                            <p class="text-xs font-semibold text-gray-900" id="agendaKuota">
                                                 <?php echo e($featuredAgenda->kuota_volunteer ?? '∞'); ?>
 
                                             </p>
@@ -378,17 +402,19 @@
                                     </div>
 
                                     <!-- Deadline Info Box -->
-                                    <?php if($featuredAgenda->deadline_pendaftaran): ?>
-                                    <div class="bg-blue-50 rounded-lg p-4 mb-4 border border-blue-200">
-                                        <p class="text-xs text-blue-800">
-                                            <span class="font-semibold">Deadline Pendaftaran:</span><br>
-                                            <?php echo e($featuredAgenda->deadline_pendaftaran->format('d M Y H:i')); ?> WIB
-                                        </p>
+                                    <div id="agendaDeadline">
+                                        <?php if($featuredAgenda->deadline_pendaftaran): ?>
+                                        <div class="bg-blue-50 rounded-lg p-4 mb-4 border border-blue-200">
+                                            <p class="text-xs text-blue-800">
+                                                <span class="font-semibold">Deadline Pendaftaran:</span><br>
+                                                <?php echo e($featuredAgenda->deadline_pendaftaran->format('d M Y H:i')); ?> WIB
+                                            </p>
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
-                                    <?php endif; ?>
 
                                     <!-- Action Link -->
-                                    <a href="<?php echo e(route('public.agenda.show', $featuredAgenda)); ?>" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800 transition">
+                                    <a href="<?php echo e(route('public.agenda.show', $featuredAgenda)); ?>" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800 transition" id="agendaDetailLink">
                                         Lihat Detail
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -549,10 +575,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Agenda Carousel Functionality
-let currentSlide = 0;
+let currentSlide = <?php echo e($agendaIndex); ?>;
 const totalSlides = <?php echo e($agendas->count()); ?>;
 
+// Store all agenda data in JavaScript
+const agendasData = <?php echo json_encode($agendasData, 15, 512) ?>;
+
+console.log('Agenda Carousel Initialized');
+console.log('Total slides:', totalSlides);
+console.log('Current slide:', currentSlide);
+console.log('Agendas data:', agendasData);
+
 function updateCarousel() {
+    console.log('Updating carousel, current slide:', currentSlide);
     // Update dots
     document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
         if (index === currentSlide) {
@@ -565,45 +600,139 @@ function updateCarousel() {
     });
 }
 
+function loadAgendaSlide(index) {
+    console.log('Loading agenda slide:', index);
+    
+    if (index < 0 || index >= agendasData.length) {
+        console.error('Invalid index:', index, 'Length:', agendasData.length);
+        return;
+    }
+    
+    const agenda = agendasData[index];
+    console.log('Loading agenda:', agenda);
+    
+    // Update image
+    const imageContainer = document.getElementById('agendaImage');
+    if (!imageContainer) {
+        console.error('Image container not found');
+        return;
+    }
+    
+    if (agenda.gambar_poster) {
+        imageContainer.innerHTML = `
+            <img src="${agenda.gambar_poster}" alt="${agenda.nama_agenda}" class="w-full h-64 md:h-full object-cover">
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-md">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        `;
+    } else {
+        imageContainer.innerHTML = `
+            <div class="w-full h-64 md:h-96 flex items-center justify-center">
+                <svg class="w-20 h-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-md">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        `;
+    }
+    
+    // Update badge and time
+    const badgeEl = document.getElementById('agendaBadge');
+    const timeEl = document.getElementById('agendaTime');
+    const titleEl = document.getElementById('agendaTitle');
+    const descEl = document.getElementById('agendaDescription');
+    const waktuEl = document.getElementById('agendaWaktu');
+    const tempatEl = document.getElementById('agendaTempat');
+    const kuotaEl = document.getElementById('agendaKuota');
+    const deadlineEl = document.getElementById('agendaDeadline');
+    const detailLinkEl = document.getElementById('agendaDetailLink');
+    
+    if (badgeEl) badgeEl.textContent = agenda.kategori;
+    if (timeEl) timeEl.textContent = agenda.waktu_mulai;
+    if (titleEl) titleEl.textContent = agenda.nama_agenda;
+    if (descEl) descEl.textContent = agenda.deskripsi;
+    if (waktuEl) waktuEl.textContent = agenda.waktu_mulai_time;
+    if (tempatEl) tempatEl.textContent = agenda.tempat;
+    if (kuotaEl) kuotaEl.textContent = agenda.kuota;
+    
+    // Update deadline
+    if (deadlineEl) {
+        if (agenda.deadline_pendaftaran) {
+            deadlineEl.innerHTML = `
+                <div class="bg-blue-50 rounded-lg p-4 mb-4 border border-blue-200">
+                    <p class="text-xs text-blue-800">
+                        <span class="font-semibold">Deadline Pendaftaran:</span><br>
+                        ${agenda.deadline_pendaftaran}
+                    </p>
+                </div>
+            `;
+        } else {
+            deadlineEl.innerHTML = '';
+        }
+    }
+    
+    // Update detail link
+    if (detailLinkEl) detailLinkEl.href = agenda.detail_url;
+    
+    // Update URL without reload
+    const url = new URL(window.location.href);
+    url.searchParams.set('agenda_index', index);
+    window.history.pushState({}, '', url.toString());
+    
+    console.log('Agenda slide loaded successfully');
+}
+
 function nextSlide() {
+    console.log('Next slide clicked');
     currentSlide = (currentSlide + 1) % totalSlides;
     loadAgendaSlide(currentSlide);
     updateCarousel();
 }
 
 function prevSlide() {
+    console.log('Prev slide clicked');
     currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
     loadAgendaSlide(currentSlide);
     updateCarousel();
 }
 
-function loadAgendaSlide(index) {
-    // This will be handled by the server-side rendering
-    // For now, we'll use a simple approach - reload the page with a parameter
-    // Or better, we can use AJAX to fetch the agenda data
-    
-    // For simplicity, let's use URL parameter approach
-    const url = new URL(window.location.href);
-    url.searchParams.set('agenda_index', index);
-    window.location.href = url.toString();
-}
-
 // Navigation button event listeners
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded, initializing carousel...');
+    
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     
+    console.log('Prev button found:', !!prevBtn);
+    console.log('Next button found:', !!nextBtn);
+    
     if (prevBtn) {
         prevBtn.addEventListener('click', prevSlide);
+        console.log('Prev button event listener added');
+    } else {
+        console.error('Prev button not found!');
     }
     
     if (nextBtn) {
         nextBtn.addEventListener('click', nextSlide);
+        console.log('Next button event listener added');
+    } else {
+        console.error('Next button not found!');
     }
     
     // Dot navigation
-    document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+    const dots = document.querySelectorAll('.carousel-dot');
+    console.log('Dots found:', dots.length);
+    
+    dots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
+            console.log('Dot clicked:', index);
             currentSlide = index;
             loadAgendaSlide(currentSlide);
             updateCarousel();
@@ -624,6 +753,8 @@ document.addEventListener('DOMContentLoaded', function() {
             touchEndX = e.changedTouches[0].screenX;
             handleSwipe();
         }, { passive: true });
+        
+        console.log('Touch swipe support enabled');
     }
     
     function handleSwipe() {
@@ -639,10 +770,137 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', () => {
+        const url = new URL(window.location.href);
+        const index = parseInt(url.searchParams.get('agenda_index')) || 0;
+        currentSlide = index;
+        loadAgendaSlide(currentSlide);
+        updateCarousel();
+    });
+    
     // Initialize first dot as active
     if (totalSlides > 0) {
         updateCarousel();
+        console.log('Carousel initialized with', totalSlides, 'slides');
     }
+});
+
+// Ormada Carousel Functionality
+let ormadaCurrentSlide = 0;
+const ormadaTotalSlides = Math.ceil(<?php echo e($profilOrmadas->count()); ?> / 4);
+const ormadaData = <?php echo json_encode($ormadasData, 15, 512) ?>;
+
+function updateOrmadaCarousel() {
+    const carousel = document.getElementById('ormadaCarousel');
+    if (!carousel) return;
+    
+    const itemsPerView = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 2 : 1);
+    const maxSlide = Math.max(0, ormadaData.length - itemsPerView);
+    ormadaCurrentSlide = Math.min(ormadaCurrentSlide, maxSlide);
+    
+    const translateX = -ormadaCurrentSlide * (100 / itemsPerView);
+    carousel.style.transform = `translateX(${translateX}%)`;
+    
+    // Update dots
+    const dotsContainer = document.getElementById('ormadaDots');
+    if (dotsContainer && ormadaTotalSlides > 1) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < ormadaTotalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = `w-2 h-2 rounded-full transition ${i === Math.floor(ormadaCurrentSlide / 4) ? 'bg-blue-700' : 'bg-gray-300 hover:bg-gray-400'}`;
+            dot.addEventListener('click', () => {
+                ormadaCurrentSlide = i * 4;
+                updateOrmadaCarousel();
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+    
+    // Update URL
+    const url = new URL(window.location.href);
+    url.searchParams.set('ormada_index', ormadaCurrentSlide);
+    window.history.pushState({}, '', url.toString());
+}
+
+function ormadaNextSlide() {
+    const itemsPerView = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 2 : 1);
+    const maxSlide = Math.max(0, ormadaData.length - itemsPerView);
+    ormadaCurrentSlide = (ormadaCurrentSlide + itemsPerView) > maxSlide ? 0 : ormadaCurrentSlide + itemsPerView;
+    updateOrmadaCarousel();
+}
+
+function ormadaPrevSlide() {
+    const itemsPerView = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 2 : 1);
+    const maxSlide = Math.max(0, ormadaData.length - itemsPerView);
+    ormadaCurrentSlide = (ormadaCurrentSlide - itemsPerView) < 0 ? maxSlide : ormadaCurrentSlide - itemsPerView;
+    updateOrmadaCarousel();
+}
+
+// Initialize ormada carousel
+document.addEventListener('DOMContentLoaded', function() {
+    const ormadaPrevBtn = document.getElementById('ormadaPrevBtn');
+    const ormadaNextBtn = document.getElementById('ormadaNextBtn');
+    
+    if (ormadaPrevBtn) {
+        ormadaPrevBtn.addEventListener('click', ormadaPrevSlide);
+    }
+    
+    if (ormadaNextBtn) {
+        ormadaNextBtn.addEventListener('click', ormadaNextSlide);
+    }
+    
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const ormadaCarousel = document.getElementById('ormadaCarousel');
+    
+    if (ormadaCarousel) {
+        ormadaCarousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        ormadaCarousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleOrmadaSwipe();
+        }, { passive: true });
+    }
+    
+    function handleOrmadaSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                ormadaNextSlide();
+            } else {
+                ormadaPrevSlide();
+            }
+        }
+    }
+    
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateOrmadaCarousel();
+        }, 250);
+    });
+    
+    // Initialize carousel
+    if (ormadaData.length > 4) {
+        updateOrmadaCarousel();
+        console.log('Ormada carousel initialized with', ormadaData.length, 'items');
+    }
+    
+    // Handle browser back/forward
+    window.addEventListener('popstate', () => {
+        const url = new URL(window.location.href);
+        const index = parseInt(url.searchParams.get('ormada_index')) || 0;
+        ormadaCurrentSlide = index;
+        updateOrmadaCarousel();
+    });
 });
 </script>
 <?php $__env->stopPush(); ?>

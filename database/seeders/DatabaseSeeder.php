@@ -16,6 +16,18 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Truncate tables to avoid duplicate entries
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Volunteer::truncate();
+        Proposal::truncate();
+        Aspirasi::truncate();
+        AnggotaOrmada::truncate();
+        Agenda::truncate();
+        Postingan::truncate();
+        ProfilOrmada::truncate();
+        Admin::truncate();
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         // Create sample admins
         $admin = Admin::factory()->create([
             'nama' => 'Admin Utama',
@@ -60,13 +72,86 @@ class DatabaseSeeder extends Seeder
             'deskripsi' => 'Universitas Indonesia merupakan kampus terkemuka dengan berbagai program studi unggulan.',
         ]);
 
-        // Create anggota ormada
-        AnggotaOrmada::factory()->count(8)->create([
+        // Create additional ormada profiles
+        $profilOrmadaC = ProfilOrmada::factory()->create([
+            'nama_universitas' => 'Universitas Negeri Semarang',
+            'alamat_universitas' => 'Jl. Sekaran Gunungpati, Semarang',
+            'total_mahasiswa_univ' => 28000,
+            'logo' => 'logos/logo-unes-semarang.png',
+            'deskripsi' => 'Universitas Negeri Semarang dikenal sebagai pusat pendidikan guru dan teknologi pendidikan di Jawa Tengah.',
+        ]);
+
+        $profilOrmadaD = ProfilOrmada::factory()->create([
+            'nama_universitas' => 'Universitas Diponegoro',
+            'alamat_universitas' => 'Jl. Prof. Soedarto, SH, Semarang',
+            'total_mahasiswa_univ' => 32000,
+            'logo' => 'logos/logo-undip.png',
+            'deskripsi' => 'Universitas Diponegoro adalah universitas terbesar di Jawa Tengah dengan berbagai fakultas unggulan.',
+        ]);
+
+        $profilOrmadaE = ProfilOrmada::factory()->create([
+            'nama_universitas' => 'Institut Teknologi Sepuluh Nopember',
+            'alamat_universitas' => 'Jl. Raya ITS, Sukolilo, Surabaya',
+            'total_mahasiswa_univ' => 25000,
+            'logo' => 'logos/logo-its.png',
+            'deskripsi' => 'ITS merupakan institusi teknologi terkemuka di Indonesia dengan fokus pada sains dan teknologi.',
+        ]);
+
+        $profilOrmadaF = ProfilOrmada::factory()->create([
+            'nama_universitas' => 'Universitas Brawijaya',
+            'alamat_universitas' => 'Jl. Veteran, Malang',
+            'total_mahasiswa_univ' => 38000,
+            'logo' => 'logos/logo-ub.png',
+            'deskripsi' => 'Universitas Brawijaya dikenal sebagai universitas berbasis riset dengan berbagai inovasi teknologi.',
+        ]);
+
+        $profilOrmadaG = ProfilOrmada::factory()->create([
+            'nama_universitas' => 'Universitas Padjadjaran',
+            'alamat_universitas' => 'Jl. Raya Bandung Sumedang, Bandung',
+            'total_mahasiswa_univ' => 42000,
+            'logo' => 'logos/logo-unpad.png',
+            'deskripsi' => 'Universitas Padjadjaran merupakan universitas favorit di Jawa Barat dengan berbagai program studi prestasi.',
+        ]);
+
+        $profilOrmadaH = ProfilOrmada::factory()->create([
+            'nama_universitas' => 'Universitas Gadjah Mada',
+            'alamat_universitas' => 'Jl. Kaliurang No. 1, Yogyakarta',
+            'total_mahasiswa_univ' => 35000,
+            'logo' => 'logos/logo-ugm.png',
+            'deskripsi' => 'Kampus UGM yang dikenal dengan berbagai kegiatan sosial dan akademik yang berkelanjutan.',
+        ]);
+
+        // Create anggota ormada for each profile
+        AnggotaOrmada::factory()->count(10)->create([
             'profil_ormada_id' => $profilOrmadaA->id,
         ]);
 
-        AnggotaOrmada::factory()->count(6)->create([
+        AnggotaOrmada::factory()->count(8)->create([
             'profil_ormada_id' => $profilOrmadaB->id,
+        ]);
+
+        AnggotaOrmada::factory()->count(7)->create([
+            'profil_ormada_id' => $profilOrmadaC->id,
+        ]);
+
+        AnggotaOrmada::factory()->count(9)->create([
+            'profil_ormada_id' => $profilOrmadaD->id,
+        ]);
+
+        AnggotaOrmada::factory()->count(6)->create([
+            'profil_ormada_id' => $profilOrmadaE->id,
+        ]);
+
+        AnggotaOrmada::factory()->count(8)->create([
+            'profil_ormada_id' => $profilOrmadaF->id,
+        ]);
+
+        AnggotaOrmada::factory()->count(7)->create([
+            'profil_ormada_id' => $profilOrmadaG->id,
+        ]);
+
+        AnggotaOrmada::factory()->count(5)->create([
+            'profil_ormada_id' => $profilOrmadaH->id,
         ]);
 
         // Create sample postingan
