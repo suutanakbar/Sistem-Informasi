@@ -15,6 +15,8 @@ use App\Http\Controllers\VolunteerController;
 Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
 Route::get('/publik/aspirasi', [PublicDashboardController::class, 'aspirasi'])->name('public.aspirasi');
 Route::get('/publik/postingan', [PublicDashboardController::class, 'postingan'])->name('public.postingan');
+Route::get('/publik/postingan/{postingan}', [PublicDashboardController::class, 'showPostingan'])->name('public.postingan.show');
+Route::get('/publik/postingan/filter', [PublicDashboardController::class, 'filterPostingan'])->name('public.postingan.filter');
 Route::get('/publik/agenda', [PublicDashboardController::class, 'agenda'])->name('public.agenda');
 Route::get('/publik/agenda/{agenda}', [PublicDashboardController::class, 'showAgenda'])->name('public.agenda.show');
 
