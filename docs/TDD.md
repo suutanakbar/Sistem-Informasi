@@ -1,538 +1,236 @@
-# Technical Design Document
+# Technical Design Document (TDD)
 
-## Nama Sistem
+## Sistem Informasi Ormada Temanggung
 
-Sistem Informasi Ormada dan Sinergi Pemda Temanggung
+| Atribut | Nilai |
+|---|---|
+| Versi | 2.0 |
+| Status | As-built / baseline teknis terkini |
+| Terakhir diperbarui | 14 Juli 2026 |
+| Sumber acuan | Implementasi commit 996e563 |
 
-## Ringkasan Teknis
+> TDD ini mendokumentasikan arsitektur yang benar-benar tersedia di repository. Gap implementasi dicatat pada bagian technical debt.
 
-Aplikasi dibangun menggunakan Laravel 12 dengan database MySQL/MariaDB. Desain data mengikuti SQL yang tersedia, dengan modul utama untuk autentikasi berbasis peran, profil ormada, anggota ormada, proposal, volunteer, kolaborasi, aspirasi, postingan, dan agenda.
+## 1. Ringkasan Teknis
 
-## Stack
+Aplikasi monolit Laravel berbasis server-rendered Blade. Request masuk melalui route web, middleware autentikasi/peran, controller, policy atau ownership guard, lalu Eloquent ke database. Aset frontend: Vite + Tailwind CSS. Upload via disk `public`.
 
-- Backend: Laravel 12, PHP 8.2+
-- Database: MySQL atau MariaDB
-- Frontend awal: Blade, Vite, Tailwind CSS bawaan Laravel bila diperlukan
-- Testing: PHPUnit melalui `php artisan test`
-- File storage: Laravel filesystem disk `public`
+## 2. Stack
 
-## Arsitektur Aplikasi
+- PHP ^8.2, Laravel ^12.0
+- MySQL/MariaDB; test bisa pakai SQLite
+- Blade + Tailwind CSS ^4.0 + Vite ^7.0.7
+- Axios ^1.11.0
+- PHPUnit ^11.5.50
+- Laravel Pint ^1.24
 
-Aplikasi memakai pola MVC Laravel:
+## 3. Arsitektur
 
-- Model menyimpan representasi tabel dan relasi.
-- Controller menangani request, validasi, authorization, dan response.
-- View Blade menampilkan halaman web.
-- Form Request dapat digunakan untuk validasi input modul yang kompleks.
-- Policy atau middleware digunakan untuk pembatasan akses per peran.
+Browser -> routes/web.php -> web middleware -> RoleMiddleware/Policy/ownership guard -> Controller -> Eloquent Model -> Database -> Blade View/Redirect/JSON
 
-## Peran dan Akses
+Komponen utama:
+- app/Http/Controllers: controller resource + dashboard
+- app/Http/Middleware/RoleMiddleware.php: role check
+- app/Policies: Agenda, Aspirasi, Postingan, Proposal
+- app/Models: model + relasi
+- resources/views: view publik + khusus peran
+- database/migrations: skema Indonesia
+- database/factories, database/seeders: data dummy
+- tests/Feature: pengujian HTTP + otorisasi
 
-### `admin`
+Timestamp domain: dibuat_pada, diperbarui_pada. Tabel users bawaan ada tapi tidak dipakai untuk auth; auth pakai tabel admin.
 
-- Mengelola akun pengguna.
-- Mengakses seluruh data untuk kebutuhan administrasi.
+## 4. Autentikasi & Otorisasi
 
-### `pengurus_ormada`
+Guard: web session
+Provider: users model App\Models\Admin
+Table: admin (email + password)
+Peran: admin, pengurus_ormada, pemda
+Helper model: isAdmin(), isPemda(), isPengurusOrmada()
 
-- Mengelola profil ormada miliknya.
-- Mengelola anggota ormada miliknya.
-- Membuat proposal, aspirasi, postingan, dan agenda kategori ormada.
-- Mendaftarkan anggota ke volunteer.
-- Melihat status proposal, aspirasi, volunteer, dan kolaborasi terkait.
+Lapisan authorization: middleware role, Policy, ownership guard di controller
 
-### `pemda`
+Ownership rules:
+- pengurus -> profil_ormada.admin_id
+- konten -> admin_id
+- proposal -> admin_id pengaju / dinas_tujuan_id
+- aspirasi -> profil_ormada.admin_id
 
-- Melihat data seluruh ormada sampai detail anggota.
-- Memproses proposal.
-- Menanggapi aspirasi.
-- Membuat volunteer, kolaborasi, agenda kategori pemda, dan postingan.
+## 5. Route
 
-### `public`
+### Publik
+GET / -> PublicDashboardController@index
+GET /publik/aspirasi -> PublicDashboardController@aspirasi
+GET /publik/aspirasi/{aspirasi} -> showAspirasi
+GET /publik/postingan -> postingan
+GET /publik/postingan/filter -> filterPostingan JSON
+GET /publik/postingan/{postingan} -> showPostingan
+GET /publik/agenda -> agenda
+GET /publik/agenda/{agenda} -> showAgenda
+GET /publik/ormada/{profilOrmada} -> showOrmada
+POST /agenda/{agenda}/daftar-volunteer -> AgendaController@daftarVolunteer
 
-- Mengakses dashboard umum tanpa login.
-- Melihat ringkasan ormada, total anggota agregat, profil ormada ringkas, berita/pengumuman/prestasi dari ormada, aspirasi publik, dan kalender agenda.
-- Tidak dapat melihat detail personal anggota seperti NIM, nomor HP, status personal, atau riwayat jabatan individu.
-
-## Desain Database
-
-### `admin`
-
-Menyimpan akun pengguna aplikasi.
-
-Kolom utama:
-
-- `id`
-- `nama`
-- `email`
-- `kata_sandi`
-- `peran`
-- `terakhir_masuk`
-- `dibuat_pada`
-- `diperbarui_pada`
-
-Catatan implementasi Laravel:
-
-- Model dapat dinamai `Admin`.
-- Jika memakai auth bawaan Laravel, pertimbangkan rename kolom `kata_sandi` ke `password`, atau override accessor auth password pada model.
-
-### `profil_ormada`
-
-Menyimpan profil organisasi mahasiswa daerah berdasarkan universitas.
-
-Relasi:
-
-- `profil_ormada.admin_id` belongs to `admin.id`
-- Satu admin pengurus ormada idealnya punya satu profil ormada.
-
-### `anggota_ormada`
-
-Menyimpan data anggota, pengurus, demisioner, dan alumni.
-
-Relasi:
-
-- `anggota_ormada.profil_ormada_id` belongs to `profil_ormada.id`
+### Internal
+GET /dashboard -> DashboardController@index
+POST /logout -> AuthController@logout
+Resource admin -> AdminController
+Resource profil-ormada -> ProfilOrmadaController
+Resource anggota-ormada -> AnggotaOrmadaController
+Resource agenda -> AgendaController
+PATCH agenda/{agenda}/publish -> AgendaController@publish
+GET agenda/{agenda}/volunteer -> AgendaController@listVolunteer
+GET volunteer -> VolunteerController@index
+PATCH volunteer/{volunteer}/status -> VolunteerController@updateStatus
+Resource postingan -> PostinganController
+PATCH postingan/{postingan}/publish -> PostinganController@publish
+Resource proposal -> ProposalController
+PATCH proposal/{proposal}/status -> ProposalController@updateStatus
+Resource aspirasi -> AspirasiController
+PATCH aspirasi/{aspirasi}/tanggapan -> AspirasiController@updateTanggapan
 
 Catatan:
-
-- Kolom `is_pengurus` saat ini bertipe `VARCHAR(5)` dengan nilai `YA` atau `TIDAK`.
-- Secara teknis bisa dipertahankan sesuai SQL, tetapi boolean lebih ideal untuk implementasi baru.
-
-### `proposal`
-
-Menyimpan proposal kegiatan atau bantuan.
-
-Relasi:
-
-- `proposal.admin_id` belongs to pengaju pada `admin.id`
-- `proposal.dinas_tujuan_id` belongs to tujuan pada `admin.id`
-
-Status:
-
-- `diajukan`
-- `diproses_pemda`
-- `dana_cair`
-- `ditolak`
-
-### `volunteer`
-
-Menyimpan program volunteer.
-
-Relasi:
-
-- `volunteer.admin_id` belongs to pembuat pada `admin.id`
-- `volunteer` has many `anggota_volunteer`
-
-### `anggota_volunteer`
-
-Menyimpan pendaftaran anggota ormada pada program volunteer.
-
-Relasi:
-
-- belongs to `volunteer`
-- belongs to `anggota_ormada`
-
-Status:
-
-- `pending`
-- `diterima`
-- `ditolak`
-
-### `kolaborasi`
-
-Menyimpan program kolaborasi Pemda dan ormada.
-
-Relasi:
-
-- `admin_id_pemda` belongs to `admin.id`
-- `admin_id_ormada` belongs to `admin.id`
-
-Status:
-
-- `diajukan`
-- `disetujui`
-- `selesai`
-- `batal`
-
-### `aspirasi`
-
-Menyimpan aspirasi dari ormada untuk Pemda.
-
-Relasi:
-
-- belongs to `profil_ormada`
-
-### `postingan`
-
-Menyimpan konten berita, pengumuman, dan prestasi.
-
-Relasi:
-
-- belongs to `admin`
-
-Jenis konten:
-
-- `berita`
-- `pengumuman`
-- `prestasi`
-
-### `agenda`
-
-Menyimpan agenda kegiatan ormada atau Pemda.
-
-Relasi:
-
-- belongs to `admin`
-
-Kategori:
-
-- `ormada`
-- `pemda`
-
-## Relasi Model Laravel
-
-### `Admin`
-
-```php
-public function profilOrmada()
-{
-    return $this->hasOne(ProfilOrmada::class);
-}
-
-public function proposals()
-{
-    return $this->hasMany(Proposal::class);
-}
-
-public function postingan()
-{
-    return $this->hasMany(Postingan::class);
-}
-
-public function agenda()
-{
-    return $this->hasMany(Agenda::class);
-}
-```
-
-### `ProfilOrmada`
-
-```php
-public function admin()
-{
-    return $this->belongsTo(Admin::class);
-}
-
-public function anggota()
-{
-    return $this->hasMany(AnggotaOrmada::class);
-}
-
-public function aspirasi()
-{
-    return $this->hasMany(Aspirasi::class);
-}
-```
-
-### `AnggotaOrmada`
-
-```php
-public function profilOrmada()
-{
-    return $this->belongsTo(ProfilOrmada::class);
-}
-
-public function volunteerRegistrations()
-{
-    return $this->hasMany(AnggotaVolunteer::class);
-}
-```
-
-## Modul Controller
-
-Rekomendasi controller:
-
-- `AuthController`
-- `DashboardController`
-- `ProfilOrmadaController`
-- `AnggotaOrmadaController`
-- `ProposalController`
-- `VolunteerController`
-- `AnggotaVolunteerController`
-- `KolaborasiController`
-- `AspirasiController`
-- `PostinganController`
-- `AgendaController`
-- `PublicDashboardController`
-
-## Rancangan Route Web
-
-```php
-Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
-Route::get('/publik/agenda', [PublicDashboardController::class, 'agenda'])->name('public.agenda');
-Route::get('/publik/postingan/{postingan}', [PublicDashboardController::class, 'postingan'])->name('public.postingan.show');
-
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('profil-ormada', ProfilOrmadaController::class);
-    Route::resource('anggota-ormada', AnggotaOrmadaController::class);
-    Route::resource('proposal', ProposalController::class);
-    Route::resource('volunteer', VolunteerController::class);
-    Route::resource('kolaborasi', KolaborasiController::class);
-    Route::resource('aspirasi', AspirasiController::class);
-    Route::resource('postingan', PostinganController::class);
-    Route::resource('agenda', AgendaController::class);
-
-    Route::patch('/proposal/{proposal}/status', [ProposalController::class, 'updateStatus'])
-        ->name('proposal.update-status');
-
-    Route::patch('/aspirasi/{aspirasi}/tanggapan', [AspirasiController::class, 'updateTanggapan'])
-        ->name('aspirasi.update-tanggapan');
-
-    Route::post('/volunteer/{volunteer}/anggota', [AnggotaVolunteerController::class, 'store'])
-        ->name('volunteer.anggota.store');
-
-    Route::patch('/volunteer-anggota/{anggotaVolunteer}/status', [AnggotaVolunteerController::class, 'updateStatus'])
-        ->name('volunteer.anggota.update-status');
-});
-```
-
-## Middleware dan Authorization
-
-Tambahkan middleware peran, misalnya `role:admin,pemda`.
-
-Aturan akses utama:
-
-- Pengurus ormada hanya boleh mengubah profil dan anggota milik admin yang sedang login.
-- Pemda boleh melihat semua profil dan detail anggota, tetapi tidak mengubah data internal ormada kecuali fitur memang diizinkan.
-- Pemda boleh mengubah status proposal dan tanggapan aspirasi.
-- Pengurus ormada boleh membuat proposal dan aspirasi.
-- Admin sistem boleh mengakses semua modul.
-- Masyarakat umum hanya boleh mengakses halaman utama publik dan data agregat tanpa detail personal anggota.
-
-## Validasi Input
-
-### Profil Ormada
-
-- `nama_universitas`: required, max 255
-- `alamat_universitas`: required, max 255
-- `total_mahasiswa_univ`: integer, min 0
-- `logo`: nullable, image
-- `deskripsi`: nullable
-
-### Anggota Ormada
-
-- `nama_lengkap`: required, max 255
-- `nim`: required, max 50
-- `program_studi`: required, max 255
-- `status_aktif`: required, in daftar enum
-- `is_pengurus`: required, in `YA,TIDAK`
-- `no_hp`: nullable, max 20
-- tanggal: nullable, date
-
-### Proposal
-
-- `dinas_tujuan_id`: required, exists admin
-- `judul_kegiatan`: required, max 255
-- `deskripsi_kegiatan`: required
-- `jenis_bantuan`: required, in `dana,izin,tempat,fasilitas`
-- `anggaran_dibutuhkan`: integer, min 0
-- `file_proposal`: required, file, mimes pdf/doc/docx
-
-### Volunteer
-
-- `nama_volunteer`: required, max 255
-- `deskripsi`: required
-- `kuota`: integer, min 0
-- `tenggat_pendaftaran`: required, date
-- `status`: in `buka,tutup`
-
-### Kolaborasi
-
-- `admin_id_pemda`: required, exists admin
-- `admin_id_ormada`: required, exists admin
-- `nama_program`: required, max 255
-- `deskripsi_kolaborasi`: required
-- `anggaran_bersama`: integer, min 0
-- `tanggal_pelaksanaan`: required, date
-- `tempat_pelaksanaan`: required, max 255
-- `file_mou`: nullable, file
-
-### Aspirasi
-
-- `topik_aspirasi`: required, max 255
-- `detail_aspirasi`: required
-- `file`: nullable, file
-- `tanggapan_pemda`: nullable
-
-### Postingan
-
-- `judul`: required, max 255
-- `isi_konten`: required
-- `foto`: nullable, image
-- `jenis_konten`: required, in `berita,pengumuman,prestasi`
-
-### Agenda
-
-- `nama_agenda`: required, max 255
-- `deskripsi_agenda`: required
-- `gambar_poster`: nullable, image
-- `waktu_mulai`: required, date
-- `waktu_selesai`: required, date, after_or_equal waktu_mulai
-- `tempat`: required, max 255
-- `kategori`: required, in `ormada,pemda`
-
-## File Upload
-
-File disimpan menggunakan disk `public`.
-
-Rekomendasi folder:
-
-- `profil-ormada/logo`
-- `proposal`
-- `aspirasi`
-- `postingan/foto`
-- `agenda/poster`
-- `kolaborasi/mou`
-
-Path file yang disimpan ke database cukup path relatif dari storage publik.
-
-## Dashboard
-
-### Dashboard Pengurus Ormada
-
-Data yang ditampilkan:
-
-- Jumlah anggota.
-- Jumlah pengurus aktif.
-- Jumlah proposal berdasarkan status.
-- Jumlah aspirasi.
-- Agenda terdekat.
-- Volunteer yang masih buka.
-
-### Dashboard Pemda
-
-Data yang ditampilkan:
-
-- Jumlah ormada.
-- Total anggota terdata.
-- Proposal masuk berdasarkan status.
-- Aspirasi belum ditanggapi.
-- Agenda Pemda terdekat.
-- Program kolaborasi aktif.
-
-### Halaman Utama Publik
-
-Data yang ditampilkan:
-
-- Jumlah ormada terdaftar.
-- Total anggota terdata secara agregat.
-- Jumlah pengurus aktif secara agregat.
-- Daftar profil ormada ringkas.
-- Berita, pengumuman, dan prestasi terbaru dari setiap ormada.
-- Aspirasi publik atau aspirasi yang sudah boleh ditampilkan.
-- Kalender agenda ormada dan Pemda.
-
-Query data yang disarankan:
-
-- `ProfilOrmada::withCount('anggota')->latest()->limit(...)` untuk profil ormada ringkas.
-- `Postingan::with('admin.profilOrmada')->latest()->paginate(...)` untuk berita/pengumuman/prestasi.
-- `Aspirasi::with('profilOrmada')->whereNotNull('tanggapan_pemda')->latest()->limit(...)` untuk aspirasi publik awal.
-- `Agenda::where('waktu_selesai', '>=', now())->orderBy('waktu_mulai')->get()` untuk kalender agenda.
-
-Data yang tidak boleh ditampilkan:
-
-- NIM.
-- Nomor HP.
-- Detail anggota per orang.
-- Riwayat jabatan personal.
-- Tanggal personal seperti tanggal masuk kuliah, lulus, demisioner, atau masa jabatan individu.
-
-## Data Migration
-
-SQL awal dapat dikonversi menjadi migration Laravel:
-
-- `create_admin_table`
-- `create_profil_ormada_table`
-- `create_anggota_ormada_table`
-- `create_proposal_table`
-- `create_volunteer_table`
-- `create_anggota_volunteer_table`
-- `create_kolaborasi_table`
-- `create_aspirasi_table`
-- `create_postingan_table`
-- `create_agenda_table`
-
-Catatan:
-
-- Laravel default timestamp memakai `created_at` dan `updated_at`. SQL memakai `dibuat_pada` dan `diperbarui_pada`. Pilih salah satu strategi:
-  - Pertahankan nama Indonesia dan set konstanta `CREATED_AT` serta `UPDATED_AT` pada model.
-  - Atau ubah kolom ke standar Laravel agar lebih minim konfigurasi.
-
-## Seeder
-
-Seeder awal perlu memuat:
-
-- Satu akun Pemda.
-- Beberapa akun pengurus ormada.
-- Profil ormada.
-- Anggota ormada.
-- Aspirasi contoh.
-
-Password dummy pada SQL memakai hash Laravel untuk nilai umum `password`.
-
-## Testing
-
-### Feature Test
-
-Minimal test:
-
-- User bisa login dengan kredensial valid.
-- User tidak bisa login dengan kredensial salah.
-- Pengurus ormada bisa membuat anggota pada profilnya.
-- Pengurus ormada tidak bisa mengubah anggota milik ormada lain.
-- Pemda bisa melihat detail anggota ormada.
-- Masyarakat umum tidak bisa mengakses detail anggota ormada.
-- Pengurus ormada bisa mengajukan proposal.
-- Pemda bisa mengubah status proposal.
-- Pengurus ormada tidak bisa mengubah status proposal.
-- Pengurus ormada bisa membuat aspirasi.
-- Pemda bisa memberi tanggapan aspirasi.
-- Pemda bisa membuat volunteer.
-- Anggota ormada bisa didaftarkan ke volunteer.
-
-### Unit Test
-
-Minimal test:
-
-- Relasi `Admin` ke `ProfilOrmada`.
-- Relasi `ProfilOrmada` ke `AnggotaOrmada`.
-- Relasi `Proposal` ke pengaju dan dinas tujuan.
-- Relasi `Volunteer` ke `AnggotaVolunteer`.
-
-## Risiko Teknis
-
-- Nama tabel dan kolom berbahasa Indonesia berbeda dari konvensi Laravel, sehingga model perlu konfigurasi ekstra.
-- Tabel `admin` menggantikan tabel default `users`, sehingga auth bawaan Laravel perlu disesuaikan.
-- Banyak foreign key memakai `ON DELETE CASCADE`; penghapusan akun admin dapat menghapus profil, proposal, agenda, postingan, volunteer, dan kolaborasi terkait.
-- Kolom `is_pengurus` bertipe string, sehingga perlu validasi konsisten agar tidak ada nilai selain `YA` dan `TIDAK`.
-- `dinas_tujuan_id` mengarah ke tabel `admin`, sehingga validasi perlu memastikan akun tujuan punya peran Pemda.
-
-## Rencana Implementasi
-
-1. Buat migration sesuai SQL atau ubah ke konvensi Laravel.
-2. Buat model dan relasi.
-3. Konfigurasi authentication memakai model `Admin`.
-4. Tambahkan middleware role.
-5. Implementasi dashboard.
-6. Implementasi CRUD profil ormada dan anggota.
-7. Implementasi proposal dan update status.
-8. Implementasi aspirasi dan tanggapan.
-9. Implementasi postingan dan agenda.
-10. Implementasi volunteer dan kolaborasi.
-11. Tambahkan feature test dan unit test.
+- Literal /publik/postingan/filter sebaiknya diletakkan sebelum {postingan}.
+- Route update status volunteer mengacu ke VolunteerController@updateStatus.
+
+## 6. Database
+
+admin: id, nama, email unique, password, peran enum, terakhir_masuk nullable, remember_token, timestamps.
+profil_ormada: id, admin_id unique FK cascade, nama_universitas, alamat_universitas, total_mahasiswa_univ, logo nullable, deskripsi nullable, timestamps.
+anggota_ormada: id, profil_ormada_id FK cascade, nama_lengkap, nim, program_studi, status_aktif enum, jabatan nullable, is_pengurus varchar default TIDAK, tanggal akademik/organisasi, no_hp nullable, timestamps.
+proposal: id, admin_id FK cascade, dinas_tujuan_id FK cascade, judul, deskripsi, jenis_bantuan enum, anggaran, file_proposal, status enum default diajukan, catatan_pemda nullable, timestamps.
+aspirasi: id, profil_ormada_id FK cascade, topik, detail, file nullable, tanggapan_pemda nullable, tanggal_tanggapan nullable, status enum default belum_ditanggapi, timestamps.
+postingan: id, admin_id FK cascade, judul, isi_konten, foto nullable, jenis_konten enum, is_published boolean default false, tanggal_publish nullable, timestamps.
+agenda: id, admin_id FK cascade, nama, deskripsi, gambar_poster nullable, waktu mulai/selesai datetime, tempat, kategori enum, kuota_volunteer nullable, deadline_pendaftaran nullable, is_published boolean default false, tanggal_publish nullable, timestamps.
+volunteers: id, agenda_id FK cascade, nama, email, no_hp, alasan nullable, status enum default pending, timestamps.
+
+## 7. Model Relasi
+
+Admin -> profilOrmada hasOne, profilOrmadas hasMany, proposals hasMany, postingan hasMany, agenda hasMany.
+ProfilOrmada -> admin belongsTo, anggota hasMany, aspirasi hasMany.
+AnggotaOrmada -> profilOrmada belongsTo, volunteerRegistrations hasMany.
+Agenda -> admin belongsTo, volunteers hasMany.
+Aspirasi -> profilOrmada belongsTo.
+Postingan -> admin belongsTo.
+Volunteer -> agenda belongsTo.
+
+## 8. Controller
+
+AuthController: login/logout + last login
+DashboardController: agregasi per peran
+AdminController: CRUD akun
+ProfilOrmadaController: profil, anggota ringkas, list filter
+AnggotaOrmadaController: CRUD anggota + ownership
+ProposalController: CRUD proposal, filter, status Pemda
+AspirasiController: CRUD aspirasi, tanggapan/status
+PostinganController: CRUD, upload foto, publish
+AgendaController: CRUD, poster, publish, daftar volunteer
+VolunteerController: list, update status
+PublicDashboardController: landing, listing/detail publik, JSON filter
+
+Validasi ada di controller private method. Belum pakai Form Request.
+
+## 9. Validasi
+
+Profil: nama/alamat required max 255, total mahasiswa nullable integer min 0, logo nullable image max 2MB, deskripsi nullable.
+Anggota: profil required, nama/NIM/program studi required, status/pengurus enum, jabatan required_if pengurus YA, tanggal demisioner/lulus required_if sesuai status, no_hp max 20.
+Proposal: dinas tujuan exists admin, judul/deskripsi/jenis required, anggaran integer min 0, file required_on create pdf/doc/docx max 5MB.
+Aspirasi: topik/detail required, file nullable pdf/doc/docx/jpg/jpeg/png max 5MB, tanggapan required saat update, status enum.
+Postingan: judul/isi/jenis required, foto nullable image max 2MB, is_published boolean, tanggal_publish nullable datetime.
+Agenda: nama/kategori/deskripsi/waktu/tempat required, kategori enum, poster nullable image max 2MB, waktu_selesai after waktu_mulai, kuota nullable integer min 1, deadline nullable before waktu_mulai, is_published boolean, tanggal_publish nullable datetime.
+Volunteer: nama/email/no_hp required, alasan nullable.
+
+## 10. Storage
+
+Folder disk publik:
+- profil-ormada/logo (2MB)
+- proposal (5MB)
+- aspirasi (5MB)
+- postingan/foto (2MB)
+- agenda/poster (2MB)
+
+Path relatif disimpan. URL publik lewat asset('storage/' . $path). Saat update/delete record, controller menghapus file lama.
+
+## 11. Query Publik
+
+- Agenda: eager load admin, published + upcoming, limit 6/12.
+- Postingan: eager load admin, published, by jenis opsional, limit 6/12.
+- Profil: withCount anggota, terbaru, limit 8.
+- Aspirasi: eager load profil terbatas, terbaru, limit 6/12.
+- Carousel payload disiapkan di controller sebagai array/JSON.
+
+## 12. Testing
+
+PHPUnit + RefreshDatabase. Fitur test:
+- Admin login
+- Agenda + volunteer
+- Aspirasi
+- Postingan
+- Proposal
+- Public dashboard
+
+Perintah: composer test atau php artisan test
+
+Test wajib dipertahankan:
+1. Login valid/invalid + tamu diblokir.
+2. Matriks peran + ownership lintas ormada.
+3. Validasi enum, tanggal, file, ukuran, field kondisional.
+4. Draft tidak tampil publik; published tampil.
+5. Proposal hanya diproses Pemda tujuan/admin.
+6. Aspirasi hanya diedit pemilik, ditanggapi Pemda/admin.
+7. Volunteer: agenda tertutup, deadline, kuota, duplikasi email.
+8. Data sensitif tidak tampil di landing page publik.
+
+Test yang perlu ditambahkan:
+- update status volunteer 403 untuk role tidak berwenang
+- konflik race condition kuota/duplikasi volunteer
+- route filter postingan tidak tertangkap model binding
+- detail ormada publik tidak bocorkan field terlarang
+- validasi dinas tujuan berperan pemda
+- penghapusan/gantian file semua modul
+- kebijakan publish oleh pengurus
+
+## 13. Build & Operasional
+
+Setup:
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm install
+npm run build
+php artisan storage:link
+
+Dev: composer run dev
+
+Production: APP_ENV=production, APP_DEBUG=false, APP_URL, koneksi DB, disk filesystem.
+
+## 14. Keamanan
+
+- CSRF, session regen, input validasi, mass assignment via fillable, parameter binding.
+- Auth + role + policy + ownership.
+- File hanya yang dipublikkan diakses publik.
+
+Rekomendasi hardening:
+- Admin::$hidden isi password, remember_token
+- Rate limit login + volunteer
+- Unique DB constraint (agenda_id, email)
+- Transaksi/lock saat approve volunteer
+- Simpan dokumen sensitif di private + download controller
+- Sanitasi rich text sebelum render
+
+## 15. Technical Debt
+
+1. Route volunteer status belum konsisten; update status volunteer perlu audit ulang.
+2. Detail ormada publik perlu kebijakan privasi anggota.
+3. Aspirasi publik sepenuhnya tanpa moderasi.
+4. Urutan route postingan filter berisiko tertangkap wildcard.
+5. Field jenis konten postingan berpotensi inkonsisten dengan referensi jenis di beberapa controller.
+6. Admin::$hidden kosong.
+7. Validasi proposal belum cek peran Pemda tujuan.
+8. Aturan publish tidak seragam antara pengurus dan Pemda/admin.
+9. Otorisasi tersebar; perlu konsolidasi.
+10. Migrasi redundant untuk kolom publish/volunteer.
+11. Relasi Aspirasi::pengaju() perlu verifikasi.
+12. Tabel users bawaan tidak dihapus.
+13. Validasi di controller; sebaiknya pindah ke Form Request.
+14. Tidak ada unique constraint untuk email volunteer per agenda.

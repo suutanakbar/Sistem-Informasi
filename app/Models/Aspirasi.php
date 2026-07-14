@@ -39,10 +39,10 @@ class Aspirasi extends Model
         return $this->belongsTo(ProfilOrmada::class);
     }
 
-    // Relasi ke Admin (pengaju) melalui profil ormada
+    // Relasi ke Admin (pengaju) - opsional, bisa ditambahkan kolom admin_id nanti
     public function pengaju(): BelongsTo
     {
-        return $this->belongsTo(Admin::class, 'admin_id')->through('profilOrmada');
+        return $this->belongsTo(Admin::class, 'admin_id');
     }
 
     // Scope untuk aspirasi publik (SEMUA aspirasi untuk transparansi)

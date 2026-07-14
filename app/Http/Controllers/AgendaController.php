@@ -223,7 +223,11 @@ class AgendaController extends Controller
     public function daftarVolunteer(Request $request, Agenda $agenda): RedirectResponse
     {
         // Cek apakah agenda masih membuka volunteer
-        if (!$agenda->kuota_volunteer || !$agenda->deadline_pendaftaran || !$agenda->is_published) {
+        if (!$agenda->is_published) {
+            return back()->with('error', 'Agenda ini belum dipublish.');
+        }
+        
+        if (!$agenda->kuota_volunteer || !$agenda->deadline_pendaftaran) {
             return back()->with('error', 'Agenda ini tidak membuka pendaftaran volunteer.');
         }
 

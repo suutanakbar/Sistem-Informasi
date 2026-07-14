@@ -1,239 +1,151 @@
-# Product Requirements Document
+# Product Requirements Document (PRD)
 
-## Nama Produk
+## Sistem Informasi Ormada Temanggung
 
-Sistem Informasi Ormada dan Sinergi Pemda Temanggung
+| Atribut | Nilai |
+|---|---|
+| Versi | 2.0 |
+| Status | Baseline implementasi saat ini |
+| Terakhir diperbarui | 14 Juli 2026 |
+| Sumber acuan | Implementasi commit 996e563 |
+| Platform | Aplikasi web responsif |
 
-## Ringkasan
+## 1. Ringkasan Produk
 
-Produk ini adalah aplikasi web untuk mengelola data organisasi mahasiswa daerah (ormada), anggota, pengurus, aspirasi, proposal bantuan, agenda, publikasi, program volunteer, dan kolaborasi antara ormada dengan Pemerintah Daerah Temanggung.
+Sistem Informasi Ormada Temanggung menghubungkan Pemerintah Daerah, pengurus ormada, admin sistem, dan masyarakat. Sistem memusatkan profil ormada, data anggota, proposal bantuan, aspirasi, agenda, publikasi, serta pendaftaran volunteer berbasis agenda.
 
-Aplikasi dirancang agar Pemda dapat memantau persebaran mahasiswa Temanggung di berbagai universitas, menindaklanjuti aspirasi, menerima proposal, mempublikasikan informasi, dan membuka ruang kolaborasi. Pengurus ormada dapat mengelola profil organisasi, data anggota, proposal kegiatan, agenda, postingan, aspirasi, serta pendaftaran volunteer.
+Portal publik menyediakan statistik agregat dan konten yang telah dipublikasikan. Area internal menyediakan dashboard dan operasi pengelolaan sesuai peran. Data sensitif anggota ditujukan untuk admin, Pemda, dan pengurus pemilik data.
 
-## Latar Belakang
+## 2. Tujuan
 
-Data ormada dan mahasiswa daerah sering tersebar di banyak tempat, sehingga Pemda sulit mendapatkan gambaran terkini tentang jumlah mahasiswa, kepengurusan, kebutuhan organisasi, agenda, dan peluang kolaborasi. Di sisi lain, ormada membutuhkan kanal formal untuk menyampaikan aspirasi, mengajukan proposal, dan mengikuti program yang disediakan Pemda.
+1. Pusat data profil dan anggota ormada Temanggung.
+2. Ruang kerja terpisah admin, Pemda, dan pengurus ormada.
+3. Digitalisasi pengajuan dan tindak lanjut proposal bantuan.
+4. Kanal aspirasi transparan dan dapat ditanggapi Pemda.
+5. Penebaran agenda, berita, pengumuman, dan prestasi.
+6. Pendaftaran volunteer publik pada agenda tertentu.
+7. Perlindungan data personal melalui autentikasi, peran, dan kepemilikan data.
 
-## Tujuan Produk
+## 3. Persona
 
-1. Menyediakan pusat data ormada dan mahasiswa Temanggung lintas universitas.
-2. Mempermudah pengurus ormada mengelola profil, anggota, pengurus, agenda, dan postingan.
-3. Mempermudah Pemda menerima, memproses, dan memberi tanggapan terhadap proposal serta aspirasi.
-4. Mendukung kolaborasi program antara Pemda dan ormada.
-5. Menyediakan kanal informasi agenda, berita, pengumuman, prestasi, dan volunteer.
+- Admin Sistem: kelola akun dan akses seluruh modul.
+- Pemda: pantau ormada, proses proposal dan aspirasi, kelola konten, proses volunteer.
+- Pengurus Ormada: kelola satu profil ormada, anggota, proposal, aspirasi, agenda, postingan.
+- Masyarakat/Tamu: akses portal publik dan daftar volunteer tanpa akun.
 
-## Pengguna
+## 4. Ruang Lingkup
 
-### Admin Sistem
+### 4.1 Autentikasi
+Login email + password, ingat saya, logout aman, login terakhir dicatat, password di-hash.
 
-Admin sistem mengelola akun, data master, dan akses aplikasi secara keseluruhan.
+### 4.2 Dashboard Berbasis Peran
+Admin: total ormada, anggota, pengurus, alumni, demisioner. Pemda: ringkasan ormada, anggota aktif, agenda, proposal. Pengurus: ringkasan profil sendiri, anggota, proposal.
 
-### Pengurus Ormada
+### 4.3 Profil Ormada
+Satu akun pengurus bisa punya satu profil. Nama universitas, alamat, jumlah mahasiswa, logo, deskripsi. Pengurus kelola miliknya; admin kelola semua; pemda lihat semua; publik lihat ringkas.
 
-Pengurus ormada mengelola profil ormada, data anggota, agenda ormada, postingan, aspirasi, proposal, serta pendaftaran anggota ke program volunteer.
+### 4.4 Anggota Ormada
+Admin dan pengurus kelola; pengurus hanya miliknya; pemda lihat detail. Nama, NIM, program studi, status, jabatan, pengurus, tanggal akademik, no HP. Status: fungsionaris, mahasiswa_biasa, demisioner, alumni. Pengurus: YA/TIDAK.
 
-### Pemda
+### 4.5 Proposal
+Pengurus/admin buat proposal ke akun Pemda tujuan. Dokumen PDF/DOC/DOCX, maksimum 5 MB. Status: diajukan, diproses_pemda, dana_cair, ditolak. Pemda tujuan/admin ubah status dan catatan.
 
-Pemda melihat data ormada sampai detail anggota, menindaklanjuti aspirasi, memproses proposal, membuat agenda/pengumuman, membuka volunteer, dan membuat program kolaborasi.
+### 4.6 Aspirasi
+Pengurus kirim aspirasi atas nama profilnya. File opsional, tanggapan Pemda, tanggal tanggapan, status. Semua aspirasi ditampilkan di portal publik.
 
-### Masyarakat Umum
+### 4.7 Postingan
+Admin, Pemda, pengurus buat postingan. Jenis: berita, pengumuman, prestasi. Foto opsional; status draft/published; tanggal publish. Hanya published yang tampil publik; Pemda/admin bisa publish.
 
-Masyarakat umum dapat melihat halaman utama publik berisi ringkasan informasi ormada, agenda, berita, pengumuman, dan prestasi tanpa mengakses detail data personal anggota.
+### 4.8 Agenda
+Admin, Pemda, pengurus buat agenda. Data: nama, kategori, deskripsi, poster, waktu, tempat, kuota volunteer, deadline, publish. Kategori: kegiatan_ormada, kegiatan_pemda, baksos, pendidikan, kesehatan, lingkungan, lainnya. Hanya published + upcoming yang tampil publik; Pemda/admin bisa publish.
 
-## Ruang Lingkup Fitur
+### 4.9 Volunteer
+Terikat agenda; pendaftaran publik tanpa akun. Syarat: published, ada kuota, deadline belum lewat. Status: pending, diterima, ditolak. Satu email satu agenda; duplikasi dicegah. Kuota dihitung dari status diterima.
 
-### Autentikasi dan Otorisasi
+### 4.10 Portal Publik
+Statistik agregat ormada, anggota, pengurus, alumni. Daftar/detail profil ormada, aspirasi, postingan published, agenda published. Filter jenis postingan; daftar agenda mendatang. Form daftar volunteer pada agenda ber-syarat.
 
-Pengguna dapat login menggunakan email dan kata sandi. Sistem membedakan hak akses berdasarkan peran `admin`, `pengurus_ormada`, dan `pemda`.
+## 5. Matriks Akses
 
-Kebutuhan utama:
+| Kapabilitas | Public | Pengurus | Pemda | Admin |
+|---|:---:|:---:|:---:|:---:|
+| Portal publik | Ya | Ya | Ya | Ya |
+| Login/logout | Ya | Ya | Ya | Ya |
+| Kelola akun | - | - | - | Ya |
+| Lihat seluruh profil/anggota | Ringkas | Milik sendiri | Ya | Ya |
+| Ubah profil/anggota | - | Milik sendiri | - | Ya |
+| Ajukan proposal | - | Ya | - | Ya |
+| Proses proposal | - | - | Tujuan sendiri | Ya |
+| Ajukan aspirasi | - | Ya | - | Ya |
+| Tanggapi aspirasi | - | - | Ya | Ya |
+| Kelola agenda/postingan | - | Milik sendiri | Ya | Ya |
+| Publikasi eksplisit | - | - | Ya | Ya |
+| Daftar volunteer | Ya | Ya | Ya | Ya |
+| Proses volunteer | - | Terbatas agenda terkait | Ya | Ya |
 
-- Login dan logout.
-- Penyimpanan waktu terakhir masuk.
-- Pembatasan menu berdasarkan peran.
-- Password tersimpan dalam bentuk hash.
+## 6. Alur Utama
 
-### Manajemen Profil Ormada
+### 6.1 Onboarding Pengurus
+Admin buat akun -> pengurus login -> buat profil -> tambah anggota -> ringkas tampil di portal publik.
 
-Pengurus ormada dapat mengelola profil organisasi berdasarkan universitas.
+### 6.2 Pengajuan Proposal
+Pilih Pemda tujuan -> unggah dokumen -> status diajukan -> Pemda proses -> pengurus pantau.
 
-Kebutuhan utama:
+### 6.3 Tindak Lanjut Aspirasi
+Pengurus kirim -> Pemda tanggapi -> ada status dan catatan -> publik baca.
 
-- Membuat dan memperbarui profil ormada.
-- Mengisi nama universitas, alamat universitas, jumlah mahasiswa, logo, dan deskripsi.
-- Pemda dapat melihat daftar profil ormada.
-- Masyarakat umum dapat melihat ringkasan profil ormada yang bersifat publik.
+### 6.4 Publikasi Konten
+Buat draft -> Pemda/admin publish -> publik lihat.
 
-### Manajemen Anggota Ormada
-
-Pengurus ormada dapat mengelola anggota dan pengurus organisasi.
-
-Kebutuhan utama:
-
-- Menambah, mengubah, menghapus, dan melihat anggota.
-- Mencatat NIM, program studi, nomor HP, status aktif, jabatan, dan masa jabatan.
-- Menandai anggota sebagai pengurus dengan nilai `YA` atau `TIDAK`.
-- Mencatat status `fungsionaris`, `mahasiswa_biasa`, `demisioner`, atau `alumni`.
-- Pemda dapat melihat daftar dan detail anggota ormada untuk kebutuhan pendataan.
-- Masyarakat umum hanya dapat melihat statistik agregat anggota, bukan detail anggota.
-
-### Proposal Bantuan
-
-Pengurus ormada dapat mengajukan proposal bantuan kepada Pemda atau dinas tujuan.
-
-Kebutuhan utama:
-
-- Membuat proposal kegiatan.
-- Mengunggah file proposal.
-- Memilih jenis bantuan: dana, izin, tempat, atau fasilitas.
-- Melihat status proposal: diajukan, diproses Pemda, dana cair, atau ditolak.
-- Pemda dapat memperbarui status dan memberi catatan.
-
-### Volunteer
-
-Pemda atau admin terkait dapat membuka program volunteer. Anggota ormada dapat didaftarkan sebagai peserta volunteer.
-
-Kebutuhan utama:
-
-- Membuat program volunteer.
-- Mengatur kebutuhan posisi, kuota, tenggat pendaftaran, dan status buka/tutup.
-- Mendaftarkan anggota ormada.
-- Mengelola status seleksi: pending, diterima, atau ditolak.
-
-### Kolaborasi
-
-Pemda dan ormada dapat mencatat program kolaborasi bersama.
-
-Kebutuhan utama:
-
-- Membuat program kolaborasi.
-- Mencatat nama program, deskripsi, anggaran bersama, tanggal, tempat, dan file MoU.
-- Mengelola status: diajukan, disetujui, selesai, atau batal.
-
-### Aspirasi
-
-Ormada dapat menyampaikan aspirasi kepada Pemda.
-
-Kebutuhan utama:
-
-- Membuat aspirasi berdasarkan profil ormada.
-- Menyertakan topik, detail aspirasi, dan file pendukung.
-- Pemda dapat memberi tanggapan.
-
-### Postingan
-
-Pengguna berwenang dapat membuat konten informasi.
-
-Kebutuhan utama:
-
-- Membuat berita, pengumuman, atau prestasi.
-- Menyertakan judul, isi konten, dan foto.
-- Menampilkan daftar postingan untuk pengguna.
-
-### Agenda
-
-Pengguna berwenang dapat membuat agenda kegiatan.
-
-Kebutuhan utama:
-
-- Membuat agenda dengan nama, deskripsi, poster, waktu mulai, waktu selesai, tempat, dan kategori.
-- Kategori agenda terdiri dari `ormada` dan `pemda`.
-- Agenda dapat ditampilkan dalam daftar atau kalender sederhana.
-
-### Halaman Utama Publik
-
-Masyarakat umum dapat membuka halaman publik tanpa login.
-
-Kebutuhan utama:
-
-- Menampilkan jumlah ormada terdaftar.
-- Menampilkan total anggota terdata secara agregat.
-- Menampilkan ringkasan persebaran ormada per universitas.
-- Menampilkan daftar beberapa profil ormada dalam bentuk ringkas.
-- Menampilkan berita, pengumuman, dan prestasi dari setiap ormada.
-- Menampilkan aspirasi yang bersifat publik atau sudah layak ditampilkan.
-- Menampilkan kalender agenda berisi agenda ormada dan Pemda.
-- Tidak menampilkan NIM, nomor HP, detail status personal, riwayat jabatan personal, atau detail anggota per orang.
-
-Konten profil ormada yang tampil untuk masyarakat umum:
-
-- Nama universitas.
-- Logo ormada.
-- Alamat universitas secara umum.
-- Deskripsi singkat.
-- Total mahasiswa universitas atau total anggota secara agregat.
-
-Konten profil ormada yang tidak tampil untuk masyarakat umum:
-
-- Daftar anggota.
-- Detail anggota.
-- Nomor HP anggota.
-- NIM anggota.
-- Riwayat jabatan anggota.
-
-## Kebutuhan Non-Fungsional
-
-- Aplikasi berbasis web dan responsif.
-- Backend menggunakan Laravel 12.
-- Database menggunakan MySQL/MariaDB.
-- File upload disimpan di storage publik Laravel.
-- Setiap data utama memiliki timestamp dibuat dan diperbarui.
-- Akses data dibatasi sesuai peran.
-- Validasi input dilakukan di server.
-- Operasi hapus harus mempertimbangkan relasi data karena foreign key memakai `ON DELETE CASCADE`.
-- Data personal anggota hanya dapat diakses oleh pengurus pemilik data, Pemda, dan admin sistem.
-
-## Alur Utama
-
-### Pengurus Ormada Mengajukan Proposal
-
-1. Pengurus login.
-2. Pengurus membuka menu proposal.
-3. Pengurus mengisi judul kegiatan, deskripsi, jenis bantuan, anggaran, dinas tujuan, dan file proposal.
-4. Sistem menyimpan proposal dengan status `diajukan`.
-5. Pemda melihat proposal masuk.
-6. Pemda memperbarui status dan memberi catatan.
-7. Pengurus melihat hasil tindak lanjut.
-
-### Pengurus Ormada Mengelola Anggota
-
-1. Pengurus login.
-2. Pengurus membuka menu anggota.
-3. Pengurus menambah atau memperbarui data anggota.
-4. Sistem memvalidasi data wajib.
-5. Sistem menyimpan anggota sesuai profil ormada milik pengurus.
-
-### Pemda Menanggapi Aspirasi
-
-1. Pemda login.
-2. Pemda membuka daftar aspirasi.
-3. Pemda membaca detail aspirasi dan file pendukung.
-4. Pemda mengisi tanggapan.
-5. Sistem menyimpan tanggapan agar dapat dibaca pengurus ormada.
-
-## Kriteria Keberhasilan
-
-- Pengurus ormada dapat mengelola profil dan anggota tanpa mengakses data ormada lain.
-- Proposal dapat diajukan, diproses, diberi catatan, dan dipantau statusnya.
-- Aspirasi dapat dikirim oleh ormada dan ditanggapi oleh Pemda.
-- Pemda dapat melihat ringkasan dan detail data ormada serta anggota.
-- Masyarakat umum dapat melihat halaman utama publik tanpa detail personal anggota.
-- Sistem memiliki validasi dan pembatasan akses untuk setiap peran.
-
-## Batasan dan Asumsi
-
-- Satu akun pengurus ormada memiliki satu profil ormada.
-- Akun dengan peran `pemda` dapat menjadi tujuan proposal dan pembuat kolaborasi.
-- Kolom `dinas_tujuan_id` pada proposal mengarah ke tabel `admin`, sehingga dinas tujuan direpresentasikan sebagai akun admin berperan Pemda.
-- Belum ada tabel khusus untuk mahasiswa umum di luar `anggota_ormada`.
-- Belum ada tabel notifikasi, sehingga pemberitahuan status dapat ditambahkan pada fase berikutnya.
-
-## Prioritas MVP
-
-1. Autentikasi dan otorisasi peran.
-2. Profil ormada.
-3. Anggota ormada.
-4. Proposal dan tindak lanjut Pemda.
-5. Aspirasi dan tanggapan Pemda.
-6. Postingan dan agenda.
-7. Volunteer dan kolaborasi.
+### 6.5 Volunteer
+Buka agenda published -> cek syarat -> daftar -> admin/Pemda setujui/tolak.
+
+## 7. Nonfungsional
+
+- Auth sesi + CSRF; role, policy, ownership guard.
+- Password hash; upload tipe/ukuran terbatas.
+- Pagination; eager loading; portal limit 6-8 per section.
+- Validasi server; cascade delete hati-hati.
+- Timestamp dibuat_pada/diperbarui_pada; file lama dihapus.
+- Health endpoint /up.
+
+## 8. Di Luar Ruang Lingkup
+
+- Mobile native, reset password UI, notifikasi, audit log.
+- Kolaborasi/MoU, volunteer independen, API publik, ekspor lanjutan.
+
+## 9. Risiko
+
+1. Privasi detail ormada publik: tampil beberapa data anggota baru.
+2. Aspirasi sepenuhnya publik: belum ada moderasi.
+3. Publish pengurus: aturan moderasi perlu diseragamkan.
+4. Kuota volunteer: pending bisa melebihi kuota.
+5. Cascade delete: penghapusan data permanen.
+
+## 10. Backlog
+
+### P0
+- Kebijakan data anggota publik.
+- Moderasi aspirasi.
+- Konsolidasi publish postingan/agenda.
+- Otorisasi update status volunteer.
+
+### P1
+- Notifikasi status.
+- Audit trail.
+- Ekspor laporan.
+- Dashboard metrik lanjutan.
+
+### P2
+- Kolaborasi/MoU.
+- Volunteer independen.
+- API + mobile.
+- Email/WhatsApp.
+
+## 11. Definition of Done
+
+1. Perilaku sesuai PRD/TDD.
+2. Test untuk sukses, validation error, akses terlarang.
+3. Tidak bocorkan data.
+4. Upload/delete file diuji.
+5. Dokumentasi diperbarui.

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('email')->unique();
-            $table->string('kata_sandi');
+            $table->string('password');
             $table->enum('peran', ['admin', 'pengurus_ormada', 'pemda']);
             $table->timestamp('terakhir_masuk')->nullable();
             $table->timestamp('dibuat_pada')->useCurrent();
