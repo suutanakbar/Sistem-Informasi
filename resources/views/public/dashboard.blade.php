@@ -81,7 +81,7 @@
                     @if ($profilOrmadas->isNotEmpty())
                         <div class="relative mt-8">
                             <!-- Carousel Container -->
-                            <div class="overflow-hidden">
+                            <div class="overflow-hidden mx-12">
                                 <div id="ormadaCarousel" class="flex transition-transform duration-500 ease-in-out">
                                     @foreach ($profilOrmadas as $profil)
                                     <div class="w-full md:w-1/2 lg:w-1/4 flex-shrink-0 px-3">
@@ -301,8 +301,8 @@
                     <!-- Featured Agenda - Master Detail Layout -->
                     @if($agendas->isNotEmpty())
                     @php $featuredAgenda = $agendas[$agendaIndex] ?? $agendas->first(); @endphp
-                    <div class="relative">
-                        <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition" id="agendaCard">
+                    <div class="relative px-12">
+                        <article class="content-card bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition relative z-0" id="agendaCard">
                             <div class="grid md:grid-cols-2 gap-0">
                                 <!-- Left Side - Visual -->
                                 <div class="relative bg-gray-100" id="agendaImage">
@@ -689,29 +689,34 @@ function prevSlide() {
     updateCarousel();
 }
 
-// Navigation button event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded, initializing carousel...');
-    
+// Navigation button event listeners with error handling
+function initAgendaCarousel() {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     
-    console.log('Prev button found:', !!prevBtn);
-    console.log('Next button found:', !!nextBtn);
-    
-    if (prevBtn) {
-        prevBtn.addEventListener('click', prevSlide);
-        console.log('Prev button event listener added');
-    } else {
-        console.error('Prev button not found!');
+    if (!prevBtn || !nextBtn) {
+        console.warn('Carousel buttons not found');
+        return;
     }
     
-    if (nextBtn) {
-        nextBtn.addEventListener('click', nextSlide);
-        console.log('Next button event listener added');
-    } else {
-        console.error('Next button not found!');
-    }
+    prevBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        prevSlide();
+    });
+    
+    nextBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        nextSlide();
+    });
+    
+    console.log('Carousel buttons initialized');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAgendaCarousel);
+} else {
+    initAgendaCarousel();
+}
     
     // Dot navigation
     const dots = document.querySelectorAll('.carousel-dot');

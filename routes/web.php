@@ -37,8 +37,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin routes - full access
     Route::middleware('role:admin')->group(function () {
-        Route::resource('admin', \App\Http\Controllers\AdminController::class)
-            ->except(['destroy']);
+        Route::resource('admin', \App\Http\Controllers\AdminController::class);
     });
 
     // Profil Ormada routes - accessible by admin, pemda, and pengurus
