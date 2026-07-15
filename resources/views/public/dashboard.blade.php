@@ -689,6 +689,7 @@ function nextSlide() {
     currentSlide = (currentSlide + 1) % totalSlides;
     loadAgendaSlide(currentSlide);
     updateCarousel();
+    resetAgendaAutoSlide();
 }
 
 function prevSlide() {
@@ -696,6 +697,7 @@ function prevSlide() {
     currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
     loadAgendaSlide(currentSlide);
     updateCarousel();
+    resetAgendaAutoSlide();
 }
 
 // Initialize carousel after DOM is ready
@@ -780,10 +782,47 @@ function initAgendaCarousel() {
     }
 }
 
+// Auto-slide functionality for Agenda Carousel
+let agendaAutoSlideInterval;
+
+function startAgendaAutoSlide() {
+    if (totalSlides <= 1) return;
+    agendaAutoSlideInterval = setInterval(() => {
+        nextSlide();
+    }, 3000);
+}
+
+function resetAgendaAutoSlide() {
+    clearInterval(agendaAutoSlideInterval);
+    startAgendaAutoSlide();
+}
+
 // Initialize the carousel when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAgendaCarousel);
-} else {
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.readyState === 'loading') {
+        // Already loading, initAgendaCarousel will be called when ready
+    } else {
+        initAgendaCarousel();
+    }
+    
+    // Start auto-slide after initialization
+    startAgendaAutoSlide();
+    
+    // Pause auto-slide on hover
+    const agendaCard = document.getElementById('agendaCard');
+    if (agendaCard) {
+        agendaCard.addEventListener('mouseenter', () => {
+            clearInterval(agendaAutoSlideInterval);
+        });
+        
+        agendaCard.addEventListener('mouseleave', () => {
+            startAgendaAutoSlide();
+        });
+    }
+});
+
+// Also initialize if DOM is already ready
+if (document.readyState === 'complete') {
     initAgendaCarousel();
 }
 
@@ -830,6 +869,22 @@ function ormadaPrevSlide() {
     const maxSlide = Math.max(0, {{ $profilOrmadas->count() }} - itemsPerView);
     ormadaCurrentSlide = (ormadaCurrentSlide - itemsPerView) < 0 ? maxSlide : ormadaCurrentSlide - itemsPerView;
     updateOrmadaCarousel();
+    resetOrmadaAutoSlide();
+}
+
+// Auto-slide functionality for Ormada Carousel
+let ormadaAutoSlideInterval;
+
+function startOrmadaAutoSlide() {
+    if (ormadaTotalSlides <= 1) return;
+    ormadaAutoSlideInterval = setInterval(() => {
+        ormadaNextSlide();
+    }, 3000);
+}
+
+function resetOrmadaAutoSlide() {
+    clearInterval(ormadaAutoSlideInterval);
+    startOrmadaAutoSlide();
 }
 
 // Initialize ormada carousel
@@ -843,6 +898,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (ormadaNextBtn) {
         ormadaNextBtn.addEventListener('click', ormadaNextSlide);
+    }
+    
+    // Start ormada auto-slide after initialization
+    startOrmadaAutoSlide();
+    
+    // Pause ormada auto-slide on hover
+    const ormadaCarouselContainer = document.getElementById('ormadaCarouselContainer');
+    if (ormadaCarouselContainer) {
+        ormadaCarouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(ormadaAutoSlideInterval);
+        });
+        
+        ormadaCarouselContainer.addEventListener('mouseleave', () => {
+            startOrmadaAutoSlide();
+        });
     }
     
     // Touch swipe support
@@ -892,3 +962,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 @endpush
+
+</parameter1_name>
+task_progress</parameter1_name>
+<parameter2_name>- [x] Diagnose why slider broke
+- [x] Fix the slider functionality</parameter2_name>
+</write_to_file>
