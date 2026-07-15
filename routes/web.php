@@ -13,6 +13,16 @@ use App\Http\Controllers\PublicDashboardController;
 use App\Http\Controllers\VolunteerController;
 
 Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
+
+// Serve images from public/storage directory (real files, not symlink)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = public_path('storage/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*');
+
 Route::get('/publik/aspirasi', [PublicDashboardController::class, 'aspirasi'])->name('public.aspirasi');
 Route::get('/publik/postingan', [PublicDashboardController::class, 'postingan'])->name('public.postingan');
 Route::get('/publik/postingan/{postingan}', [PublicDashboardController::class, 'showPostingan'])->name('public.postingan.show');
@@ -20,6 +30,7 @@ Route::get('/publik/postingan/filter', [PublicDashboardController::class, 'filte
 Route::get('/publik/agenda', [PublicDashboardController::class, 'agenda'])->name('public.agenda');
 Route::get('/publik/agenda/{agenda}', [PublicDashboardController::class, 'showAgenda'])->name('public.agenda.show');
 Route::get('/publik/aspirasi/{aspirasi}', [PublicDashboardController::class, 'showAspirasi'])->name('public.aspirasi.show');
+Route::get('/publik/ormada', [PublicDashboardController::class, 'ormada'])->name('public.ormada');
 Route::get('/publik/ormada/{profilOrmada}', [PublicDashboardController::class, 'showOrmada'])->name('public.ormada.show');
 
 // Public volunteer registration (no auth required)

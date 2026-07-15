@@ -59,6 +59,12 @@ $logoColors = [
     'logo-universitas-diponegoro.png' => [0, 150, 200],       // Cyan
     'logo-universitas-sebelas-maret.png' => [200, 100, 0],    // Orange
     'logo-universitas-brawijaya.png' => [100, 150, 0],        // Olive
+    'logo-its.png' => [200, 0, 0],                           // Red (ITS)
+    'logo-ub.png' => [100, 150, 0],                          // Olive (UB)
+    'logo-unpad.png' => [150, 0, 150],                       // Purple (Unpad)
+    'logo-ugm.png' => [255, 200, 0],                         // Yellow (UGM)
+    'logo-unes-semarang.png' => [0, 150, 100],               // Green (Unes)
+    'logo-undip.png' => [0, 150, 200],                       // Cyan (Undip)
 ];
 
 foreach ($logoColors as $filename => $color) {

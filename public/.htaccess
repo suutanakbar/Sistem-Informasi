@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
+        Options +FollowSymlinks -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
@@ -17,6 +17,8 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
+
+    # Force all storage requests through Laravel (bypass direct file access)
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
