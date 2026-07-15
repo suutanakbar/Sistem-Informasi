@@ -30,9 +30,7 @@
                             @php
                             $statusColors = [
                                 'fungsionaris' => 'bg-purple-100 text-purple-800',
-                                'mahasiswa_biasa' => 'bg-blue-100 text-blue-800',
-                                'demisioner' => 'bg-red-100 text-red-800',
-                                'alumni' => 'bg-green-100 text-green-800',
+                                'mahasiswa' => 'bg-blue-100 text-blue-800',
                             ];
                             @endphp
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$anggotaOrmada->status_aktif] ?? 'bg-gray-100 text-gray-800' }}">
@@ -72,18 +70,6 @@
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Tanggal Akhir Jabatan</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_akhir_jabatan)->format('d/m/Y') }}</dd>
-                    </div>
-                    @endif
-                    @if($anggotaOrmada->tanggal_demisioner)
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Tanggal Demisioner</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_demisioner)->format('d/m/Y') }}</dd>
-                    </div>
-                    @endif
-                    @if($anggotaOrmada->tanggal_lulus)
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Tanggal Lulus</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_lulus)->format('d/m/Y') }}</dd>
                     </div>
                     @endif
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

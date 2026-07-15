@@ -54,20 +54,11 @@ class AnggotaOrmadaFactory extends Factory
         $tanggalLulusKuliah = $this->faker->dateTimeBetween($tanggalMasukKuliah, 'now');
 
         $isPengurus = $this->faker->boolean(70); // 70% kemungkinan menjadi pengurus
-        
-        // Determine status_aktif based on conditions
-        $statusAktifOptions = ['fungsionaris', 'mahasiswa_biasa', 'demisioner', 'alumni'];
-        
-        if ($isPengurus) {
-            $statusAktif = $this->faker->randomElement(['fungsionaris', 'demisioner']);
-        } else {
-            $statusAktif = $this->faker->randomElement(['mahasiswa_biasa', 'alumni']);
-        }
+
+        $statusAktif = $isPengurus ? 'fungsionaris' : 'mahasiswa';
 
         $tanggalMulaiJabatan = $isPengurus ? $this->faker->dateTimeBetween('-2 years', 'now') : null;
         $tanggalAkhirJabatan = $isPengurus ? $this->faker->dateTimeBetween('now', '+1 year') : null;
-        $tanggalDemisioner = $statusAktif === 'demisioner' ? $this->faker->dateTimeBetween('-6 months', 'now') : null;
-        $tanggalLulus = in_array($statusAktif, ['alumni', 'demisioner']) ? $this->faker->dateTimeBetween('-1 year', 'now') : null;
 
         return [
             'profil_ormada_id' => ProfilOrmada::factory(),
@@ -81,8 +72,6 @@ class AnggotaOrmadaFactory extends Factory
             'tanggal_lulus_kuliah' => $tanggalLulusKuliah,
             'tanggal_mulai_jabatan' => $tanggalMulaiJabatan,
             'tanggal_akhir_jabatan' => $tanggalAkhirJabatan,
-            'tanggal_demisioner' => $tanggalDemisioner,
-            'tanggal_lulus' => $tanggalLulus,
             'no_hp' => $this->faker->phoneNumber(),
         ];
     }

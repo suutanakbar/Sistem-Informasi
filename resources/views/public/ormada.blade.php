@@ -36,8 +36,8 @@
                                         <span class="font-semibold text-indigo-700">{{ number_format($profil->pengurus_count) }}</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Alumni</span>
-                                        <span class="font-semibold text-gray-700">{{ number_format($profil->alumni_count) }}</span>
+                                        <span class="text-gray-600">Mahasiswa</span>
+                                        <span class="font-semibold text-gray-700">{{ number_format($profil->anggota_count - $profil->pengurus_count) }}</span>
                                     </div>
                                 </div>
 

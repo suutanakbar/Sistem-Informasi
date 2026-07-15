@@ -49,10 +49,10 @@
                     <p class="text-sm text-zinc-500">Pengurus aktif</p>
                     <p class="mt-1 text-2xl font-semibold"><?php echo e($profilOrmada->pengurus_count); ?></p>
                 </div>
-                <div class="rounded-lg border border-zinc-200 bg-white p-4">
-                    <p class="text-sm text-zinc-500">Alumni / Demisioner</p>
-                    <p class="mt-1 text-2xl font-semibold"><?php echo e($profilOrmada->alumni_count); ?> / <?php echo e($profilOrmada->demisioner_count); ?></p>
-                </div>
+            <div class="rounded-lg border border-zinc-200 bg-white p-4">
+                <p class="text-sm text-zinc-500">Mahasiswa</p>
+                <p class="mt-1 text-2xl font-semibold"><?php echo e($profilOrmada->anggota_count - $profilOrmada->pengurus_count); ?></p>
+            </div>
             </aside>
         </div>
 
@@ -78,9 +78,7 @@
                         <select name="status_aktif" id="status_aktif" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                             <option value="">Semua Status</option>
                             <option value="fungsionaris" <?php echo e(request('status_aktif') === 'fungsionaris' ? 'selected' : ''); ?>>Fungsionaris</option>
-                            <option value="mahasiswa_biasa" <?php echo e(request('status_aktif') === 'mahasiswa_biasa' ? 'selected' : ''); ?>>Mahasiswa Biasa</option>
-                            <option value="demisioner" <?php echo e(request('status_aktif') === 'demisioner' ? 'selected' : ''); ?>>Demisioner</option>
-                            <option value="alumni" <?php echo e(request('status_aktif') === 'alumni' ? 'selected' : ''); ?>>Alumni</option>
+                            <option value="mahasiswa" <?php echo e(request('status_aktif') === 'mahasiswa' ? 'selected' : ''); ?>>Mahasiswa</option>
                         </select>
                     </div>
                     <div class="flex items-end">

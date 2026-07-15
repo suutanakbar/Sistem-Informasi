@@ -85,8 +85,6 @@ class ProfilOrmadaController extends Controller
         $profilOrmada->load('admin')->loadCount([
             'anggota',
             'anggota as pengurus_count' => fn ($query) => $query->where('is_pengurus', 'YA'),
-            'anggota as alumni_count' => fn ($query) => $query->where('status_aktif', 'alumni'),
-            'anggota as demisioner_count' => fn ($query) => $query->where('status_aktif', 'demisioner'),
         ]);
 
         $anggotaRingkas = $profilOrmada->anggota()

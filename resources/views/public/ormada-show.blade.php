@@ -80,29 +80,15 @@
                     </div>
                 </div>
 
-                <div class="stat-card bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                <div class="stat-card bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-purple-700 text-sm font-medium">Alumni</p>
-                            <p class="mt-2 text-3xl sm:text-4xl font-bold text-purple-900">{{ number_format($profilOrmada->alumni_count) }}</p>
+                            <p class="text-indigo-700 text-sm font-medium">Mahasiswa</p>
+                            <p class="mt-2 text-3xl sm:text-4xl font-bold text-indigo-900">{{ number_format($profilOrmada->anggota_count - $profilOrmada->pengurus_count) }}</p>
                         </div>
-                        <div class="bg-purple-700 rounded-lg p-3">
+                        <div class="bg-indigo-700 rounded-lg p-3">
                             <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 border border-orange-200">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-orange-700 text-sm font-medium">Demisioner</p>
-                            <p class="mt-2 text-3xl sm:text-4xl font-bold text-orange-900">{{ number_format($profilOrmada->demisioner_count) }}</p>
-                        </div>
-                        <div class="bg-orange-700 rounded-lg p-3">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                             </svg>
                         </div>
                     </div>
@@ -160,14 +146,11 @@
                                     $statusLabel = 'Aktif';
                                     $statusColor = 'bg-green-100 text-green-800 border-green-200';
                                     
-                                    if ($anggota->status_aktif === 'alumni') {
-                                        $statusLabel = 'Alumni';
+                                    if ($anggota->status_aktif === 'fungsionaris') {
+                                        $statusLabel = 'Fungsionaris';
                                         $statusColor = 'bg-purple-100 text-purple-800 border-purple-200';
-                                    } elseif ($anggota->status_aktif === 'demisioner') {
-                                        $statusLabel = 'Demisioner';
-                                        $statusColor = 'bg-orange-100 text-orange-800 border-orange-200';
-                                    } elseif ($anggota->tanggal_lulus) {
-                                        $statusLabel = 'Lulus';
+                                    } else {
+                                        $statusLabel = 'Mahasiswa';
                                         $statusColor = 'bg-blue-100 text-blue-800 border-blue-200';
                                     }
                                 @endphp

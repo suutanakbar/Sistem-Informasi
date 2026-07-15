@@ -55,6 +55,10 @@
                 <?php echo method_field('PUT'); ?>
 
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <?php if(!auth()->user()->isAdmin()): ?>
+                    <input type="hidden" name="profil_ormada_id" value="<?php echo e($anggotaOrmada->profil_ormada_id); ?>">
+                    <?php endif; ?>
+
                     <div class="md:col-span-2">
                         <label for="nama_lengkap" class="block text-sm font-medium text-gray-700">Nama Lengkap <span class="text-red-500">*</span></label>
                         <input type="text" name="nama_lengkap" id="nama_lengkap" value="<?php echo e(old('nama_lengkap', $anggotaOrmada->nama_lengkap)); ?>" required
@@ -125,35 +129,6 @@ unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <div>
-                        <label for="status_aktif" class="block text-sm font-medium text-gray-700">Status Aktif <span class="text-red-500">*</span></label>
-                        <select name="status_aktif" id="status_aktif" required onchange="toggleJabatan()"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['status_aktif'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>">
-                            <option value="">Pilih Status</option>
-                            <option value="fungsionaris" <?php echo e(old('status_aktif', $anggotaOrmada->status_aktif) === 'fungsionaris' ? 'selected' : ''); ?>>Fungsionaris</option>
-                            <option value="mahasiswa_biasa" <?php echo e(old('status_aktif', $anggotaOrmada->status_aktif) === 'mahasiswa_biasa' ? 'selected' : ''); ?>>Mahasiswa Biasa</option>
-                            <option value="demisioner" <?php echo e(old('status_aktif', $anggotaOrmada->status_aktif) === 'demisioner' ? 'selected' : ''); ?>>Demisioner</option>
-                            <option value="alumni" <?php echo e(old('status_aktif', $anggotaOrmada->status_aktif) === 'alumni' ? 'selected' : ''); ?>>Alumni</option>
-                        </select>
-                        <?php $__errorArgs = ['status_aktif'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                    </div>
-
-                    <div>
                         <label for="is_pengurus" class="block text-sm font-medium text-gray-700">Pengurus <span class="text-red-500">*</span></label>
                         <select name="is_pengurus" id="is_pengurus" required onchange="toggleJabatan()"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['is_pengurus'];
@@ -182,7 +157,7 @@ unset($__errorArgs, $__bag); ?>
 
                     <div id="jabatanField" class="<?php echo e($anggotaOrmada->is_pengurus === 'YA' ? '' : 'hidden'); ?>">
                         <label for="jabatan" class="block text-sm font-medium text-gray-700">Jabatan <span class="text-red-500">*</span></label>
-                        <input type="text" name="jabatan" id="jabatan" value="<?php echo e(old('jabatan', $anggotaOrmada->jabatan)); ?>"
+                        <select name="jabatan" id="jabatan"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['jabatan'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -191,7 +166,61 @@ $message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($messag
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>">
+                            <option value="">Pilih Jabatan</option>
+                            <option value="Ketua" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Ketua' ? 'selected' : ''); ?>>Ketua</option>
+                            <option value="Wakil Ketua" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Wakil Ketua' ? 'selected' : ''); ?>>Wakil Ketua</option>
+                            <option value="Sekretaris" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Sekretaris' ? 'selected' : ''); ?>>Sekretaris</option>
+                            <option value="Bendahara" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Bendahara' ? 'selected' : ''); ?>>Bendahara</option>
+                            <option value="Kepala Divisi" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Kepala Divisi' ? 'selected' : ''); ?>>Kepala Divisi</option>
+                            <option value="Wakil Kepala Divisi" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Wakil Kepala Divisi' ? 'selected' : ''); ?>>Wakil Kepala Divisi</option>
+                            <option value="Staff Divisi" <?php echo e(old('jabatan', $anggotaOrmada->jabatan) === 'Staff Divisi' ? 'selected' : ''); ?>>Staff Divisi</option>
+                        </select>
                         <?php $__errorArgs = ['jabatan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+
+                    <div id="tanggalJabatanFields" class="<?php echo e($anggotaOrmada->is_pengurus === 'YA' ? '' : 'hidden'); ?>">
+                        <label for="tanggal_mulai_jabatan" class="block text-sm font-medium text-gray-700">Tanggal Mulai Jabatan</label>
+                        <input type="date" name="tanggal_mulai_jabatan" id="tanggal_mulai_jabatan" value="<?php echo e(old('tanggal_mulai_jabatan', $anggotaOrmada->tanggal_mulai_jabatan)); ?>"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['tanggal_mulai_jabatan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                        <?php $__errorArgs = ['tanggal_mulai_jabatan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+                    <div id="tanggalAkhirJabatanField">
+                        <label for="tanggal_akhir_jabatan" class="block text-sm font-medium text-gray-700">Tanggal Akhir Jabatan</label>
+                        <input type="date" name="tanggal_akhir_jabatan" id="tanggal_akhir_jabatan" value="<?php echo e(old('tanggal_akhir_jabatan', $anggotaOrmada->tanggal_akhir_jabatan)); ?>"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['tanggal_akhir_jabatan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                        <?php $__errorArgs = ['tanggal_akhir_jabatan'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -272,98 +301,6 @@ endif;
 unset($__errorArgs, $__bag); ?>
                     </div>
 
-                    <div>
-                        <label for="tanggal_mulai_jabatan" class="block text-sm font-medium text-gray-700">Tanggal Mulai Jabatan</label>
-                        <input type="date" name="tanggal_mulai_jabatan" id="tanggal_mulai_jabatan" value="<?php echo e(old('tanggal_mulai_jabatan', $anggotaOrmada->tanggal_mulai_jabatan)); ?>"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['tanggal_mulai_jabatan'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>">
-                        <?php $__errorArgs = ['tanggal_mulai_jabatan'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                    </div>
-
-                    <div>
-                        <label for="tanggal_akhir_jabatan" class="block text-sm font-medium text-gray-700">Tanggal Akhir Jabatan</label>
-                        <input type="date" name="tanggal_akhir_jabatan" id="tanggal_akhir_jabatan" value="<?php echo e(old('tanggal_akhir_jabatan', $anggotaOrmada->tanggal_akhir_jabatan)); ?>"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['tanggal_akhir_jabatan'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>">
-                        <?php $__errorArgs = ['tanggal_akhir_jabatan'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                    </div>
-
-                    <div>
-                        <label for="tanggal_demisioner" class="block text-sm font-medium text-gray-700">Tanggal Demisioner</label>
-                        <input type="date" name="tanggal_demisioner" id="tanggal_demisioner" value="<?php echo e(old('tanggal_demisioner', $anggotaOrmada->tanggal_demisioner)); ?>"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['tanggal_demisioner'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>">
-                        <?php $__errorArgs = ['tanggal_demisioner'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                    </div>
-
-                    <div>
-                        <label for="tanggal_lulus" class="block text-sm font-medium text-gray-700">Tanggal Lulus</label>
-                        <input type="date" name="tanggal_lulus" id="tanggal_lulus" value="<?php echo e(old('tanggal_lulus', $anggotaOrmada->tanggal_lulus)); ?>"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm <?php $__errorArgs = ['tanggal_lulus'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>">
-                        <?php $__errorArgs = ['tanggal_lulus'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                            <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                    </div>
-
                     <?php if(auth()->user()->isAdmin()): ?>
                     <div class="md:col-span-2">
                         <label for="profil_ormada_id" class="block text-sm font-medium text-gray-700">Profil Ormada <span class="text-red-500">*</span></label>
@@ -430,12 +367,18 @@ unset($__errorArgs, $__bag); ?>
         function toggleJabatan() {
             const isPengurus = document.getElementById('is_pengurus').value;
             const jabatanField = document.getElementById('jabatanField');
+            const tanggalJabatanFields = document.getElementById('tanggalJabatanFields');
+            const tanggalAkhirJabatanField = document.getElementById('tanggalAkhirJabatanField');
             
             if (isPengurus === 'YA') {
                 jabatanField.classList.remove('hidden');
+                tanggalJabatanFields.classList.remove('hidden');
+                tanggalAkhirJabatanField.classList.remove('hidden');
                 document.getElementById('jabatan').required = true;
             } else {
                 jabatanField.classList.add('hidden');
+                tanggalJabatanFields.classList.add('hidden');
+                tanggalAkhirJabatanField.classList.add('hidden');
                 document.getElementById('jabatan').required = false;
             }
         }

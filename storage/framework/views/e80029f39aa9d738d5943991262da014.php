@@ -51,6 +51,8 @@
 
         </main>
     </div>
+
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
 <?php /**PATH C:\project\magang\resources\views/components/layouts/app.blade.php ENDPATH**/ ?>

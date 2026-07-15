@@ -18,8 +18,7 @@ class DashboardController extends Controller
                 'totalOrmada' => ProfilOrmada::count(),
                 'totalAnggota' => AnggotaOrmada::count(),
                 'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
-                'totalAlumni' => AnggotaOrmada::where('status_aktif', 'alumni')->count(),
-                'totalDemisioner' => AnggotaOrmada::where('status_aktif', 'demisioner')->count(),
+                'totalMahasiswa' => AnggotaOrmada::where('is_pengurus', 'TIDAK')->count(),
             ]);
         }
 
@@ -36,14 +35,13 @@ class DashboardController extends Controller
             $profil = $user->profilOrmada()->withCount([
                 'anggota',
                 'anggota as pengurus_count' => fn ($query) => $query->where('is_pengurus', 'YA'),
-                'anggota as alumni_count' => fn ($query) => $query->where('status_aktif', 'alumni'),
             ])->first();
 
             return view('dashboard.pengurus', [
                 'profil' => $profil,
                 'totalAnggota' => $profil?->anggota_count ?? 0,
                 'totalPengurus' => $profil?->pengurus_count ?? 0,
-                'totalAlumni' => $profil?->alumni_count ?? 0,
+                'totalMahasiswa' => ($profil?->anggota_count ?? 0) - ($profil?->pengurus_count ?? 0),
                 'totalProposal' => \App\Models\Proposal::where('admin_id', $user->id)->count(),
             ]);
         }
@@ -54,8 +52,7 @@ class DashboardController extends Controller
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
             'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
-            'totalAlumni' => AnggotaOrmada::where('status_aktif', 'alumni')->count(),
-            'totalDemisioner' => AnggotaOrmada::where('status_aktif', 'demisioner')->count(),
+            'totalMahasiswa' => AnggotaOrmada::where('is_pengurus', 'TIDAK')->count(),
         ]);
     }
 }

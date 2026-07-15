@@ -90,7 +90,7 @@ class PublicDashboardTest extends TestCase
             'nama_lengkap' => 'Bagus Wijaya',
             'nim' => '21060119120015',
             'program_studi' => 'Teknik Elektro',
-            'status_aktif' => 'mahasiswa_biasa',
+            'status_aktif' => 'mahasiswa',
             'is_pengurus' => 'TIDAK',
             'no_hp' => '089999999999',
         ]);

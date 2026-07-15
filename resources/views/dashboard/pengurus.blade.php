@@ -31,8 +31,8 @@
                 <p class="mt-2 text-2xl font-semibold">{{ number_format($totalPengurus ?? 0) }}</p>
             </div>
             <div class="rounded-lg border border-zinc-200 bg-white p-4">
-                <p class="text-sm text-zinc-500">Total Alumni</p>
-                <p class="mt-2 text-2xl font-semibold">{{ number_format($totalAlumni ?? 0) }}</p>
+                <p class="text-sm text-zinc-500">Mahasiswa</p>
+                <p class="mt-2 text-2xl font-semibold">{{ number_format($totalMahasiswa ?? 0) }}</p>
             </div>
             <div class="rounded-lg border border-zinc-200 bg-white p-4">
                 <p class="text-sm text-zinc-500">Proposal Saya</p>

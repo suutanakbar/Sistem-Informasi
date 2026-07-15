@@ -56,6 +56,8 @@ class AnggotaOrmadaController extends Controller
             $validated['profil_ormada_id'] = $profil->id;
         }
 
+        $validated['status_aktif'] = $validated['is_pengurus'] === 'YA' ? 'fungsionaris' : 'mahasiswa';
+
         $anggotaOrmada = AnggotaOrmada::create($validated);
 
         return redirect()
@@ -115,6 +117,8 @@ class AnggotaOrmadaController extends Controller
             $validated['profil_ormada_id'] = $user->profilOrmada()->firstOrFail()->id;
         }
 
+        $validated['status_aktif'] = $validated['is_pengurus'] === 'YA' ? 'fungsionaris' : 'mahasiswa';
+
         $anggotaOrmada->update($validated);
 
         return redirect()
@@ -142,19 +146,16 @@ class AnggotaOrmadaController extends Controller
     private function validateAnggota(Request $request): array
     {
         return $request->validate([
-            'profil_ormada_id' => ['required', 'exists:profil_ormada,id'],
+            'profil_ormada_id' => ['nullable', 'exists:profil_ormada,id'],
             'nama_lengkap' => ['required', 'string', 'max:255'],
             'nim' => ['required', 'string', 'max:50'],
             'program_studi' => ['required', 'string', 'max:255'],
-            'status_aktif' => ['required', 'in:fungsionaris,mahasiswa_biasa,demisioner,alumni'],
-            'jabatan' => ['nullable', 'required_if:is_pengurus,YA', 'string', 'max:255'],
             'is_pengurus' => ['required', 'in:YA,TIDAK'],
+            'jabatan' => ['nullable', 'required_if:is_pengurus,YA', 'in:Ketua,Wakil Ketua,Sekretaris,Bendahara,Kepala Divisi,Wakil Kepala Divisi,Staff Divisi'],
             'tanggal_masuk_kuliah' => ['nullable', 'date'],
             'tanggal_lulus_kuliah' => ['nullable', 'date'],
             'tanggal_mulai_jabatan' => ['nullable', 'date'],
             'tanggal_akhir_jabatan' => ['nullable', 'date'],
-            'tanggal_demisioner' => ['nullable', 'required_if:status_aktif,demisioner', 'date'],
-            'tanggal_lulus' => ['nullable', 'required_if:status_aktif,alumni', 'date'],
             'no_hp' => ['nullable', 'string', 'max:20'],
         ]);
     }

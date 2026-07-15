@@ -55,7 +55,7 @@ class PublicDashboardController extends Controller
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
             'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
-            'totalAlumni' => AnggotaOrmada::where('status_aktif', 'alumni')->count(),
+            'totalMahasiswa' => AnggotaOrmada::where('is_pengurus', 'TIDAK')->count(),
             'profilOrmadas' => $profilOrmadas,
             'aspirasis' => Aspirasi::query()
                 ->with(['profilOrmada' => fn ($query) => $query->select('id', 'nama_universitas', 'logo')])
@@ -243,8 +243,6 @@ class PublicDashboardController extends Controller
         $profilOrmada->load('admin')->loadCount([
             'anggota',
             'anggota as pengurus_count' => fn ($query) => $query->where('is_pengurus', 'YA'),
-            'anggota as alumni_count' => fn ($query) => $query->where('status_aktif', 'alumni'),
-            'anggota as demisioner_count' => fn ($query) => $query->where('status_aktif', 'demisioner'),
         ]);
 
         $anggotaTerbaru = $profilOrmada->anggota()
@@ -263,8 +261,6 @@ class PublicDashboardController extends Controller
             ->withCount([
                 'anggota',
                 'anggota as pengurus_count' => fn ($query) => $query->where('is_pengurus', 'YA'),
-                'anggota as alumni_count' => fn ($query) => $query->where('status_aktif', 'alumni'),
-                'anggota as demisioner_count' => fn ($query) => $query->where('status_aktif', 'demisioner'),
             ])
             ->latest('dibuat_pada')
             ->paginate(12);

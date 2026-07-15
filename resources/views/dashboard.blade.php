@@ -5,13 +5,12 @@
         @endif
     </x-page-header>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ([
             'Ormada' => $totalOrmada,
             'Anggota' => $totalAnggota,
             'Pengurus' => $totalPengurus,
-            'Alumni' => $totalAlumni,
-            'Demisioner' => $totalDemisioner,
+            'Mahasiswa' => $totalMahasiswa,
         ] as $label => $value)
             <div class="rounded-lg border border-zinc-200 bg-white p-4">
                 <p class="text-sm text-zinc-500">{{ $label }}</p>
