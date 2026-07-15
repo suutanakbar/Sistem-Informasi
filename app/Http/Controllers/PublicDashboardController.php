@@ -51,20 +51,6 @@ class PublicDashboardController extends Controller
             ];
         });
 
-        // Prepare ormada data for carousel
-        $ormadasData = $profilOrmadas->map(function($ormada) {
-            return [
-                'id' => $ormada->id,
-                'nama_universitas' => $ormada->nama_universitas,
-                'logo' => $ormada->logo ? asset('storage/' . $ormada->logo) : null,
-                'alamat_universitas' => $ormada->alamat_universitas,
-                'total_mahasiswa_univ' => number_format($ormada->total_mahasiswa_univ),
-                'anggota_count' => number_format($ormada->anggota_count),
-                'deskripsi' => \Illuminate\Support\Str::limit($ormada->deskripsi ?: 'Belum ada deskripsi profil.', 100),
-                'detail_url' => route('public.ormada.show', $ormada)
-            ];
-        });
-
         return view('public.dashboard', [
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
@@ -84,7 +70,6 @@ class PublicDashboardController extends Controller
             'agendas' => $agendas,
             'agendaIndex' => $agendaIndex,
             'agendasData' => $agendasData,
-            'ormadasData' => $ormadasData,
         ]);
     }
 
@@ -269,5 +254,21 @@ class PublicDashboardController extends Controller
             ->get();
 
         return view('public.ormada-show', compact('profilOrmada', 'anggotaTerbaru'));
+    }
+
+    public function ormada(Request $request): View
+    {
+        $profilOrmadas = ProfilOrmada::query()
+            ->with('admin')
+            ->withCount([
+                'anggota',
+                'anggota as pengurus_count' => fn ($query) => $query->where('is_pengurus', 'YA'),
+                'anggota as alumni_count' => fn ($query) => $query->where('status_aktif', 'alumni'),
+                'anggota as demisioner_count' => fn ($query) => $query->where('status_aktif', 'demisioner'),
+            ])
+            ->latest('dibuat_pada')
+            ->paginate(12);
+
+        return view('public.ormada', compact('profilOrmadas'));
     }
 }
