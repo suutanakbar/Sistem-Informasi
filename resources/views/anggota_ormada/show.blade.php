@@ -54,10 +54,6 @@
                             <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->fakultas ?? '-' }}</p>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-zinc-500">Jurusan (Prodi)</p>
-                            <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->prodi ?? '-' }}</p>
-                        </div>
-                        <div>
                             <p class="text-sm font-medium text-zinc-500">Angkatan</p>
                             <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->angkatan ?? '-' }}</p>
                         </div>

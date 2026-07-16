@@ -73,21 +73,6 @@
                 <input name="fakultas" value="<?php echo e(old('fakultas', $anggotaOrmada?->fakultas)); ?>" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
             </label>
             <label class="block">
-                <span class="text-sm font-medium text-zinc-700">Jurusan (Prodi)</span>
-                <input name="prodi" value="<?php echo e(old('prodi', $anggotaOrmada?->prodi)); ?>" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
-            </label>
-            <label class="block">
-                <span class="text-sm font-medium text-zinc-700">Angkatan</span>
-                <input name="angkatan" value="<?php echo e(old('angkatan', $anggotaOrmada?->angkatan)); ?>" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
-            </label>
-            <label class="block">
-                <span class="text-sm font-medium text-zinc-700">Status</span>
-                <select name="status_aktif" id="status_aktif" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
-                    <option value="mahasiswa" <?php if(old('status_aktif', $anggotaOrmada?->status_aktif ?? 'mahasiswa') === 'mahasiswa'): echo 'selected'; endif; ?>>Aktif (Mahasiswa)</option>
-                    <option value="alumni" <?php if(old('status_aktif', $anggotaOrmada?->status_aktif) === 'alumni'): echo 'selected'; endif; ?>>Lulus (Alumni)</option>
-                </select>
-            </label>
-            <label class="block">
                 <span class="text-sm font-medium text-zinc-700">Tanggal Masuk Kuliah</span>
                 <input type="date" name="tanggal_masuk_kuliah" value="<?php echo e(old('tanggal_masuk_kuliah', $anggotaOrmada?->tanggal_masuk_kuliah?->format('Y-m-d'))); ?>" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
             </label>
@@ -163,6 +148,12 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="mt-6 flex justify-end">
+    <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        Simpan
+    </button>
 </div>
 
 <?php $__env->startPush('scripts'); ?>

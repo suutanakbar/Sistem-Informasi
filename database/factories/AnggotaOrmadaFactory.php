@@ -67,6 +67,7 @@ class AnggotaOrmadaFactory extends Factory
             'jabatan' => $isPengurus ? $this->faker->randomElement($jabatan) : 'Anggota',
             'is_pengurus' => $isPengurus,
             'tanggal_masuk_kuliah' => $tanggalMasukKuliah,
+            'angkatan' => date_format($tanggalMasukKuliah, 'Y'),
             'tanggal_lulus_kuliah' => $tanggalLulusKuliah,
             'tanggal_mulai_jabatan' => $tanggalMulaiJabatan,
             'tanggal_akhir_jabatan' => $tanggalAkhirJabatan,

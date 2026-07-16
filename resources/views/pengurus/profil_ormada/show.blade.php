@@ -86,6 +86,7 @@
                         <tr>
                             <th class="px-5 py-3">Nama</th>
                             <th class="px-5 py-3">Program Studi</th>
+                            <th class="px-5 py-3">Angkatan</th>
                             <th class="px-5 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -94,6 +95,7 @@
                             <tr>
                                 <td class="px-5 py-3 font-medium">{{ $anggota->nama_lengkap }}</td>
                                 <td class="px-5 py-3">{{ $anggota->program_studi }}</td>
+                                <td class="px-5 py-3">{{ $anggota->angkatan ?? '-' }}</td>
                                 <td class="px-5 py-3 text-right text-sm font-medium">
                                     <a href="{{ route('anggota-ormada.show', $anggota) }}" class="text-indigo-600 hover:text-indigo-900">
                                         Detail
@@ -113,7 +115,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="px-5 py-6 text-center text-zinc-500">
+                                <td colspan="4" class="px-5 py-6 text-center text-zinc-500">
                                     Belum ada anggota.
                                 </td>
                             </tr>

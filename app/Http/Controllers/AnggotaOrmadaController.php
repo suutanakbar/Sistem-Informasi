@@ -57,13 +57,17 @@ class AnggotaOrmadaController extends Controller
             $validated['profil_ormada_id'] = $profil->id;
         }
 
-        // Auto set status sesuai tanggal kuliah
-        if (!empty($validated['tanggal_lulus_kuliah'])) {
+        if (empty($validated['angkatan']) && ! empty($validated['tanggal_masuk_kuliah'])) {
+            $validated['angkatan'] = date('Y', strtotime($validated['tanggal_masuk_kuliah']));
+        }
+
+        // Auto set status sesuai tanggal dan status pengurus
+        if (! empty($validated['tanggal_lulus_kuliah'])) {
             $validated['status_aktif'] = 'alumni';
-        } elseif (!empty($validated['tanggal_masuk_kuliah'])) {
-            $validated['status_aktif'] = 'mahasiswa';
+        } elseif ($validated['is_pengurus'] === 'YA') {
+            $validated['status_aktif'] = 'fungsionaris';
         } else {
-            $validated['status_aktif'] = $validated['is_pengurus'] === 'YA' ? 'fungsionaris' : 'mahasiswa';
+            $validated['status_aktif'] = 'mahasiswa';
         }
 
         // Handle CV upload
@@ -130,13 +134,17 @@ class AnggotaOrmadaController extends Controller
             $validated['profil_ormada_id'] = $user->profilOrmada()->firstOrFail()->id;
         }
 
-        // Auto set status sesuai tanggal kuliah
-        if (!empty($validated['tanggal_lulus_kuliah'])) {
+        if (empty($validated['angkatan']) && ! empty($validated['tanggal_masuk_kuliah'])) {
+            $validated['angkatan'] = date('Y', strtotime($validated['tanggal_masuk_kuliah']));
+        }
+
+        // Auto set status sesuai peran dan tanggal kuliah
+        if (! empty($validated['tanggal_lulus_kuliah'])) {
             $validated['status_aktif'] = 'alumni';
-        } elseif (!empty($validated['tanggal_masuk_kuliah'])) {
-            $validated['status_aktif'] = 'mahasiswa';
+        } elseif ($validated['is_pengurus'] === 'YA') {
+            $validated['status_aktif'] = 'fungsionaris';
         } else {
-            $validated['status_aktif'] = $validated['is_pengurus'] === 'YA' ? 'fungsionaris' : 'mahasiswa';
+            $validated['status_aktif'] = 'mahasiswa';
         }
 
         // Handle CV upload
@@ -177,13 +185,18 @@ class AnggotaOrmadaController extends Controller
         return $request->validate([
             'profil_ormada_id' => ['nullable', 'exists:profil_ormada,id'],
             'nama_lengkap' => ['required', 'string', 'max:255'],
+            'nik' => ['nullable', 'string', 'max:50'],
             'nim' => ['required', 'string', 'max:50'],
             'program_studi' => ['required', 'string', 'max:255'],
             'fakultas' => ['nullable', 'string', 'max:255'],
-            'prodi' => ['nullable', 'string', 'max:255'],
+            'tempat_lahir' => ['nullable', 'string', 'max:255'],
+            'tanggal_lahir' => ['nullable', 'date'],
+            'agama' => ['nullable', 'string', 'max:255'],
+            'golongan_darah' => ['nullable', 'string', 'max:10'],
             'is_pengurus' => ['required', 'in:YA,TIDAK'],
             'jabatan' => ['nullable', 'required_if:is_pengurus,YA', 'in:Ketua,Wakil Ketua,Sekretaris,Bendahara,Kepala Divisi,Wakil Kepala Divisi,Staff Divisi'],
             'tanggal_masuk_kuliah' => ['nullable', 'date'],
+            'angkatan' => ['nullable', 'digits:4'],
             'tanggal_lulus_kuliah' => ['nullable', 'date'],
             'tanggal_mulai_jabatan' => ['nullable', 'date'],
             'tanggal_akhir_jabatan' => ['nullable', 'date'],
@@ -199,7 +212,10 @@ class AnggotaOrmadaController extends Controller
         $user = $request->user();
 
         abort_unless(
-            $user->isAdmin() || $user->isPemda() || $anggotaOrmada->profilOrmada?->admin_id === $user->id,
+            $user->isAdmin()
+            || $user->isPemda()
+            || ($user->isPengurusOrmada() && $user->profilOrmada?->id === $anggotaOrmada->profilOrmada?->id)
+            || $anggotaOrmada->profilOrmada?->admin_id === $user->id,
             403
         );
     }

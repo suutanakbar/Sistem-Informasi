@@ -27,7 +27,6 @@ class AnggotaOrmada extends Model
         'golongan_darah',
         'program_studi',
         'fakultas',
-        'prodi',
         'angkatan',
         'status_aktif',
         'jabatan',
@@ -68,7 +67,7 @@ class AnggotaOrmada extends Model
         $isPengurus = $this->is_pengurus === 'YA';
         $hasEndJabatan = ! empty($this->tanggal_akhir_jabatan);
 
-        if ($isGraduated && $isPengurus) {
+        if ($isGraduated && $hasEndJabatan) {
             return 'Lulus | Demisioner';
         }
 
@@ -76,12 +75,12 @@ class AnggotaOrmada extends Model
             return 'Lulus';
         }
 
-        if ($isPengurus) {
-            return 'Mahasiswa | Fungsionaris';
-        }
-
         if ($hasEndJabatan) {
             return 'Mahasiswa | Demisioner';
+        }
+
+        if ($isPengurus) {
+            return 'Mahasiswa | Fungsionaris';
         }
 
         return 'Mahasiswa';

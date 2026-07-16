@@ -25,6 +25,52 @@
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->program_studi }}</dd>
                     </div>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Fakultas</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->fakultas ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Angkatan</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->angkatan ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">CV</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+                            @if($anggotaOrmada->cv_path)
+                                <a href="{{ asset('storage/' . $anggotaOrmada->cv_path) }}" target="_blank" class="text-emerald-600 hover:text-emerald-900">Lihat CV</a>
+                            @else
+                                -
+                            @endif
+                        </dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Email</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->email ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Alamat</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->alamat ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">NIK</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->nik ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Tempat Lahir</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->tempat_lahir ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Tanggal Lahir</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->tanggal_lahir ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_lahir)->format('d/m/Y') : '-' }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Agama</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->agama ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Golongan Darah</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->golongan_darah ?? '-' }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Status Aktif</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
                             @php

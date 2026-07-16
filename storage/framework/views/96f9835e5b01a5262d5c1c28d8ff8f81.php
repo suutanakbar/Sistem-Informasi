@@ -96,6 +96,7 @@
                         <tr>
                             <th class="px-5 py-3">Nama</th>
                             <th class="px-5 py-3">Program Studi</th>
+                            <th class="px-5 py-3">Angkatan</th>
                             <th class="px-5 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -104,6 +105,7 @@
                             <tr>
                                 <td class="px-5 py-3 font-medium"><?php echo e($anggota->nama_lengkap); ?></td>
                                 <td class="px-5 py-3"><?php echo e($anggota->program_studi); ?></td>
+                                <td class="px-5 py-3"><?php echo e($anggota->angkatan ?? '-'); ?></td>
                                 <td class="px-5 py-3 text-right text-sm font-medium">
                                     <a href="<?php echo e(route('anggota-ormada.show', $anggota)); ?>" class="text-indigo-600 hover:text-indigo-900">
                                         Detail
@@ -123,7 +125,7 @@
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
-                                <td colspan="3" class="px-5 py-6 text-center text-zinc-500">
+                                <td colspan="4" class="px-5 py-6 text-center text-zinc-500">
                                     Belum ada anggota.
                                 </td>
                             </tr>
