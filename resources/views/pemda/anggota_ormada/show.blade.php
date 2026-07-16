@@ -50,10 +50,6 @@
                         <dt class="text-sm font-medium text-gray-500">Alamat</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->alamat ?? '-' }}</dd>
                     </div>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">NIK</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->nik ?? '-' }}</dd>
-                    </div>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Tempat Lahir</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->tempat_lahir ?? '-' }}</dd>
@@ -77,10 +73,9 @@
                             $statusColors = [
                                 'fungsionaris' => 'bg-purple-100 text-purple-800',
                                 'mahasiswa' => 'bg-blue-100 text-blue-800',
-                                'alumni' => 'bg-green-100 text-green-800',
                             ];
                             @endphp
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$anggotaOrmada->status_aktif] ?? 'bg-gray-100 text-gray-800' }}">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$anggotaOrmada->status_aktif] ?? 'bg-blue-100 text-blue-800' }}">
                                 {{ $anggotaOrmada->status_aktif_label }}
                             </span>
                         </dd>

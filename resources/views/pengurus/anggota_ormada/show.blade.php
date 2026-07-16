@@ -23,10 +23,6 @@
                                     <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->nim }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-zinc-500">NIK</p>
-                                    <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->nik ?? '-' }}</p>
-                                </div>
-                                <div>
                                     <p class="text-sm font-medium text-zinc-500">Tempat Lahir</p>
                                     <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->tempat_lahir ?? '-' }}</p>
                                 </div>

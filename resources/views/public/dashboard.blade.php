@@ -57,8 +57,8 @@
                         <div class="stat-card bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-blue-100 text-sm font-medium">Alumni Terdata</p>
-                                    <p class="mt-2 text-3xl sm:text-4xl font-bold">{{ number_format($totalAlumni) }}</p>
+                                    <p class="text-blue-100 text-sm font-medium">Lulus Terdata</p>
+                                    <p class="mt-2 text-3xl sm:text-4xl font-bold">{{ number_format($totalLulus) }}</p>
                                 </div>
                                 <div class="bg-white/20 rounded-lg p-3">
                                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -97,7 +97,7 @@
                                         <a href="{{ route('public.ormada.show', $profil) }}" class="block bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer h-full">
                                             <div class="text-center mb-4">
                                                 @if ($profil->logo)
-                                                    <img src="{{ asset('storage/'.$profil->logo) }}" alt="Logo {{ $profil->nama_universitas }}" class="h-16 w-16 mx-auto rounded-xl object-cover shadow-md">
+                                                    <img src="{{ profil_logo_url($profil->logo) }}" alt="Logo {{ $profil->nama_universitas }}" class="h-16 w-16 mx-auto rounded-xl object-cover shadow-md">
                                                 @else
                                                     <div class="flex h-16 w-16 mx-auto items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-xl font-bold text-white shadow-md">
                                                         {{ strtoupper(substr($profil->nama_universitas, 0, 2)) }}
@@ -233,7 +233,7 @@
                         <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
                             @if($heroPost->foto)
                             <div class="w-full h-64 sm:h-80 overflow-hidden bg-gray-100">
-                                <img src="{{ asset('storage/'.$heroPost->foto) }}" alt="{{ $heroPost->judul }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                                <img src="{{ storage_url($heroPost->foto) }}" alt="{{ $heroPost->judul }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                             </div>
                             @endif
                             <div class="p-6">
@@ -264,7 +264,7 @@
                             <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition flex">
                                 @if($postingan->foto)
                                 <div class="flex-shrink-0 w-32 sm:w-40">
-                                    <img src="{{ asset('storage/'.$postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-full object-cover">
+                                    <img src="{{ storage_url($postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-full object-cover">
                                 </div>
                                 @endif
                                 <div class="p-5 flex flex-col flex-1">
@@ -316,7 +316,7 @@
                                 <!-- Left Side - Visual -->
                                 <div class="relative bg-gray-100" id="agendaImage">
                                     @if($featuredAgenda->gambar_poster)
-                                    <img src="{{ asset('storage/'.$featuredAgenda->gambar_poster) }}" alt="{{ $featuredAgenda->nama_agenda }}" class="w-full h-64 md:h-full object-cover">
+                                    <img src="{{ storage_url($featuredAgenda->gambar_poster) }}" alt="{{ $featuredAgenda->nama_agenda }}" class="w-full h-64 md:h-full object-cover">
                                     @else
                                     <div class="w-full h-64 md:h-96 flex items-center justify-center">
                                         <svg class="w-20 h-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -451,6 +451,18 @@
 
 @push('scripts')
 <script>
+const storageBase = "{{ asset('storage') }}";
+
+function resolveImageUrl(path) {
+    if (!path) {
+        return null;
+    }
+
+    return /^(https?:)?\/\//.test(path)
+        ? path
+        : `${storageBase}/${path.replace(/^\/+/, '')}`;
+}
+
 function filterPostingan(jenis) {
     // Update active button state
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -500,7 +512,7 @@ function renderNewsCards(postingans) {
         <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
             ${heroPost.foto ? `
             <div class="w-full h-64 sm:h-80 overflow-hidden bg-gray-100">
-                <img src="/storage/${heroPost.foto}" alt="${heroPost.judul}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                <img src="${resolveImageUrl(heroPost.foto)}" alt="${heroPost.judul}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
             </div>
             ` : ''}
             <div class="p-6">
@@ -534,7 +546,7 @@ function renderNewsCards(postingans) {
             <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition flex">
                 ${postingan.foto ? `
                 <div class="flex-shrink-0 w-32 sm:w-40">
-                    <img src="/storage/${postingan.foto}" alt="${postingan.judul}" class="w-full h-full object-cover">
+                    <img src="${resolveImageUrl(postingan.foto)}" alt="${postingan.judul}" class="w-full h-full object-cover">
                 </div>
                 ` : ''}
                 <div class="p-5 flex flex-col flex-1">
@@ -962,9 +974,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 @endpush
-
-</parameter1_name>
-task_progress</parameter1_name>
-<parameter2_name>- [x] Diagnose why slider broke
-- [x] Fix the slider functionality</parameter2_name>
-</write_to_file>

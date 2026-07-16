@@ -36,7 +36,7 @@
                 <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                         @if($agenda->gambar_poster)
-                        <img src="{{ asset('storage/' . $agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-96 object-cover">
+                        <img src="{{ storage_url($agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-96 object-cover">
                         @endif
                         
                         <div class="p-6 sm:p-8">

@@ -16,7 +16,7 @@
                             <a href="{{ route('public.ormada.show', $profil) }}" class="block bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300">
                                 <div class="text-center mb-4">
                                     @if ($profil->logo)
-                                        <img src="{{ asset('storage/'.$profil->logo) }}" alt="Logo {{ $profil->nama_universitas }}" class="h-20 w-20 mx-auto rounded-xl object-cover shadow-md">
+                                        <img src="{{ profil_logo_url($profil->logo) }}" alt="Logo {{ $profil->nama_universitas }}" class="h-20 w-20 mx-auto rounded-xl object-cover shadow-md">
                                     @else
                                         <div class="flex h-20 w-20 mx-auto items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-2xl font-bold text-white shadow-md">
                                             {{ strtoupper(substr($profil->nama_universitas, 0, 2)) }}

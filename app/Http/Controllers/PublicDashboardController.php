@@ -56,7 +56,7 @@ class PublicDashboardController extends Controller
             'totalAnggota' => AnggotaOrmada::count(),
             'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
             'totalMahasiswa' => AnggotaOrmada::where('status_aktif', 'mahasiswa')->count(),
-            'totalAlumni' => AnggotaOrmada::where('status_aktif', 'alumni')->count(),
+            'totalLulus' => AnggotaOrmada::whereNotNull('tanggal_lulus_kuliah')->count(),
             'profilOrmadas' => $profilOrmadas,
             'aspirasis' => Aspirasi::query()
                 ->with(['profilOrmada' => fn ($query) => $query->select('id', 'nama_universitas', 'logo')])
@@ -161,7 +161,17 @@ class PublicDashboardController extends Controller
             ->when($jenis, fn($query) => $query->byJenis($jenis))
             ->latest('tanggal_publish')
             ->limit(6)
-            ->get();
+            ->get()
+            ->map(function ($postingan) {
+                return [
+                    'id' => $postingan->id,
+                    'judul' => $postingan->judul,
+                    'tanggal_publish' => $postingan->tanggal_publish->format('d M Y'),
+                    'isi_konten' => strip_tags($postingan->isi_konten),
+                    'foto' => $postingan->foto ? asset('storage/' . $postingan->foto) : null,
+                    'detail_url' => route('public.postingan.show', $postingan),
+                ];
+            });
 
         return response()->json([
             'success' => true,

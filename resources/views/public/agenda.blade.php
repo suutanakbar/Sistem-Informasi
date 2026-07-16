@@ -32,7 +32,7 @@
                 <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
                     @if($agenda->gambar_poster)
                     <div class="w-full h-48 overflow-hidden bg-gray-100">
-                        <img src="{{ asset('storage/'.$agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                        <img src="{{ storage_url($agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                     </div>
                     @endif
                     <div class="p-6">

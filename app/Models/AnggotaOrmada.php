@@ -19,7 +19,6 @@ class AnggotaOrmada extends Model
     protected $fillable = [
         'profil_ormada_id',
         'nama_lengkap',
-        'nik',
         'nim',
         'tempat_lahir',
         'tanggal_lahir',
@@ -63,7 +62,7 @@ class AnggotaOrmada extends Model
 
     public function getStatusAktifLabelAttribute(): string
     {
-        $isGraduated = ! empty($this->tanggal_lulus_kuliah);
+        $isGraduated = ! empty($this->tanggal_lulus_kuliah) || $this->status_aktif === 'alumni';
         $isPengurus = $this->is_pengurus === 'YA';
         $hasEndJabatan = ! empty($this->tanggal_akhir_jabatan);
 

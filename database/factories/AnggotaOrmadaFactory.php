@@ -53,7 +53,7 @@ class AnggotaOrmadaFactory extends Factory
 
         $isPengurus = $tanggalLulusKuliah ? false : $this->faker->boolean(70);
 
-        $statusAktif = $tanggalLulusKuliah ? 'alumni' : ($isPengurus ? 'fungsionaris' : 'mahasiswa');
+        $statusAktif = $isPengurus ? 'fungsionaris' : 'mahasiswa';
 
         $tanggalMulaiJabatan = $isPengurus ? $this->faker->dateTimeBetween('-2 years', 'now') : null;
         $tanggalAkhirJabatan = $isPengurus ? $this->faker->dateTimeBetween('now', '+1 year') : null;

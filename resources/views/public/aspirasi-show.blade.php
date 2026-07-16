@@ -32,7 +32,7 @@
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 @if($aspirasi->profilOrmada->logo)
                 <div class="w-full h-64 sm:h-96 overflow-hidden bg-gray-100">
-                    <img src="{{ asset('storage/' . $aspirasi->profilOrmada->logo) }}" alt="{{ $aspirasi->profilOrmada->nama_universitas }}" class="w-full h-full object-cover">
+                    <img src="{{ profil_logo_url($aspirasi->profilOrmada->logo) }}" alt="{{ $aspirasi->profilOrmada->nama_universitas }}" class="w-full h-full object-cover">
                 </div>
                 @endif
                 
@@ -68,7 +68,7 @@
                     <!-- Author Info -->
                     <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
                         @if($aspirasi->profilOrmada->logo)
-                        <img src="{{ asset('storage/' . $aspirasi->profilOrmada->logo) }}" alt="{{ $aspirasi->profilOrmada->nama_universitas }}" class="h-12 w-12 rounded-lg object-cover">
+                        <img src="{{ profil_logo_url($aspirasi->profilOrmada->logo) }}" alt="{{ $aspirasi->profilOrmada->nama_universitas }}" class="h-12 w-12 rounded-lg object-cover">
                         @else
                         <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-700 text-sm font-bold text-white">
                             {{ strtoupper(substr($aspirasi->profilOrmada->nama_universitas ?? 'UN', 0, 2)) }}

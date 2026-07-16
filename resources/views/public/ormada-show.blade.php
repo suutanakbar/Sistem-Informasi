@@ -18,7 +18,7 @@
                 </div>
                 <div class="flex items-start gap-6">
                     @if($profilOrmada->logo)
-                    <img src="{{ asset('storage/' . $profilOrmada->logo) }}" alt="Logo {{ $profilOrmada->nama_universitas }}" class="h-20 w-20 sm:h-24 sm:w-24 rounded-xl object-cover shadow-lg border-2 border-white/30">
+                    <img src="{{ profil_logo_url($profilOrmada->logo) }}" alt="Logo {{ $profilOrmada->nama_universitas }}" class="h-20 w-20 sm:h-24 sm:w-24 rounded-xl object-cover shadow-lg border-2 border-white/30">
                     @else
                     <div class="flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center rounded-xl bg-white/20 text-2xl sm:text-3xl font-bold text-white shadow-lg border-2 border-white/30">
                         {{ strtoupper(substr($profilOrmada->nama_universitas, 0, 2)) }}
@@ -143,15 +143,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
-                                    $statusLabel = 'Aktif';
-                                    $statusColor = 'bg-green-100 text-green-800 border-green-200';
-                                    
-                                    if ($anggota->status_aktif === 'fungsionaris') {
-                                        $statusLabel = 'Fungsionaris';
+                                    $statusLabel = $anggota->status_aktif_label;
+                                    $statusColor = 'bg-blue-100 text-blue-800 border-blue-200';
+
+                                    if (str_contains($statusLabel, 'Fungsionaris')) {
                                         $statusColor = 'bg-purple-100 text-purple-800 border-purple-200';
-                                    } else {
-                                        $statusLabel = 'Mahasiswa';
-                                        $statusColor = 'bg-blue-100 text-blue-800 border-blue-200';
+                                    } elseif (str_starts_with($statusLabel, 'Lulus')) {
+                                        $statusColor = 'bg-green-100 text-green-800 border-green-200';
                                     }
                                 @endphp
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $statusColor }}">

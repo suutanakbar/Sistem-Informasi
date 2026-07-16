@@ -32,7 +32,7 @@
                 <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
                     @if($aspirasi->profilOrmada->logo)
                     <div class="w-full h-48 overflow-hidden bg-gray-100">
-                        <img src="{{ asset('storage/'.$aspirasi->profilOrmada->logo) }}" alt="{{ $aspirasi->profilOrmada->nama_universitas }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                        <img src="{{ profil_logo_url($aspirasi->profilOrmada->logo) }}" alt="{{ $aspirasi->profilOrmada->nama_universitas }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                     </div>
                     @else
                     <div class="w-full h-48 bg-gray-100 flex items-center justify-center">

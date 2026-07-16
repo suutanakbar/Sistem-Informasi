@@ -24,10 +24,6 @@
                 <input name="nama_lengkap" value="{{ old('nama_lengkap', $anggotaOrmada?->nama_lengkap) }}" required class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
             </label>
             <label class="block">
-                <span class="text-sm font-medium text-zinc-700">NIK <span class="text-red-500">*</span></span>
-                <input name="nik" value="{{ old('nik', $anggotaOrmada?->nik) }}" required class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
-            </label>
-            <label class="block">
                 <span class="text-sm font-medium text-zinc-700">Tempat Lahir</span>
                 <input name="tempat_lahir" value="{{ old('tempat_lahir', $anggotaOrmada?->tempat_lahir) }}" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
             </label>

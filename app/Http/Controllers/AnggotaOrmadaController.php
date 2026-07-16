@@ -61,10 +61,9 @@ class AnggotaOrmadaController extends Controller
             $validated['angkatan'] = date('Y', strtotime($validated['tanggal_masuk_kuliah']));
         }
 
-        // Auto set status sesuai tanggal dan status pengurus
-        if (! empty($validated['tanggal_lulus_kuliah'])) {
-            $validated['status_aktif'] = 'alumni';
-        } elseif ($validated['is_pengurus'] === 'YA') {
+        // Auto set status sesuai peran dan tanggal kuliah.
+        // Graduated members remain stored as mahasiswa, label will display "Lulus".
+        if ($validated['is_pengurus'] === 'YA') {
             $validated['status_aktif'] = 'fungsionaris';
         } else {
             $validated['status_aktif'] = 'mahasiswa';
@@ -138,10 +137,9 @@ class AnggotaOrmadaController extends Controller
             $validated['angkatan'] = date('Y', strtotime($validated['tanggal_masuk_kuliah']));
         }
 
-        // Auto set status sesuai peran dan tanggal kuliah
-        if (! empty($validated['tanggal_lulus_kuliah'])) {
-            $validated['status_aktif'] = 'alumni';
-        } elseif ($validated['is_pengurus'] === 'YA') {
+        // Auto set status sesuai peran dan tanggal kuliah.
+        // Graduated members remain stored as mahasiswa, label will display "Lulus".
+        if ($validated['is_pengurus'] === 'YA') {
             $validated['status_aktif'] = 'fungsionaris';
         } else {
             $validated['status_aktif'] = 'mahasiswa';
@@ -185,7 +183,6 @@ class AnggotaOrmadaController extends Controller
         return $request->validate([
             'profil_ormada_id' => ['nullable', 'exists:profil_ormada,id'],
             'nama_lengkap' => ['required', 'string', 'max:255'],
-            'nik' => ['nullable', 'string', 'max:50'],
             'nim' => ['required', 'string', 'max:50'],
             'program_studi' => ['required', 'string', 'max:255'],
             'fakultas' => ['nullable', 'string', 'max:255'],
