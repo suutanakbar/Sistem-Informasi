@@ -112,11 +112,11 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-zinc-500">Tanggal Mulai Jabatan</p>
-                            <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->tanggal_mulai_jabatan ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_mulai_jabatan)->format('d/m/Y') : '-' }}</p>
+                            <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->tanggal_mulai_jabatan ? $anggotaOrmada->tanggal_mulai_jabatan->format('d/m/Y') : '-' }}</p>
                         </div>
                         <div>
                             <p class="text-sm font-medium text-zinc-500">Tanggal Akhir Jabatan</p>
-                            <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->tanggal_akhir_jabatan ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_akhir_jabatan)->format('d/m/Y') : '-' }}</p>
+                            <p class="mt-1 text-sm text-zinc-900">{{ $anggotaOrmada->tanggal_akhir_jabatan ? $anggotaOrmada->tanggal_akhir_jabatan->format('d/m/Y') : '-' }}</p>
                         </div>
                     </div>
                 </div>

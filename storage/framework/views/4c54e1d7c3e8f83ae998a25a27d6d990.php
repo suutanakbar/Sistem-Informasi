@@ -52,10 +52,10 @@
                             </span>
                         </dd>
                     </div>
-                    <?php if($anggotaOrmada->is_pengurus === 'YA' && $anggotaOrmada->jabatan): ?>
+                    <?php if($anggotaOrmada->is_pengurus === 'YA'): ?>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Jabatan</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e($anggotaOrmada->jabatan); ?></dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e($anggotaOrmada->jabatan ?? '-'); ?></dd>
                     </div>
                     <?php endif; ?>
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -70,16 +70,22 @@
                         <dt class="text-sm font-medium text-gray-500">Tanggal Lulus Kuliah</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e($anggotaOrmada->tanggal_lulus_kuliah ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_lulus_kuliah)->format('d/m/Y') : '-'); ?></dd>
                     </div>
-                    <?php if($anggotaOrmada->is_pengurus === 'YA' && $anggotaOrmada->tanggal_mulai_jabatan): ?>
+                    <?php if($anggotaOrmada->tanggal_mulai_jabatan): ?>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Tanggal Mulai Jabatan</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e(\Carbon\Carbon::parse($anggotaOrmada->tanggal_mulai_jabatan)->format('d/m/Y')); ?></dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e($anggotaOrmada->tanggal_mulai_jabatan->format('d/m/Y')); ?></dd>
                     </div>
                     <?php endif; ?>
-                    <?php if($anggotaOrmada->is_pengurus === 'YA' && $anggotaOrmada->tanggal_akhir_jabatan): ?>
+                    <?php if($anggotaOrmada->tanggal_akhir_jabatan): ?>
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Tanggal Akhir Jabatan</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e(\Carbon\Carbon::parse($anggotaOrmada->tanggal_akhir_jabatan)->format('d/m/Y')); ?></dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e($anggotaOrmada->tanggal_akhir_jabatan->format('d/m/Y')); ?></dd>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($anggotaOrmada->tanggal_demisioner): ?>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Tanggal Demisioner</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><?php echo e($anggotaOrmada->tanggal_demisioner->format('d/m/Y')); ?></dd>
                     </div>
                     <?php endif; ?>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

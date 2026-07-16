@@ -35,11 +35,9 @@ class AnggotaOrmadaFactory extends Factory
             'Wakil Ketua',
             'Sekretaris',
             'Bendahara',
-            'Koordinator Acara',
-            'Koordinator Humas',
-            'Koordinator Pendidikan',
-            'Koordinator Kesejahteraan',
-            'Anggota',
+            'Kepala Divisi',
+            'Wakil Kepala Divisi',
+            'Staff Divisi',
         ];
 
         $namaDepan = $this->faker->firstName();
@@ -51,11 +49,11 @@ class AnggotaOrmadaFactory extends Factory
         $nim = $tahunMasuk . $this->faker->unique()->numerify('########');
 
         $tanggalMasukKuliah = $this->faker->dateTimeBetween('-5 years', '-1 year');
-        $tanggalLulusKuliah = $this->faker->dateTimeBetween($tanggalMasukKuliah, 'now');
+        $tanggalLulusKuliah = $this->faker->boolean(50) ? $this->faker->dateTimeBetween($tanggalMasukKuliah, 'now') : null;
 
-        $isPengurus = $this->faker->boolean(70); // 70% kemungkinan menjadi pengurus
+        $isPengurus = $tanggalLulusKuliah ? false : $this->faker->boolean(70);
 
-        $statusAktif = $isPengurus ? 'fungsionaris' : 'mahasiswa';
+        $statusAktif = $tanggalLulusKuliah ? 'alumni' : ($isPengurus ? 'fungsionaris' : 'mahasiswa');
 
         $tanggalMulaiJabatan = $isPengurus ? $this->faker->dateTimeBetween('-2 years', 'now') : null;
         $tanggalAkhirJabatan = $isPengurus ? $this->faker->dateTimeBetween('now', '+1 year') : null;

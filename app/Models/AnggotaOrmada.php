@@ -64,22 +64,27 @@ class AnggotaOrmada extends Model
 
     public function getStatusAktifLabelAttribute(): string
     {
-        $status = $this->status_aktif;
+        $isGraduated = ! empty($this->tanggal_lulus_kuliah);
+        $isPengurus = $this->is_pengurus === 'YA';
+        $hasEndJabatan = ! empty($this->tanggal_akhir_jabatan);
 
-        if (! $status) {
-            if ($this->tanggal_lulus_kuliah) {
-                return 'Lulus';
-            }
-
-            return $this->is_pengurus === 'YA' ? 'Fungsionaris' : 'Mahasiswa';
+        if ($isGraduated && $isPengurus) {
+            return 'Lulus | Demisioner';
         }
 
-        return match ($status) {
-            'alumni' => 'Lulus',
-            'mahasiswa' => 'Mahasiswa',
-            'fungsionaris' => 'Fungsionaris',
-            default => ucfirst(str_replace('_', ' ', $status)),
-        };
+        if ($isGraduated) {
+            return 'Lulus';
+        }
+
+        if ($isPengurus) {
+            return 'Mahasiswa | Fungsionaris';
+        }
+
+        if ($hasEndJabatan) {
+            return 'Mahasiswa | Demisioner';
+        }
+
+        return 'Mahasiswa';
     }
 
     public function scopeSearch(Builder $query, ?string $search): Builder
