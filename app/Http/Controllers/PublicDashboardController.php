@@ -55,7 +55,8 @@ class PublicDashboardController extends Controller
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
             'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
-            'totalMahasiswa' => AnggotaOrmada::where('is_pengurus', 'TIDAK')->count(),
+            'totalMahasiswa' => AnggotaOrmada::where('status_aktif', 'mahasiswa')->count(),
+            'totalAlumni' => AnggotaOrmada::where('status_aktif', 'alumni')->count(),
             'profilOrmadas' => $profilOrmadas,
             'aspirasis' => Aspirasi::query()
                 ->with(['profilOrmada' => fn ($query) => $query->select('id', 'nama_universitas', 'logo')])

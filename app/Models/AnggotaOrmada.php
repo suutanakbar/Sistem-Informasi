@@ -19,8 +19,16 @@ class AnggotaOrmada extends Model
     protected $fillable = [
         'profil_ormada_id',
         'nama_lengkap',
+        'nik',
         'nim',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'agama',
+        'golongan_darah',
         'program_studi',
+        'fakultas',
+        'prodi',
+        'angkatan',
         'status_aktif',
         'jabatan',
         'is_pengurus',
@@ -31,6 +39,9 @@ class AnggotaOrmada extends Model
         'tanggal_demisioner',
         'tanggal_lulus',
         'no_hp',
+        'alamat',
+        'email',
+        'cv_path',
     ];
 
     protected function casts(): array
@@ -42,6 +53,7 @@ class AnggotaOrmada extends Model
             'tanggal_akhir_jabatan' => 'date',
             'tanggal_demisioner' => 'date',
             'tanggal_lulus' => 'date',
+            'tanggal_lahir' => 'date',
         ];
     }
 
