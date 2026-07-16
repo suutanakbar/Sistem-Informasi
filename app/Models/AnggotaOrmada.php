@@ -62,6 +62,26 @@ class AnggotaOrmada extends Model
         return $this->belongsTo(ProfilOrmada::class);
     }
 
+    public function getStatusAktifLabelAttribute(): string
+    {
+        $status = $this->status_aktif;
+
+        if (! $status) {
+            if ($this->tanggal_lulus_kuliah) {
+                return 'Lulus';
+            }
+
+            return $this->is_pengurus === 'YA' ? 'Fungsionaris' : 'Mahasiswa';
+        }
+
+        return match ($status) {
+            'alumni' => 'Lulus',
+            'mahasiswa' => 'Mahasiswa',
+            'fungsionaris' => 'Fungsionaris',
+            default => ucfirst(str_replace('_', ' ', $status)),
+        };
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

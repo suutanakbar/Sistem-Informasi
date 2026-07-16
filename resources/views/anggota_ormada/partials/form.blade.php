@@ -163,3 +163,30 @@
             </div>
         </div>
     </div>
+</div>
+
+@push('scripts')
+<script>
+    function toggleJabatan() {
+        const isPengurus = document.getElementById('is_pengurus').value;
+        const jabatanField = document.getElementById('jabatanField');
+        const tanggalJabatanFields = document.getElementById('tanggalJabatanFields');
+        const tanggalAkhirJabatanField = document.getElementById('tanggalAkhirJabatanField');
+        
+        if (isPengurus === 'YA') {
+            jabatanField.classList.remove('hidden');
+            tanggalJabatanFields.classList.remove('hidden');
+            tanggalAkhirJabatanField.classList.remove('hidden');
+            document.getElementById('jabatan').required = true;
+        } else {
+            jabatanField.classList.add('hidden');
+            tanggalJabatanFields.classList.add('hidden');
+            tanggalAkhirJabatanField.classList.add('hidden');
+            document.getElementById('jabatan').required = false;
+        }
+    }
+
+    // Initialize on page load
+    toggleJabatan();
+</script>
+@endpush

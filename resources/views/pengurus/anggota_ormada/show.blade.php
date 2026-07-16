@@ -34,18 +34,15 @@
                             $statusColors = [
                                 'fungsionaris' => 'bg-purple-100 text-purple-800',
                                 'mahasiswa' => 'bg-blue-100 text-blue-800',
+                                'alumni' => 'bg-green-100 text-green-800',
                             ];
                             @endphp
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$anggotaOrmada->status_aktif] ?? 'bg-gray-100 text-gray-800' }}">
-                                {{ ucfirst(str_replace('_', ' ', $anggotaOrmada->status_aktif)) }}
+                                {{ $anggotaOrmada->status_aktif_label }}
                             </span>
                         </dd>
                     </div>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Pengurus</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->is_pengurus === 'YA' ? 'Ya' : 'Tidak' }}</dd>
-                    </div>
-                    @if($anggotaOrmada->jabatan)
+                    @if($anggotaOrmada->is_pengurus === 'YA' && $anggotaOrmada->jabatan)
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Jabatan</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->jabatan }}</dd>
@@ -63,13 +60,13 @@
                         <dt class="text-sm font-medium text-gray-500">Tanggal Lulus Kuliah</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ $anggotaOrmada->tanggal_lulus_kuliah ? \Carbon\Carbon::parse($anggotaOrmada->tanggal_lulus_kuliah)->format('d/m/Y') : '-' }}</dd>
                     </div>
-                    @if($anggotaOrmada->tanggal_mulai_jabatan)
+                    @if($anggotaOrmada->is_pengurus === 'YA' && $anggotaOrmada->tanggal_mulai_jabatan)
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Tanggal Mulai Jabatan</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_mulai_jabatan)->format('d/m/Y') }}</dd>
                     </div>
                     @endif
-                    @if($anggotaOrmada->tanggal_akhir_jabatan)
+                    @if($anggotaOrmada->is_pengurus === 'YA' && $anggotaOrmada->tanggal_akhir_jabatan)
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Tanggal Akhir Jabatan</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ \Carbon\Carbon::parse($anggotaOrmada->tanggal_akhir_jabatan)->format('d/m/Y') }}</dd>

@@ -57,9 +57,11 @@ class AnggotaOrmadaController extends Controller
             $validated['profil_ormada_id'] = $profil->id;
         }
 
-        // Auto set status alumni jika tanggal lulus diisi
+        // Auto set status sesuai tanggal kuliah
         if (!empty($validated['tanggal_lulus_kuliah'])) {
             $validated['status_aktif'] = 'alumni';
+        } elseif (!empty($validated['tanggal_masuk_kuliah'])) {
+            $validated['status_aktif'] = 'mahasiswa';
         } else {
             $validated['status_aktif'] = $validated['is_pengurus'] === 'YA' ? 'fungsionaris' : 'mahasiswa';
         }
@@ -128,9 +130,11 @@ class AnggotaOrmadaController extends Controller
             $validated['profil_ormada_id'] = $user->profilOrmada()->firstOrFail()->id;
         }
 
-        // Auto set status alumni jika tanggal lulus diisi
+        // Auto set status sesuai tanggal kuliah
         if (!empty($validated['tanggal_lulus_kuliah'])) {
             $validated['status_aktif'] = 'alumni';
+        } elseif (!empty($validated['tanggal_masuk_kuliah'])) {
+            $validated['status_aktif'] = 'mahasiswa';
         } else {
             $validated['status_aktif'] = $validated['is_pengurus'] === 'YA' ? 'fungsionaris' : 'mahasiswa';
         }
