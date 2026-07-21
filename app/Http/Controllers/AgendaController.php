@@ -300,6 +300,69 @@ class AgendaController extends Controller
         return back()->with('status', 'Status volunteer berhasil diperbarui.');
     }
 
+    public function calendarEvents(Request $request)
+    {
+        $agendas = Agenda::query()
+            ->where('is_published', true)
+            ->whereNotNull('tanggal_publish')
+            ->where('waktu_mulai', '>=', now())
+            ->orderBy('waktu_mulai')
+            ->get(['id', 'nama_agenda', 'kategori', 'waktu_mulai', 'waktu_selesai', 'tempat', 'deskripsi_agenda', 'deadline_pendaftaran']);
+
+        $formatted = [];
+
+        foreach ($agendas as $agenda) {
+            // Event utama: waktu acara
+            $formatted[] = [
+                'id' => (string) $agenda->id,
+                'title' => $agenda->nama_agenda,
+                'start' => $agenda->waktu_mulai,
+                'end' => $agenda->waktu_selesai,
+                'backgroundColor' => $this->getCategoryColor($agenda->kategori),
+                'borderColor' => $this->getCategoryColor($agenda->kategori),
+                'extendedProps' => [
+                    'kategori' => $agenda->kategori,
+                    'tempat' => $agenda->tempat,
+                    'deskripsi' => $agenda->deskripsi_agenda,
+                    'type' => 'acara',
+                ],
+            ];
+
+            // Event tambahan: deadline volunteer
+            if ($agenda->deadline_pendaftaran) {
+                $formatted[] = [
+                    'id' => 'deadline-' . $agenda->id,
+                    'title' => 'Deadline: ' . $agenda->nama_agenda,
+                    'start' => $agenda->deadline_pendaftaran,
+                    'backgroundColor' => '#ef4444',
+                    'borderColor' => '#ef4444',
+                    'display' => 'background',
+                    'extendedProps' => [
+                        'type' => 'deadline',
+                        'kategori' => $agenda->kategori,
+                        'tempat' => $agenda->tempat,
+                        'deskripsi' => 'Deadline pendaftaran volunteer: ' . $agenda->deskripsi_agenda,
+                    ],
+                ];
+            }
+        }
+
+        return response()->json($formatted);
+    }
+
+    private function getCategoryColor(string $kategori): string
+    {
+        return match ($kategori) {
+            'kegiatan_ormada' => '#f97316', // orange
+            'kegiatan_pemda' => '#3b82f6', // blue
+            'baksos' => '#10b981', // green
+            'pendidikan' => '#8b5cf6', // purple
+            'kesehatan' => '#ef4444', // red
+            'lingkungan' => '#84cc16', // lime
+            default => '#6b7280', // gray
+        };
+    }
+
     private function validateAgenda(Request $request, ?Agenda $agenda = null): array
     {
         $rules = [

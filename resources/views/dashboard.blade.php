@@ -5,6 +5,10 @@
         @endif
     </x-page-header>
 
+    @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
+    @endpush
+
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ([
             'Ormada' => $totalOrmada,
@@ -26,5 +30,12 @@
             <x-button-link href="{{ route('proposal.index') }}" variant="secondary">Proposal</x-button-link>
             <x-button-link href="{{ route('aspirasi.index') }}" variant="secondary">Aspirasi</x-button-link>
         </div>
+    </section>
+
+    <!-- Event Calendar -->
+    <section class="mt-6 rounded-lg border border-zinc-200 bg-white p-6">
+        <h2 class="font-semibold">Kalender Agenda</h2>
+        <p class="mt-2 text-sm text-zinc-500">Agenda kegiatan yang akan datang dari Pemerintah Daerah.</p>
+        <div id="calendar" class="mt-4 min-h-[500px]"></div>
     </section>
 </x-layouts.app>

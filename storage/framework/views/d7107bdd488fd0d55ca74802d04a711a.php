@@ -70,6 +70,15 @@
                 </div>
             </section>
 
+            <!-- Event Calendar -->
+            <section class="bg-white py-16">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Kalender Agenda</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl">Jadwal kegiatan ormada yang akan datang. Klik agenda untuk melihat detail.</p>
+                    <div id="calendar-public" class="mt-8 min-h-[500px]"></div>
+                </div>
+            </section>
+
             <section id="profil" class="bg-white py-16">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <!-- Header with Title and View All Button -->
@@ -96,7 +105,7 @@
                                         <a href="<?php echo e(route('public.ormada.show', $profil)); ?>" class="block bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer h-full">
                                             <div class="text-center mb-4">
                                                 <?php if($profil->logo): ?>
-                                                    <img src="<?php echo e(asset('storage/'.$profil->logo)); ?>" alt="Logo <?php echo e($profil->nama_universitas); ?>" class="h-16 w-16 mx-auto rounded-xl object-cover shadow-md">
+                                                    <img src="<?php echo e(profil_logo_url($profil->logo)); ?>" alt="Logo <?php echo e($profil->nama_universitas); ?>" class="h-16 w-16 mx-auto rounded-xl object-cover shadow-md">
                                                 <?php else: ?>
                                                     <div class="flex h-16 w-16 mx-auto items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-xl font-bold text-white shadow-md">
                                                         <?php echo e(strtoupper(substr($profil->nama_universitas, 0, 2))); ?>
@@ -235,7 +244,7 @@
                         <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
                             <?php if($heroPost->foto): ?>
                             <div class="w-full h-64 sm:h-80 overflow-hidden bg-gray-100">
-                                <img src="<?php echo e(asset('storage/'.$heroPost->foto)); ?>" alt="<?php echo e($heroPost->judul); ?>" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                                <img src="<?php echo e(storage_url($heroPost->foto)); ?>" alt="<?php echo e($heroPost->judul); ?>" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                             </div>
                             <?php endif; ?>
                             <div class="p-6">
@@ -269,7 +278,7 @@
                             <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition flex">
                                 <?php if($postingan->foto): ?>
                                 <div class="flex-shrink-0 w-32 sm:w-40">
-                                    <img src="<?php echo e(asset('storage/'.$postingan->foto)); ?>" alt="<?php echo e($postingan->judul); ?>" class="w-full h-full object-cover">
+                                    <img src="<?php echo e(storage_url($postingan->foto)); ?>" alt="<?php echo e($postingan->judul); ?>" class="w-full h-full object-cover">
                                 </div>
                                 <?php endif; ?>
                                 <div class="p-5 flex flex-col flex-1">
@@ -298,6 +307,7 @@
             </section>
             <?php endif; ?>
 
+            <!-- Featured Agenda Carousel -->
             <?php if($agendas->isNotEmpty()): ?>
             <section id="agenda" class="bg-gray-50 py-16">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -323,7 +333,7 @@
                                 <!-- Left Side - Visual -->
                                 <div class="relative bg-gray-100" id="agendaImage">
                                     <?php if($featuredAgenda->gambar_poster): ?>
-                                    <img src="<?php echo e(asset('storage/'.$featuredAgenda->gambar_poster)); ?>" alt="<?php echo e($featuredAgenda->nama_agenda); ?>" class="w-full h-64 md:h-full object-cover">
+                                    <img src="<?php echo e(storage_url($featuredAgenda->gambar_poster)); ?>" alt="<?php echo e($featuredAgenda->nama_agenda); ?>" class="w-full h-64 md:h-full object-cover">
                                     <?php else: ?>
                                     <div class="w-full h-64 md:h-96 flex items-center justify-center">
                                         <svg class="w-20 h-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -460,10 +470,23 @@
                 </div>
             </section>
             <?php endif; ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
 <script>
+const storageBase = "<?php echo e(asset('storage')); ?>";
+
+function resolveImageUrl(path) {
+    if (!path) {
+        return null;
+    }
+
+    return /^(https?:)?\/\//.test(path)
+        ? path
+        : `${storageBase}/${path.replace(/^\/+/, '')}`;
+}
+
 function filterPostingan(jenis) {
     // Update active button state
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -513,7 +536,7 @@ function renderNewsCards(postingans) {
         <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
             ${heroPost.foto ? `
             <div class="w-full h-64 sm:h-80 overflow-hidden bg-gray-100">
-                <img src="/storage/${heroPost.foto}" alt="${heroPost.judul}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                <img src="${resolveImageUrl(heroPost.foto)}" alt="${heroPost.judul}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
             </div>
             ` : ''}
             <div class="p-6">
@@ -547,7 +570,7 @@ function renderNewsCards(postingans) {
             <article class="content-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition flex">
                 ${postingan.foto ? `
                 <div class="flex-shrink-0 w-32 sm:w-40">
-                    <img src="/storage/${postingan.foto}" alt="${postingan.judul}" class="w-full h-full object-cover">
+                    <img src="${resolveImageUrl(postingan.foto)}" alt="${postingan.judul}" class="w-full h-full object-cover">
                 </div>
                 ` : ''}
                 <div class="p-5 flex flex-col flex-1">

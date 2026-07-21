@@ -49,6 +49,13 @@
             <p class="mt-2 text-sm text-zinc-500">Agenda kegiatan yang dibuat oleh Pemerintah Daerah. Anda dapat melihat detail dan mendaftar volunteer.</p>
         </section>
 
+        <!-- Event Calendar -->
+        <section class="rounded-lg border border-zinc-200 bg-white p-6">
+            <h2 class="font-semibold">Kalender Agenda</h2>
+            <p class="mt-2 text-sm text-zinc-500">Agenda kegiatan yang akan datang dari Pemerintah Daerah.</p>
+            <div id="calendar" class="mt-4 min-h-[500px]"></div>
+        </section>
+
         <!-- My Postingan -->
         <section class="rounded-lg border border-zinc-200 bg-white p-6">
             <div class="flex items-center justify-between">

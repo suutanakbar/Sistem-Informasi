@@ -1,4 +1,7 @@
 <x-layouts.pemda title="Dashboard Pemda" headerTitle="Dashboard Pemerintah Daerah">
+    @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
+    @endpush
     <div class="space-y-6">
         <!-- Welcome Message -->
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
@@ -51,6 +54,13 @@
                     Kelola Volunteer
                 </a>
             </div>
+        </section>
+
+        <!-- Event Calendar -->
+        <section class="rounded-lg border border-zinc-200 bg-white p-6">
+            <h2 class="font-semibold">Kalender Agenda</h2>
+            <p class="mt-2 text-sm text-zinc-500">Agenda kegiatan yang akan datang.</p>
+            <div id="calendar" class="mt-4 min-h-[500px]"></div>
         </section>
 
         <!-- Recent Agenda -->

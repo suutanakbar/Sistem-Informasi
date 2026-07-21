@@ -1,4 +1,7 @@
 <x-layouts.admin title="Dashboard Admin" headerTitle="Dashboard Admin">
+    @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
+    @endpush
     <div class="space-y-6">
     <!-- Welcome Message -->
     <div class="rounded-lg border border-blue-200 bg-blue-50 p-6">
@@ -41,6 +44,13 @@
                 Buat Proposal
             </a>
         </div>
+    </section>
+
+    <!-- Event Calendar -->
+    <section class="rounded-lg border border-zinc-200 bg-white p-6">
+        <h2 class="font-semibold">Kalender Agenda</h2>
+        <p class="mt-2 text-sm text-zinc-500">Agenda kegiatan yang akan datang.</p>
+        <div id="calendar" class="mt-4 min-h-[500px]"></div>
     </section>
 
     <!-- Management Links -->

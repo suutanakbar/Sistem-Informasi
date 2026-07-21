@@ -71,6 +71,15 @@
                 </div>
             </section>
 
+            <!-- Event Calendar -->
+            <section class="bg-white py-16">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Kalender Agenda</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl">Jadwal kegiatan ormada yang akan datang. Klik agenda untuk melihat detail.</p>
+                    <div id="calendar-public" class="mt-8 min-h-[500px]"></div>
+                </div>
+            </section>
+
             <section id="profil" class="bg-white py-16">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <!-- Header with Title and View All Button -->
@@ -291,6 +300,7 @@
             </section>
             @endif
 
+            <!-- Featured Agenda Carousel -->
             @if($agendas->isNotEmpty())
             <section id="agenda" class="bg-gray-50 py-16">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -447,6 +457,7 @@
                 </div>
             </section>
             @endif
+
 @endsection
 
 @push('scripts')
