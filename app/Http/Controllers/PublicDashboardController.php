@@ -51,6 +51,24 @@ class PublicDashboardController extends Controller
             ];
         });
 
+        // Prepare calendar events for FullCalendar
+        $calendarEvents = $agendas->map(function($agenda) {
+            return [
+                'id' => (string) $agenda->id,
+                'title' => $agenda->nama_agenda,
+                'start' => $agenda->waktu_mulai->toIso8601String(),
+                'end' => $agenda->waktu_selesai ? $agenda->waktu_selesai->toIso8601String() : null,
+                'backgroundColor' => $this->getCategoryColor($agenda->kategori),
+                'borderColor' => $this->getCategoryColor($agenda->kategori),
+                'extendedProps' => [
+                    'kategori' => $agenda->kategori,
+                    'tempat' => $agenda->tempat,
+                    'deskripsi' => $agenda->deskripsi_agenda,
+                    'detail_url' => route('public.agenda.show', $agenda),
+                ],
+            ];
+        });
+
         return view('public.dashboard', [
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
@@ -71,6 +89,7 @@ class PublicDashboardController extends Controller
             'agendas' => $agendas,
             'agendaIndex' => $agendaIndex,
             'agendasData' => $agendasData,
+            'calendarEvents' => $calendarEvents,
         ]);
     }
 
