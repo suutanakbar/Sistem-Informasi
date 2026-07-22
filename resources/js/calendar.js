@@ -3,6 +3,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
+window.FullCalendar = { Calendar };
+
 function initCalendar(elementId, eventsUrl) {
     const calendarEl = document.getElementById(elementId);
 
@@ -56,12 +58,73 @@ function initCalendar(elementId, eventsUrl) {
     calendar.render();
 }
 
+window.initPublicCalendarFromGlobal = function() {
+    const calendarEl = document.getElementById('calendar-public');
+    if (!calendarEl) return;
+    if (!window.FullCalendar) {
+        console.error('FullCalendar not loaded');
+        return;
+    }
+
+    const events = window.publicCalendarEvents || [];
+
+    const calendar = new window.FullCalendar.Calendar(calendarEl, {
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+        initialView: 'dayGridMonth',
+        locale: 'id',
+        height: 'auto',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listMonth'
+        },
+        events: events,
+        eventClick: function(info) {
+            const props = info.event.extendedProps;
+            const start = info.event.start.toLocaleString('id-ID', {
+                dateStyle: 'full',
+                timeStyle: 'short',
+            });
+            const end = info.event.end
+                ? info.event.end.toLocaleString('id-ID', {
+                      dateStyle: 'full',
+                      timeStyle: 'short',
+                  })
+                : null;
+
+            let detail = `<strong>${info.event.title}</strong><br><br>`;
+            detail += `<strong>Kategori:</strong> ${props.kategori}<br>`;
+            detail += `<strong>Tempat:</strong> ${props.tempat}<br>`;
+            detail += `<strong>Waktu:</strong> ${start}`;
+            if (end) {
+                detail += ` - ${end}`;
+            }
+            detail += `<br><br><em>${props.deskripsi}</em>`;
+
+            if (props.detail_url) {
+                window.location.href = props.detail_url;
+            } else {
+                alert(detail);
+            }
+        },
+        eventDisplay: 'block',
+        displayEventTime: true,
+        eventTimeFormat: {
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: false
+        }
+    });
+
+    calendar.render();
+};
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
         initCalendar('calendar', '/api/agenda/calendar');
-        initCalendar('calendar-public', '/publik/agenda/calendar');
+        window.initPublicCalendarFromGlobal();
     });
 } else {
     initCalendar('calendar', '/api/agenda/calendar');
-    initCalendar('calendar-public', '/publik/agenda/calendar');
+    window.initPublicCalendarFromGlobal();
 }

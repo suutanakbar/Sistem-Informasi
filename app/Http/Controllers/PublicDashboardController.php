@@ -19,7 +19,9 @@ class PublicDashboardController extends Controller
         $agendas = Agenda::query()
             ->with('admin')
             ->published()
-            ->upcoming()
+            ->where('waktu_mulai', '>=', now()->subMonths(1))
+            ->where('waktu_mulai', '<=', now()->addMonths(3))
+            ->orderBy('waktu_mulai')
             ->limit(6)
             ->get();
 
@@ -53,7 +55,7 @@ class PublicDashboardController extends Controller
 
         // Prepare calendar events for FullCalendar
         $calendarEvents = $agendas->map(function($agenda) {
-            return [
+            $event = [
                 'id' => (string) $agenda->id,
                 'title' => $agenda->nama_agenda,
                 'start' => $agenda->waktu_mulai->toIso8601String(),
@@ -67,7 +69,20 @@ class PublicDashboardController extends Controller
                     'detail_url' => route('public.agenda.show', $agenda),
                 ],
             ];
-        });
+
+            if ($agenda->deadline_pendaftaran) {
+                $event['deadline'] = [
+                    'id' => 'deadline-' . $agenda->id,
+                    'title' => 'Deadline: ' . $agenda->nama_agenda,
+                    'start' => $agenda->deadline_pendaftaran->toIso8601String(),
+                    'backgroundColor' => '#ef4444',
+                    'borderColor' => '#ef4444',
+                    'display' => 'background',
+                ];
+            }
+
+            return $event;
+        })->filter()->values();
 
         return view('public.dashboard', [
             'totalOrmada' => ProfilOrmada::count(),
@@ -284,14 +299,15 @@ class PublicDashboardController extends Controller
             $formatted[] = [
                 'id' => (string) $agenda->id,
                 'title' => $agenda->nama_agenda,
-                'start' => $agenda->waktu_mulai,
-                'end' => $agenda->waktu_selesai,
+                'start' => $agenda->waktu_mulai->toIso8601String(),
+                'end' => $agenda->waktu_selesai ? $agenda->waktu_selesai->toIso8601String() : null,
                 'backgroundColor' => $this->getCategoryColor($agenda->kategori),
                 'borderColor' => $this->getCategoryColor($agenda->kategori),
                 'extendedProps' => [
                     'kategori' => $agenda->kategori,
                     'tempat' => $agenda->tempat,
                     'deskripsi' => $agenda->deskripsi_agenda,
+                    'detail_url' => route('public.agenda.show', $agenda),
                     'type' => 'acara',
                 ],
             ];
@@ -301,7 +317,7 @@ class PublicDashboardController extends Controller
                 $formatted[] = [
                     'id' => 'deadline-' . $agenda->id,
                     'title' => 'Deadline: ' . $agenda->nama_agenda,
-                    'start' => $agenda->deadline_pendaftaran,
+                    'start' => $agenda->deadline_pendaftaran->toIso8601String(),
                     'backgroundColor' => '#ef4444',
                     'borderColor' => '#ef4444',
                     'display' => 'background',
