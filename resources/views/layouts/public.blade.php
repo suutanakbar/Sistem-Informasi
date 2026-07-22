@@ -131,15 +131,23 @@
 
             <!-- Right -->
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
 
                 @auth
 
                 <a
                     href="{{ route('dashboard') }}"
-                    class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700 transition">
+                    class="text-xs uppercase tracking-widest font-semibold hover:text-blue-700 transition">
 
                     Dashboard
+
+                </a>
+
+                <a
+                    href="{{ route('pengumuman.create') }}"
+                    class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700 transition">
+
+                    Buat Pengumuman
 
                 </a>
 
@@ -147,7 +155,7 @@
 
                 <a
                     href="{{ route('login') }}"
-                    class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700 transition">
+                    class="text-xs uppercase tracking-widest font-semibold hover:text-blue-700 transition">
 
                     Login
 
@@ -298,6 +306,15 @@
                     class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">
 
                     Aspirasi
+
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('public.pengumuman') }}"
+                    class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">
+
+                    Pengumuman
 
                 </a>
             </li>

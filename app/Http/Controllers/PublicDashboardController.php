@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agenda;
 use App\Models\AnggotaOrmada;
 use App\Models\Aspirasi;
+use App\Models\Pengumuman;
 use App\Models\Postingan;
 use App\Models\ProfilOrmada;
 use Illuminate\Http\Request;
@@ -84,6 +85,13 @@ class PublicDashboardController extends Controller
             return $event;
         })->filter()->values();
 
+        $pengumumans = Pengumuman::query()
+            ->with('pembuat')
+            ->latest('tanggal_publish')
+            ->latest('dibuat_pada')
+            ->limit(4)
+            ->get();
+
         return view('public.dashboard', [
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
@@ -101,6 +109,7 @@ class PublicDashboardController extends Controller
                 ->published()
                 ->limit(6)
                 ->get(),
+            'pengumumans' => $pengumumans,
             'agendas' => $agendas,
             'agendaIndex' => $agendaIndex,
             'agendasData' => $agendasData,
@@ -281,6 +290,24 @@ class PublicDashboardController extends Controller
         $aspirasi->load('profilOrmada');
 
         return view('public.aspirasi-show', compact('aspirasi'));
+    }
+
+    public function pengumuman(Request $request): View
+    {
+        $pengumumans = Pengumuman::query()
+            ->with('pembuat')
+            ->latest('tanggal_publish')
+            ->latest('dibuat_pada')
+            ->paginate(12);
+
+        return view('public.pengumuman', compact('pengumumans'));
+    }
+
+    public function showPengumuman(Pengumuman $pengumuman): View
+    {
+        $pengumuman->load('pembuat');
+
+        return view('public.pengumuman-show', compact('pengumuman'));
     }
 
     public function calendarEvents(Request $request)
