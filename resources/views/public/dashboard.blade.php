@@ -122,7 +122,7 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-black uppercase tracking-wide"
                     style="font-family:'Playfair Display',serif;">
-                    Aspirasi
+                    Berita
                 </h2>
                 <a href="{{ route('public.postingan') }}"
                    class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700 transition">
@@ -132,84 +132,109 @@
         </div>
 
 
-        <!-- News Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
-            @foreach($postingans->take(4) as $postingan)
-
-            <article class="group bg-white border border-gray-200 rounded-sm">
-
-                <a href="{{ route('public.postingan.show',$postingan) }}">
-
-                    <!-- Image -->
-                    @if($postingan->foto)
-                    <div class="overflow-hidden">
-
-                        <img
-                            src="{{ storage_url($postingan->foto) }}"
-                            alt="{{ $postingan->judul }}"
-                            class="w-full h-28 object-cover transition duration-500 group-hover:scale-105">
-
+        <!-- Featured News Section -->
+        @if($postingans->isNotEmpty())
+        @php $featured = $postingans->first(); @endphp
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Featured Article (Left - 50%) -->
+            <article class="bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
+                <a href="{{ route('public.postingan.show', $featured) }}" class="block">
+                    @if($featured->foto)
+                    <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
+                        <img src="{{ storage_url($featured->foto) }}" alt="{{ $featured->judul }}" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
                     </div>
                     @endif
-
-
-                    <!-- Content -->
-                    <div class="p-3">
-
-                        <!-- Category -->
-                        <div class="uppercase tracking-[2px] text-[10px] font-bold text-gray-500 mb-2">
-
-                            {{ strtoupper($postingan->jenis) }}
-
+                    <div class="p-5">
+                        <!-- Badges -->
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
+                                {{ ucfirst($featured->jenis_konten ?? $featured->jenis) }}
+                            </span>
+                            @if($featured->is_published)
+                            <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Published</span>
+                            @else
+                            <span class="px-2 py-1 text-[10px] font-medium bg-yellow-100 text-yellow-800 rounded-full">Draft</span>
+                            @endif
                         </div>
-
 
                         <!-- Title -->
-                        <h3
-                            class="text-base font-black leading-tight mb-1 group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                            {{ $postingan->judul }}
-
+                        <h3 class="text-xl sm:text-2xl font-black leading-tight mb-2 group-hover:text-blue-700 transition" style="font-family:'Playfair Display',serif;">
+                            {{ $featured->judul }}
                         </h3>
 
-
                         <!-- Summary -->
-                        <p class="text-gray-600 leading-5 text-[11px] mb-2 line-clamp-2">
-
-                            {{ Str::limit(strip_tags($postingan->isi_konten),120) }}
-
+                        <p class="text-gray-600 leading-5 text-xs sm:text-sm mb-3 line-clamp-3">
+                            {{ Str::limit(strip_tags($featured->isi_konten),200) }}
                         </p>
 
-
-                        <!-- Footer -->
-                        <div class="pt-2 border-t border-gray-200 flex items-center justify-between">
-
-                            <span class="uppercase text-[10px] tracking-wider text-gray-500">
-
-                                {{ $postingan->tanggal_publish->format('d M Y') }}
-
-                            </span>
-
-                            <span
-                                class="text-[11px] font-bold group-hover:translate-x-1 transition">
-
-                                →
-
-                            </span>
-
+                        <!-- Date -->
+                        <div class="flex items-center gap-1 text-[10px] text-gray-500 uppercase tracking-widest">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            {{ ($featured->tanggal_publish ?? $featured->dibuat_pada)->format('d M Y') }}
                         </div>
 
+                        <!-- Footer -->
+                        <div class="mt-3 pt-2 border-t border-gray-200">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
+                                Baca selengkapnya →
+                            </span>
+                        </div>
                     </div>
-
                 </a>
-
             </article>
 
-            @endforeach
+            <!-- Side Articles (Right - 50% Vertical Stack) -->
+            @if($postingans->count() > 1)
+            <div class="flex flex-col gap-4">
+                @foreach($postingans->skip(1)->take(2) as $postingan)
+                <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
+                    <a href="{{ route('public.postingan.show', $postingan) }}" class="block">
+                        @if($postingan->foto)
+                        <div class="w-full p-2 bg-gray-100 flex items-center justify-center">
+                            <img src="{{ storage_url($postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-32 object-cover object-center transition duration-500 group-hover:scale-105">
+                        </div>
+                        @endif
+                        <div class="p-3">
+                            <!-- Badges -->
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="px-1 py-0.5 text-[8px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-wider">
+                                    {{ ucfirst($postingan->jenis_konten ?? $postingan->jenis) }}
+                                </span>
+                                @if($postingan->is_published)
+                                <span class="px-1 py-0.5 text-[8px] font-medium bg-green-100 text-green-800 rounded-full">Pub</span>
+                                @endif
+                            </div>
 
+                            <!-- Title -->
+                            <h3 class="text-[11px] sm:text-xs font-black leading-tight mb-1 line-clamp-2 group-hover:text-blue-700 transition flex-1" style="font-family:'Playfair Display',serif;">
+                                {{ $postingan->judul }}
+                            </h3>
+
+                            <!-- Date -->
+                            <div class="flex items-center gap-1 text-[8px] text-gray-500 uppercase tracking-wider">
+                                <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
+                                </svg>
+                                {{ ($postingan->tanggal_publish ?? $postingan->dibuat_pada)->format('d M Y') }}
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="mt-2 pt-1.5 border-t border-gray-200">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
+                                    Baca selengkapnya →
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                @endforeach
+            </div>
+            @endif
         </div>
+        @endif
 
         </div>
     </div>
@@ -491,7 +516,7 @@
     </div>
 </section>
 
-<footer class="mt-5 border-t pt-4 pb-4">
+<!-- <footer class="mt-5 border-t pt-4 pb-4">
     <div class="text-center">
         <h2 class="text-2xl font-black">
             SI ORMADA TEMANGGUNG
@@ -503,7 +528,7 @@
             © {{ date('Y') }} SI Ormada Temanggung
         </p>
     </div>
-</footer>
+</footer> -->
 
 </main>
 

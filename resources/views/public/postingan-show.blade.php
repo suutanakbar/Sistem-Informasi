@@ -2,55 +2,81 @@
 @section('title', $postingan->judul . ' - SI Ormada Temanggung')
 @section('content')
     <!-- Page Header -->
-    <section class="hero-gradient text-white py-12 sm:py-16">
+    <section class="bg-white border-t border-b border-gray-300 py-8">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <a href="{{ route('public.postingan') }}" class="inline-flex items-center text-sm text-blue-100 hover:text-white mb-4 transition">
+            <a href="{{ route('public.postingan') }}" class="inline-flex items-center text-sm text-gray-600 hover:text-blue-700 mb-4 transition">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
                 Kembali ke Berita & Pengumuman
             </a>
             <div class="max-w-4xl">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="px-3 py-1 text-xs font-semibold bg-white/20 text-white rounded-full border border-white/30">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
                         {{ ucfirst($postingan->jenis_konten) }}
                     </span>
                 </div>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">{{ $postingan->judul }}</h2>
-                <div class="flex flex-wrap items-center gap-4 text-sm text-blue-100">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-3" style="font-family:'Playfair Display',serif;">{{ $postingan->judul }}</h2>
+                <div class="flex flex-wrap items-center gap-3 text-[10px] text-gray-500 uppercase tracking-widest">
                     <span>Oleh: {{ $postingan->admin->nama }}</span>
-                    <span>•</span>
-                    <span>{{ $postingan->tanggal_publish->format('d F Y H:i') }}</span>
+                    <span class="font-bold">•</span>
+                    <div class="flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        {{ $postingan->tanggal_publish->format('d M Y') }}
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Postingan Detail -->
-    <section class="bg-gray-50 py-12 sm:py-16">
+    <section class="bg-white py-12">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="border border-gray-200 rounded-sm overflow-hidden hover:shadow-md transition-shadow">
                 @if($postingan->foto)
-                <img src="{{ storage_url($postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-96 object-cover">
+                <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
+                    <img src="{{ storage_url($postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-auto object-contain object-center">
+                </div>
                 @endif
-                <div class="p-6 sm:p-8">
-                    <!-- Description -->
-                    <div class="prose max-w-none text-gray-700 whitespace-pre-line mb-8 text-base leading-relaxed">
-                        {{ $postingan->isi_konten }}
+                <div class="p-4 sm:p-6">
+                    <!-- Badges -->
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
+                            {{ ucfirst($postingan->jenis_konten ?? $postingan->jenis) }}
+                        </span>
+                        @if($postingan->is_published)
+                        <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Published</span>
+                        @else
+                        <span class="px-2 py-1 text-[10px] font-medium bg-yellow-100 text-yellow-800 rounded-full">Draft</span>
+                        @endif
                     </div>
 
-                    <!-- Author Info -->
-                    <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
-                        <div class="bg-blue-100 rounded-full p-3">
-                            <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    <!-- Title -->
+                    <h2 class="text-2xl sm:text-3xl font-black leading-tight mb-4" style="font-family:'Playfair Display',serif;">
+                        {{ $postingan->judul }}
+                    </h2>
+
+                    <!-- Date & Author -->
+                    <div class="flex flex-wrap items-center gap-3 text-[10px] text-gray-500 mb-4 uppercase tracking-widest">
+                        <div class="flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
+                            {{ $postingan->tanggal_publish->format('d M Y') }}
                         </div>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-900">Dipublikasi oleh</p>
-                            <p class="text-sm text-gray-600">{{ $postingan->admin->nama }}</p>
-                            <p class="text-xs text-gray-400">{{ $postingan->tanggal_publish->format('d F Y H:i') }}</p>
-                        </div>
+                        <span class="font-bold uppercase tracking-wider">• {{ $postingan->admin->nama }}</span>
+                    </div>
+
+                    <!-- Summary/Excerpt -->
+                    <div class="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 pb-6 border-b border-gray-200">
+                        {{ Str::limit(strip_tags($postingan->isi_konten), 300) }}
+                    </div>
+
+                    <!-- Full Content -->
+                    <div class="text-gray-700 whitespace-pre-line leading-relaxed text-sm sm:text-base">
+                        {{ $postingan->isi_konten }}
                     </div>
                 </div>
             </div>

@@ -23,6 +23,23 @@ function initCalendar(elementId, eventsUrl) {
         locale: 'id',
         events: eventsUrl,
         height: 'auto',
+        eventContent: function(arg) {
+            const event = arg.event;
+            const foto = event.extendedProps.foto;
+            
+            if (foto) {
+                return {
+                    html: `<div class="fc-event-custom" style="padding: 2px;">
+                        <img src="${foto}" style="width: 100%; height: 40px; object-fit: cover; border-radius: 3px; margin-bottom: 2px;">
+                        <div style="font-size: 11px; font-weight: 600; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${event.title}</div>
+                    </div>`
+                };
+            }
+            
+            return {
+                html: `<div class="fc-event-custom">${event.title}</div>`
+            };
+        },
         eventClick: function (info) {
             const props = info.event.extendedProps;
             const start = info.event.start.toLocaleString('id-ID', {
@@ -49,6 +66,10 @@ function initCalendar(elementId, eventsUrl) {
                     detail += ` - ${end}`;
                 }
                 detail += `<br><br><em>${props.deskripsi}</em>`;
+                
+                if (props.foto) {
+                    detail += `<br><img src="${props.foto}" style="max-width: 200px; max-height: 150px; margin-top: 8px; border-radius: 4px;">`;
+                }
             }
 
             alert(detail);

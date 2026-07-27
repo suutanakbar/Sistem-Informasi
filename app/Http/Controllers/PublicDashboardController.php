@@ -60,10 +60,12 @@ class PublicDashboardController extends Controller
                 'backgroundColor' => $this->getCategoryColor($agenda->kategori),
                 'borderColor' => $this->getCategoryColor($agenda->kategori),
                 'extendedProps' => [
+                    'type' => 'acara',
                     'kategori' => $agenda->kategori,
                     'tempat' => $agenda->tempat,
                     'deskripsi' => $agenda->deskripsi_agenda,
                     'detail_url' => route('public.agenda.show', $agenda),
+                    'foto' => $agenda->gambar_poster ? asset('storage/' . $agenda->gambar_poster) : null,
                 ],
             ];
 
@@ -278,7 +280,7 @@ class PublicDashboardController extends Controller
             ->whereNotNull('tanggal_publish')
             ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai')
-            ->get(['id', 'nama_agenda', 'kategori', 'waktu_mulai', 'waktu_selesai', 'tempat', 'deskripsi_agenda', 'deadline_pendaftaran']);
+            ->get(['id', 'nama_agenda', 'kategori', 'waktu_mulai', 'waktu_selesai', 'tempat', 'deskripsi_agenda', 'deadline_pendaftaran', 'gambar_poster']);
 
         $formatted = [];
 
@@ -296,6 +298,7 @@ class PublicDashboardController extends Controller
                     'deskripsi' => $agenda->deskripsi_agenda,
                     'detail_url' => route('public.agenda.show', $agenda),
                     'type' => 'acara',
+                    'foto' => $agenda->gambar_poster ? asset('storage/' . $agenda->gambar_poster) : null,
                 ],
             ];
 

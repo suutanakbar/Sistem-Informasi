@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AnggotaOrmada;
+use App\Models\Postingan;
 use App\Models\ProfilOrmada;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,6 +20,11 @@ class DashboardController extends Controller
                 'totalAnggota' => AnggotaOrmada::count(),
                 'totalPengurus' => AnggotaOrmada::where('is_pengurus', 'YA')->count(),
                 'totalMahasiswa' => AnggotaOrmada::where('is_pengurus', 'TIDAK')->count(),
+                'beritaTerbaru' => Postingan::query()
+                    ->with('admin')
+                    ->latest('dibuat_pada')
+                    ->limit(6)
+                    ->get(),
             ]);
         }
 
