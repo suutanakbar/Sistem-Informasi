@@ -12,7 +12,8 @@
 
 <section class="mt-4">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+        <div class="border border-gray-300">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
 
             {{-- ================================= --}}
             {{-- KALENDER (utama) --}}
@@ -41,82 +42,14 @@
 
 
             {{-- ================================= --}}
-            {{-- PENGUMUMAN --}}
-            {{-- ================================= --}}
-
-            <aside class="xl:col-span-3 pl-4">
-
-                <h3 class="text-base font-black uppercase tracking-widest border-b-2 border-black pb-2 mb-4"
-                    style="font-family:'Playfair Display',serif;">
-                    Pengumuman
-                </h3>
-
-                @if($pengumumans->isNotEmpty())
-
-                <div class="space-y-4">
-
-                    @foreach($pengumumans->take(4) as $item)
-
-                    <a href="{{ route('public.pengumuman.show',$item) }}"
-                       class="flex gap-4 group">
-
-                        @if($item->foto)
-
-                        <img
-                            src="{{ asset('storage/' . $item->foto) }}"
-                            class="w-20 h-20 object-cover flex-shrink-0">
-
-                        @endif
-
-                        <div>
-
-                            <div class="uppercase tracking-[3px] text-[10px] font-bold text-gray-500">
-
-                                {{ $item->tanggal_publish->format('d M Y') }}
-
-                            </div>
-
-                            <h4 class="mt-1 text-sm leading-tight font-black group-hover:text-blue-700 transition"
-                                style="font-family:'Playfair Display',serif;">
-
-                                {{ $item->judul }}
-
-                            </h4>
-
-                            <p class="mt-1 text-xs text-gray-600 leading-5 line-clamp-2">
-
-                                {{ Str::limit(strip_tags($item->isi),70) }}
-
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                    @endforeach
-
-                </div>
-
-                @else
-
-                <div class="text-xs text-gray-500">
-                    Belum ada pengumuman.
-                </div>
-
-                @endif
-
-            </aside>
-
-
-            {{-- ================================= --}}
             {{-- ASPIRASI --}}
             {{-- ================================= --}}
 
             @if($aspirasis->isNotEmpty())
 
-            <aside class="xl:col-span-3">
+            <section class="xl:col-span-6">
 
-                <h3 class="text-base font-black uppercase tracking-widest border-b-2 border-black pb-2 mb-4"
+                <h3 class="text-base font-black uppercase tracking-widest border-b border-gray-300 pb-2 mb-4"
                     style="font-family:'Playfair Display',serif;">
 
                     Aspirasi
@@ -128,7 +61,7 @@
                     @foreach($aspirasis->take(4) as $aspirasi)
 
                     <a href="{{ route('public.aspirasi.show',$aspirasi) }}"
-                       class="block group">
+                       class="block group pb-3 mb-3 border-b border-gray-200 last:border-b-0 last:pb-0 last:mb-0">
 
                         <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold">
 
@@ -171,43 +104,40 @@
 
             @endif
 
+            </div>
         </div>
     </div>
-</section>  
+</section>
 
 <!-- ====================================== -->
-<!-- TMG NEWS -->
+<!-- Aspirasi -->
 <!-- ====================================== -->
 
 <section id="tmgnews" class="mt-5">
     <div class="max-w-7xl mx-auto px-4">
+        <div class="border border-gray-300">
 
         <!-- Header -->
-        <div class="flex items-center justify-between border-b-2 border-black pb-2 mb-3">
-
-            <div class="flex-1 border-t border-black"></div>
-
-            <h2 class="px-4 text-lg font-black uppercase tracking-wide text-center"
-                style="font-family:'Playfair Display',serif;">
-                TMG NEWS
-            </h2>
-
-            <div class="flex-1 border-t border-black"></div>
-
-            <a href="{{ route('public.postingan') }}"
-               class="ml-3 text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700 transition">
-                View All →
-            </a>
-
+        <div class="border-b border-gray-300 pb-2 mb-3">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-black uppercase tracking-wide"
+                    style="font-family:'Playfair Display',serif;">
+                    Aspirasi
+                </h2>
+                <a href="{{ route('public.postingan') }}"
+                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700 transition">
+                    View All →
+                </a>
+            </div>
         </div>
 
 
         <!-- News Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 border border-gray-300">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
             @foreach($postingans->take(4) as $postingan)
 
-            <article class="group bg-white border-r border-gray-300 last:border-r-0">
+            <article class="group bg-white border border-gray-200 rounded-sm">
 
                 <a href="{{ route('public.postingan.show',$postingan) }}">
 
@@ -281,8 +211,8 @@
 
         </div>
 
+        </div>
     </div>
-
 </section>
 
 <!-- ====================================== -->
@@ -291,46 +221,37 @@
 
 <section id="profil" class="mt-6">
     <div class="max-w-7xl mx-auto px-4">
+        <div class="border border-gray-300">
 
         <!-- Header -->
-        <div class="flex items-center justify-between border-b-2 border-black pb-2 mb-3">
+        <div class="border-b border-gray-300 pb-2 mb-3">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-black uppercase"
+                    style="font-family:'Playfair Display',serif;">
 
-            <div class="flex-1 border-t border-black"></div>
+                    Profil Ormada
 
-            <h2 class="px-4 text-lg font-black uppercase"
-                style="font-family:'Playfair Display',serif;">
-
-                Profil Ormada
-
-            </h2>
-
-            <div class="flex-1 border-t border-black"></div>
-
-            <div class="flex items-center gap-2">
-                <a href="#"
-                   class="ml-3 text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700">
+                </h2>
+                <a href="{{ route('public.ormada') }}"
+                   class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700">
 
                     View All →
 
                 </a>
-                <button id="profil-prev" class="text-[11px] font-bold border border-gray-300 px-2 py-1 hover:bg-black hover:text-white transition">←</button>
-                <button id="profil-next" class="text-[11px] font-bold border border-gray-300 px-2 py-1 hover:bg-black hover:text-white transition">→</button>
             </div>
-
         </div>
 
 
         <!-- Grid -->
-        <div class="relative">
-            <div id="profil-track" class="flex gap-4 transition-transform duration-300 overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
 
-                @foreach($profilOrmadas->take(4) as $profil)
+            @foreach($profilOrmadas->take(4) as $profil)
 
-                <article class="group flex-shrink-0" style="width: calc(25% - 12px);">
+            <article class="group border border-gray-200 rounded-sm overflow-hidden">
 
                     <!-- Logo -->
 
-                    <div class="overflow-hidden border border-gray-300">
+                    <div class="overflow-hidden border-b border-gray-200">
 
                         @if($profil->logo)
 
@@ -357,7 +278,7 @@
 
                     <!-- Content -->
 
-                    <div class="pt-4">
+                    <div class="p-4">
 
                         <div class="uppercase text-[11px] tracking-[3px] font-bold text-gray-500">
 
@@ -399,6 +320,7 @@
             </div>
         </div>
 
+        </div>
     </div>
 </section>
 
@@ -408,28 +330,23 @@
 
 <section id="agenda" class="mt-6">
     <div class="max-w-7xl mx-auto px-4">
+        <div class="border border-gray-300">
 
-        <div class="flex items-center justify-between border-b-2 border-black pb-2 mb-3">
+        <div class="border-b border-gray-300 pb-2 mb-3">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-black uppercase tracking-wide"
+                    style="font-family:'Playfair Display',serif;">
 
-            <div class="flex-1 border-t border-black"></div>
+                    Agenda
 
-            <h2
-                class="px-4 text-lg font-black uppercase"
-                style="font-family:'Playfair Display',serif;">
+                </h2>
+                <a href="{{ route('public.agenda') }}"
+                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700">
 
-                Agenda
+                    View All →
 
-            </h2>
-
-            <div class="flex-1 border-t border-black"></div>
-
-            <a href="{{ route('public.agenda') }}"
-               class="ml-3 text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700">
-
-                View All →
-
-            </a>
-
+                </a>
+            </div>
         </div>
 
         @php
@@ -446,7 +363,7 @@
 
                 @if($headlineAgenda)
 
-                <article>
+                <article class="border border-gray-200 rounded-sm overflow-hidden">
 
                     @if($headlineAgenda->gambar_poster)
 
@@ -456,7 +373,7 @@
 
                     @endif
 
-                    <div class="mt-4">
+                    <div class="p-4">
 
                         <div
                             class="uppercase tracking-[4px] text-xs font-bold text-gray-500">
@@ -570,8 +487,8 @@
 
         </div>
 
+        </div>
     </div>
-
 </section>
 
 <footer class="mt-5 border-t pt-4 pb-4">
@@ -595,55 +512,6 @@
 @push('scripts')
 <script>
     window.publicCalendarEvents = @json($calendarEvents ?? []);
-    
-    (function(){
-        const track = document.getElementById('profil-track');
-        const prevBtn = document.getElementById('profil-prev');
-        const nextBtn = document.getElementById('profil-next');
-        if(!track || !prevBtn || !nextBtn) return;
-        // simple index slide per 1 card
-        let index = 0;
-        const cards = track.children.length;
-        function getCols(){
-            if(window.innerWidth >= 1280) return 4;
-            if(window.innerWidth >= 768) return 2;
-            return 1;
-        }
-        function gap(){ return 16; } // match gap-4
-        function slide(){
-            const cols = getCols();
-            const maxIndex = Math.max(0, cards - cols);
-            if(index < 0) index = 0;
-            if(index > maxIndex) index = maxIndex;
-            const card = track.children[0];
-            if(!card) return;
-            const step = card.offsetWidth + gap();
-            track.style.transform = `translateX(-${index * step}px)`;
-        }
-        prevBtn.addEventListener('click', ()=>{ index--; slide(); });
-        nextBtn.addEventListener('click', ()=>{ index++; slide(); });
-        window.addEventListener('resize', slide);
-        slide();
-    })();
-
-    function updateProfilCardWidths(){
-        const track = document.getElementById('profil-track');
-        if(!track) return;
-        const articles = track.querySelectorAll('article');
-        const w = window.innerWidth;
-        articles.forEach((article)=>{
-            if(w >= 1280){
-                article.style.width = `calc(25% - 12px)`;
-            } else if(w >= 1024){
-                article.style.width = `calc(33.333% - 12px)`;
-            } else if(w >= 768){
-                article.style.width = `calc(50% - 12px)`;
-            } else {
-                article.style.width = `calc(100% - 12px)`;
-            }
-        });
-        slide();
-    }
-    window.addEventListener('resize', updateProfilCardWidths);
-    updateProfilCardWidths();
 </script>
+
+<!-- TEST -->

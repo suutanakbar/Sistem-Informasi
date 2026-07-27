@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Agenda;
 use App\Models\AnggotaOrmada;
 use App\Models\Aspirasi;
-use App\Models\Pengumuman;
 use App\Models\Postingan;
 use App\Models\ProfilOrmada;
 use Illuminate\Http\Request;
@@ -26,7 +25,6 @@ class PublicDashboardController extends Controller
             ->limit(6)
             ->get();
 
-        // Ensure agenda_index is within valid range
         if ($agendaIndex >= $agendas->count()) {
             $agendaIndex = 0;
         }
@@ -37,7 +35,6 @@ class PublicDashboardController extends Controller
             ->limit(8)
             ->get();
 
-        // Prepare agenda data for carousel
         $agendasData = $agendas->map(function($agenda) {
             return [
                 'id' => $agenda->id,
@@ -54,7 +51,6 @@ class PublicDashboardController extends Controller
             ];
         });
 
-        // Prepare calendar events for FullCalendar
         $calendarEvents = $agendas->map(function($agenda) {
             $event = [
                 'id' => (string) $agenda->id,
@@ -85,13 +81,6 @@ class PublicDashboardController extends Controller
             return $event;
         })->filter()->values();
 
-        $pengumumans = Pengumuman::query()
-            ->with('pembuat')
-            ->latest('tanggal_publish')
-            ->latest('dibuat_pada')
-            ->limit(4)
-            ->get();
-
         return view('public.dashboard', [
             'totalOrmada' => ProfilOrmada::count(),
             'totalAnggota' => AnggotaOrmada::count(),
@@ -109,7 +98,6 @@ class PublicDashboardController extends Controller
                 ->published()
                 ->limit(6)
                 ->get(),
-            'pengumumans' => $pengumumans,
             'agendas' => $agendas,
             'agendaIndex' => $agendaIndex,
             'agendasData' => $agendasData,
@@ -127,12 +115,10 @@ class PublicDashboardController extends Controller
             ->limit(12)
             ->get();
 
-        // Ensure aspirasi_index is within valid range
         if ($aspirasiIndex >= $aspirasis->count()) {
             $aspirasiIndex = 0;
         }
 
-        // Prepare aspirasi data for carousel
         $aspirasisData = $aspirasis->map(function($aspirasi) {
             return [
                 'id' => $aspirasi->id,
@@ -168,12 +154,10 @@ class PublicDashboardController extends Controller
             ->limit(12)
             ->get();
 
-        // Ensure postingan_index is within valid range
         if ($postinganIndex >= $postingans->count()) {
             $postinganIndex = 0;
         }
 
-        // Prepare postingan data for carousel
         $postingansData = $postingans->map(function($postingan) {
             return [
                 'id' => $postingan->id,
@@ -233,12 +217,10 @@ class PublicDashboardController extends Controller
             ->limit(12)
             ->get();
 
-        // Ensure agenda_index is within valid range
         if ($agendaIndex >= $agendas->count()) {
             $agendaIndex = 0;
         }
 
-        // Prepare agenda data for carousel
         $agendasData = $agendas->map(function($agenda) {
             return [
                 'id' => $agenda->id,
@@ -264,12 +246,10 @@ class PublicDashboardController extends Controller
 
     public function showAgenda(Agenda $agenda): View
     {
-        // Only show published agendas to public
         abort_if(!$agenda->is_published, 404);
 
         $agenda->load('admin', 'volunteers');
         
-        // Count accepted volunteers
         $volunteerDiterima = $agenda->volunteers()->where('status', 'diterima')->count();
 
         return view('public.agenda-show', compact('agenda', 'volunteerDiterima'));
@@ -277,7 +257,6 @@ class PublicDashboardController extends Controller
 
     public function showPostingan(Postingan $postingan): View
     {
-        // Only show published postingan to public
         abort_if(!$postingan->is_published, 404);
 
         $postingan->load('admin');
@@ -292,24 +271,6 @@ class PublicDashboardController extends Controller
         return view('public.aspirasi-show', compact('aspirasi'));
     }
 
-    public function pengumuman(Request $request): View
-    {
-        $pengumumans = Pengumuman::query()
-            ->with('pembuat')
-            ->latest('tanggal_publish')
-            ->latest('dibuat_pada')
-            ->paginate(12);
-
-        return view('public.pengumuman', compact('pengumumans'));
-    }
-
-    public function showPengumuman(Pengumuman $pengumuman): View
-    {
-        $pengumuman->load('pembuat');
-
-        return view('public.pengumuman-show', compact('pengumuman'));
-    }
-
     public function calendarEvents(Request $request)
     {
         $agendas = Agenda::query()
@@ -322,7 +283,6 @@ class PublicDashboardController extends Controller
         $formatted = [];
 
         foreach ($agendas as $agenda) {
-            // Event utama: waktu acara
             $formatted[] = [
                 'id' => (string) $agenda->id,
                 'title' => $agenda->nama_agenda,
@@ -339,7 +299,6 @@ class PublicDashboardController extends Controller
                 ],
             ];
 
-            // Event tambahan: deadline volunteer
             if ($agenda->deadline_pendaftaran) {
                 $formatted[] = [
                     'id' => 'deadline-' . $agenda->id,

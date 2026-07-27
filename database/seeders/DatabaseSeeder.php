@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Agenda;
 use App\Models\AnggotaOrmada;
 use App\Models\Aspirasi;
+use App\Models\Pengumuman;
 use App\Models\Postingan;
 use App\Models\ProfilOrmada;
 use App\Models\Proposal;
@@ -203,6 +204,28 @@ class DatabaseSeeder extends Seeder
             'isi_konten' => 'Ini adalah draft postingan yang belum dipublish.',
             'is_published' => false,
             'tanggal_publish' => null,
+        ]);
+
+        // Create sample pengumuman
+        Pengumuman::factory()->create([
+            'admin_id' => $pemda->id,
+            'judul' => 'Pengumuman Seleksi Ormada Baru',
+            'isi' => 'Pendaftaran ormada baru untuk periode 2024/2025 sudah resmi dibuka. Silakan daftar melalui website ini.',
+            'tanggal_publish' => now()->subDays(2),
+        ]);
+
+        Pengumuman::factory()->create([
+            'admin_id' => $pengurus1->id,
+            'judul' => 'Jadwal Pelantikan Pengurus Ormada',
+            'isi' => 'Pelantikan pengurus ormada akan dilaksanakan pada tanggal 20 Juli 2024 di gedung serbaguna kampus.',
+            'tanggal_publish' => now()->subDays(1),
+        ]);
+
+        Pengumuman::factory()->create([
+            'admin_id' => $pengurus2->id,
+            'judul' => 'Rapat Koordinasi Bulanan',
+            'isi' => 'Rapat koordinasi bulanan akan digeser ke hari Jumat karena bentrok dengan kegiatan akademik.',
+            'tanggal_publish' => now(),
         ]);
 
         // Create sample agenda

@@ -143,14 +143,6 @@
 
                 </a>
 
-                <a
-                    href="<?php echo e(route('pengumuman.create')); ?>"
-                    class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700 transition">
-
-                    Buat Pengumuman
-
-                </a>
-
                 <?php else: ?>
 
                 <a
@@ -284,10 +276,10 @@
             </li>
 
             <li>
-                <a href="<?php echo e(route('public.postingan')); ?>"
+                <a href="<?php echo e(route('public.aspirasi')); ?>"
                     class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">
 
-                    Berita
+                    Aspirasi
 
                 </a>
             </li>
@@ -302,19 +294,10 @@
             </li>
 
             <li>
-                <a href="<?php echo e(route('public.aspirasi')); ?>"
+                <a href="<?php echo e(route('public.postingan')); ?>"
                     class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">
 
-                    Aspirasi
-
-                </a>
-            </li>
-
-            <li>
-                <a href="<?php echo e(route('public.pengumuman')); ?>"
-                    class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">
-
-                    Pengumuman
+                    Berita
 
                 </a>
             </li>
@@ -398,10 +381,10 @@
 
             </a>
 
-            <a href="<?php echo e(route('public.postingan')); ?>"
+            <a href="<?php echo e(route('public.aspirasi')); ?>"
                class="hover:text-blue-700 transition">
 
-                Berita
+                Aspirasi
 
             </a>
 
@@ -412,10 +395,10 @@
 
             </a>
 
-            <a href="<?php echo e(route('public.aspirasi')); ?>"
+            <a href="<?php echo e(route('public.postingan')); ?>"
                class="hover:text-blue-700 transition">
 
-                Aspirasi
+                Berita
 
             </a>
 
@@ -465,5 +448,4 @@
 
 </body>
 
-</html>
-<?php /**PATH C:\project\magang\resources\views/layouts/public.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\project\magang\resources\views/layouts/public.blade.php ENDPATH**/ ?>

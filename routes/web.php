@@ -6,7 +6,6 @@ use App\Http\Controllers\AnggotaOrmadaController;
 use App\Http\Controllers\AspirasiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfilOrmadaController;
 use App\Http\Controllers\ProposalController;
@@ -31,8 +30,6 @@ Route::get('/publik/postingan/filter', [PublicDashboardController::class, 'filte
 Route::get('/publik/agenda', [PublicDashboardController::class, 'agenda'])->name('public.agenda');
 Route::get('/publik/agenda/{agenda}', [PublicDashboardController::class, 'showAgenda'])->name('public.agenda.show');
 Route::get('/publik/agenda/calendar', [PublicDashboardController::class, 'calendarEvents'])->name('public.agenda.calendar');
-Route::get('/publik/pengumuman', [PublicDashboardController::class, 'pengumuman'])->name('public.pengumuman');
-Route::get('/publik/pengumuman/{pengumuman}', [PublicDashboardController::class, 'showPengumuman'])->name('public.pengumuman.show');
 Route::get('/publik/aspirasi/{aspirasi}', [PublicDashboardController::class, 'showAspirasi'])->name('public.aspirasi.show');
 Route::get('/publik/ormada', [PublicDashboardController::class, 'ormada'])->name('public.ormada');
 Route::get('/publik/ormada/{profilOrmada}', [PublicDashboardController::class, 'showOrmada'])->name('public.ormada.show');
@@ -90,8 +87,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('aspirasi', AspirasiController::class);
         Route::patch('/aspirasi/{aspirasi}/tanggapan', [AspirasiController::class, 'updateTanggapan'])
             ->name('aspirasi.update-tanggapan');
-
-        Route::resource('pengumuman', PengumumanController::class);
     });
 
     

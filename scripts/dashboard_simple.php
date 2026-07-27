@@ -1,0 +1,1 @@
+<?php $f=file_get_contents("resources/views/public/dashboard.blade.php"); file_put_contents($f); echo "loaded";

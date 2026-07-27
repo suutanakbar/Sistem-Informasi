@@ -33,6 +33,7 @@
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <?php if($postingan->foto): ?>
                 <img src="<?php echo e(storage_url($postingan->foto)); ?>" alt="<?php echo e($postingan->judul); ?>" class="w-full h-96 object-cover">
+                <?php endif; ?>
                 <div class="p-6 sm:p-8">
                     <!-- Description -->
                     <div class="prose max-w-none text-gray-700 whitespace-pre-line mb-8 text-base leading-relaxed">

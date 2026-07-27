@@ -32,6 +32,7 @@
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 @if($postingan->foto)
                 <img src="{{ storage_url($postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-96 object-cover">
+                @endif
                 <div class="p-6 sm:p-8">
                     <!-- Description -->
                     <div class="prose max-w-none text-gray-700 whitespace-pre-line mb-8 text-base leading-relaxed">
