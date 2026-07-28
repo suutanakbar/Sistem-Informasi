@@ -66,78 +66,9 @@
                 Lihat Semua
             </a>
         </div>
-        <?php if($beritaTerbaru->count() === 3): ?>
-            <div class="grid gap-4 xl:grid-cols-2">
-                <!-- Left: Featured card (50%) -->
+        <div class="grid gap-4 md:grid-cols-2">
+            <?php $__empty_1 = true; $__currentLoopData = $beritaTerbaru->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $postingan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php if (isset($component)) { $__componentOriginal71dcb006fef4235d1b253d113bf6ce81 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.berita-agenda-card','data' => ['postingan' => $beritaTerbaru[0]]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('berita-agenda-card'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['postingan' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($beritaTerbaru[0])]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal71dcb006fef4235d1b253d113bf6ce81)): ?>
-<?php $attributes = $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
-<?php unset($__attributesOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81)): ?>
-<?php $component = $__componentOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
-<?php unset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
-<?php endif; ?>
-                
-                <!-- Right: Stack 2 cards vertically (each 25%) -->
-                <div class="flex flex-col gap-4">
-                    <?php if (isset($component)) { $__componentOriginal71dcb006fef4235d1b253d113bf6ce81 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.berita-agenda-card','data' => ['postingan' => $beritaTerbaru[1]]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('berita-agenda-card'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['postingan' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($beritaTerbaru[1])]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal71dcb006fef4235d1b253d113bf6ce81)): ?>
-<?php $attributes = $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
-<?php unset($__attributesOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81)): ?>
-<?php $component = $__componentOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
-<?php unset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
-<?php endif; ?>
-                    <?php if (isset($component)) { $__componentOriginal71dcb006fef4235d1b253d113bf6ce81 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.berita-agenda-card','data' => ['postingan' => $beritaTerbaru[2]]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('berita-agenda-card'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['postingan' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($beritaTerbaru[2])]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal71dcb006fef4235d1b253d113bf6ce81)): ?>
-<?php $attributes = $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
-<?php unset($__attributesOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81)): ?>
-<?php $component = $__componentOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
-<?php unset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
-<?php endif; ?>
-                </div>
-            </div>
-        <?php else: ?>
-            <div class="grid gap-4 <?php echo e($beritaTerbaru->count() === 2 ? 'md:grid-cols-2 xl:grid-cols-2' : 'md:grid-cols-2 xl:grid-cols-3'); ?>">
-                <?php $__empty_1 = true; $__currentLoopData = $beritaTerbaru; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $postingan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <?php if (isset($component)) { $__componentOriginal71dcb006fef4235d1b253d113bf6ce81 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal71dcb006fef4235d1b253d113bf6ce81 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.berita-agenda-card','data' => ['postingan' => $postingan]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('berita-agenda-card'); ?>
@@ -157,13 +88,12 @@
 <?php $component = $__componentOriginal71dcb006fef4235d1b253d113bf6ce81; ?>
 <?php unset($__componentOriginal71dcb006fef4235d1b253d113bf6ce81); ?>
 <?php endif; ?>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <div class="col-span-full text-center py-8">
-                        <p class="text-xs text-gray-500">Belum ada berita.</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="col-span-full text-center py-8">
+                    <p class="text-xs text-gray-500">Belum ada berita.</p>
+                </div>
+            <?php endif; ?>
+        </div>
     </section>
 
     <!-- Event Calendar -->

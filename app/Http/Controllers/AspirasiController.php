@@ -52,12 +52,17 @@ class AspirasiController extends Controller
         $user = $request->user();
         abort_unless($user->isPengurusOrmada() || $user->isAdmin(), 403);
 
+        $profilOrmadas = [];
+        
         // Jika pengurus, ambil profil ormada-nya
         if ($user->isPengurusOrmada()) {
             $profil = $user->profilOrmada()->first();
             if (!$profil) {
                 abort(403, 'Anda belum memiliki profil ormada');
             }
+        } elseif ($user->isAdmin()) {
+            // Ambil semua profil ormada untuk admin
+            $profilOrmadas = \App\Models\ProfilOrmada::all();
         }
 
         $view = match(true) {
@@ -66,7 +71,7 @@ class AspirasiController extends Controller
             default => 'admin.aspirasi.create',
         };
         
-        return view($view);
+        return view($view, compact('profilOrmadas'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -205,6 +210,7 @@ class AspirasiController extends Controller
             'topik_aspirasi' => ['required', 'string', 'max:255'],
             'detail_aspirasi' => ['required', 'string'],
             'file' => [$aspirasi ? 'nullable' : 'nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
+            'profil_ormada_id' => [$aspirasi ? 'nullable' : 'required', 'exists:profil_ormada,id'],
         ];
 
         return $request->validate($rules);

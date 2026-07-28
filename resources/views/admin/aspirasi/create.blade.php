@@ -33,6 +33,22 @@
                         </div>
 
                         <div>
+                            <label for="profil_ormada_id" class="block text-sm font-medium text-gray-700">Profil Ormada <span class="text-red-500">*</span></label>
+                            <select name="profil_ormada_id" id="profil_ormada_id" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('profil_ormada_id') border-red-500 @enderror">
+                                <option value="">-- Pilih Ormada --</option>
+                                @foreach($profilOrmadas as $profil)
+                                    <option value="{{ $profil->id }}" {{ old('profil_ormada_id') == $profil->id ? 'selected' : '' }}>
+                                        {{ $profil->nama_universitas }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('profil_ormada_id')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
                             <label for="file" class="block text-sm font-medium text-gray-700">File Pendukung (Opsional)</label>
                             <input type="file" name="file" id="file"
                                 class="mt-1 block w-full text-sm text-gray-500 @error('file') border-red-500 @enderror">

@@ -57,28 +57,15 @@
                 Lihat Semua
             </a>
         </div>
-        @if($beritaTerbaru->count() === 3)
-            <div class="grid gap-4 xl:grid-cols-2">
-                <!-- Left: Featured card (50%) -->
-                <x-berita-agenda-card :postingan="$beritaTerbaru[0]" />
-                
-                <!-- Right: Stack 2 cards vertically (each 25%) -->
-                <div class="flex flex-col gap-4">
-                    <x-berita-agenda-card :postingan="$beritaTerbaru[1]" />
-                    <x-berita-agenda-card :postingan="$beritaTerbaru[2]" />
+        <div class="grid gap-4 md:grid-cols-2">
+            @forelse($beritaTerbaru->take(2) as $postingan)
+                <x-berita-agenda-card :postingan="$postingan" />
+            @empty
+                <div class="col-span-full text-center py-8">
+                    <p class="text-xs text-gray-500">Belum ada berita.</p>
                 </div>
-            </div>
-        @else
-            <div class="grid gap-4 {{ $beritaTerbaru->count() === 2 ? 'md:grid-cols-2 xl:grid-cols-2' : 'md:grid-cols-2 xl:grid-cols-3' }}">
-                @forelse($beritaTerbaru as $postingan)
-                    <x-berita-agenda-card :postingan="$postingan" />
-                @empty
-                    <div class="col-span-full text-center py-8">
-                        <p class="text-xs text-gray-500">Belum ada berita.</p>
-                    </div>
-                @endforelse
-            </div>
-        @endif
+            @endforelse
+        </div>
     </section>
 
     <!-- Event Calendar -->
