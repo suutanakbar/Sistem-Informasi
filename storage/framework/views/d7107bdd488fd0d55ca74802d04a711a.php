@@ -45,8 +45,6 @@
             
             
 
-            <?php if($aspirasis->isNotEmpty()): ?>
-
             <section class="xl:col-span-6">
 
                 <h3 class="text-base font-black uppercase tracking-widest border-b border-gray-300 pb-2 mb-4"
@@ -56,6 +54,7 @@
 
                 </h3>
 
+                <?php if($aspirasis->isNotEmpty()): ?>
                 <div class="space-y-4">
 
                     <?php $__currentLoopData = $aspirasis->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aspirasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -103,10 +102,14 @@
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </div>
+                <?php else: ?>
+                <div class="text-center py-8">
+                    <p class="text-xs text-gray-500">Belum ada aspirasi.</p>
+                </div>
+                <?php endif; ?>
 
             </aside>
 
-            <?php endif; ?>
 
             </div>
         </div>

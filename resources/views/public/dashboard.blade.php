@@ -45,8 +45,6 @@
             {{-- ASPIRASI --}}
             {{-- ================================= --}}
 
-            @if($aspirasis->isNotEmpty())
-
             <section class="xl:col-span-6">
 
                 <h3 class="text-base font-black uppercase tracking-widest border-b border-gray-300 pb-2 mb-4"
@@ -56,6 +54,7 @@
 
                 </h3>
 
+                @if($aspirasis->isNotEmpty())
                 <div class="space-y-4">
 
                     @foreach($aspirasis->take(4) as $aspirasi)
@@ -99,10 +98,14 @@
                     @endforeach
 
                 </div>
+                @else
+                <div class="text-center py-8">
+                    <p class="text-xs text-gray-500">Belum ada aspirasi.</p>
+                </div>
+                @endif
 
             </aside>
 
-            @endif
 
             </div>
         </div>
