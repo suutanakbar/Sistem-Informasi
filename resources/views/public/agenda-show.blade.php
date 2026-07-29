@@ -147,7 +147,7 @@
                                                 <label for="no_hp" class="block text-sm font-semibold text-gray-700 mb-2">Nomor HP</label>
                                                 <input type="text" name="no_hp" id="no_hp" required
                                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                                    placeholder="081234567890">
+                                                    placeholder="Masukkan nomor HP Anda">
                                             </div>
 
                                             <div>

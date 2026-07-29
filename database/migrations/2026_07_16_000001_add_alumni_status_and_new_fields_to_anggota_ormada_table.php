@@ -18,8 +18,12 @@ return new class extends Migration
         });
 
         // Update enum to include alumni
-        \DB::statement('SET SESSION sql_mode = ""');
-        \DB::statement("ALTER TABLE anggota_ormada MODIFY COLUMN status_aktif ENUM('mahasiswa', 'fungsionaris', 'alumni') NOT NULL DEFAULT 'mahasiswa'");
+        if (\DB::getDriverName() !== 'sqlite') {
+            \DB::statement('SET SESSION sql_mode = ""');
+        }
+        if (\DB::getDriverName() !== 'sqlite') {
+            \DB::statement("ALTER TABLE anggota_ormada MODIFY COLUMN status_aktif ENUM('mahasiswa', 'fungsionaris', 'alumni') NOT NULL DEFAULT 'mahasiswa'");
+        }
     }
 
     public function down(): void
@@ -28,7 +32,11 @@ return new class extends Migration
             $table->dropColumn(['fakultas', 'prodi', 'alamat', 'email', 'cv_path']);
         });
 
-        \DB::statement('SET SESSION sql_mode = ""');
-        \DB::statement("ALTER TABLE anggota_ormada MODIFY COLUMN status_aktif ENUM('mahasiswa', 'fungsionaris') NOT NULL");
+        if (\DB::getDriverName() !== 'sqlite') {
+            \DB::statement('SET SESSION sql_mode = ""');
+        }
+        if (\DB::getDriverName() !== 'sqlite') {
+            \DB::statement("ALTER TABLE anggota_ormada MODIFY COLUMN status_aktif ENUM('mahasiswa', 'fungsionaris') NOT NULL");
+        }
     }
 };

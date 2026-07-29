@@ -59,7 +59,7 @@ class ProposalTest extends TestCase
         $response = $this->get(route('proposal.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('proposal.index');
+        $response->assertViewIs('pengurus.proposal.index');
     }
 
     public function test_pengurus_bisa_membuat_proposal(): void
@@ -106,7 +106,7 @@ class ProposalTest extends TestCase
         $response = $this->get(route('proposal.show', $proposal));
 
         $response->assertStatus(200);
-        $response->assertViewIs('proposal.show');
+        $response->assertViewIs('pengurus.proposal.show');
         $response->assertSee('Kegiatan Test');
     }
 
@@ -179,7 +179,7 @@ class ProposalTest extends TestCase
         $response = $this->get(route('proposal.edit', $proposal));
 
         $response->assertStatus(200);
-        $response->assertViewIs('proposal.edit');
+        $response->assertViewIs('pengurus.proposal.edit');
     }
 
     public function test_pengurus_bisa_update_proposal_miliknya(): void

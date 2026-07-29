@@ -222,6 +222,9 @@ class AgendaController extends Controller
 
     public function daftarVolunteer(Request $request, Agenda $agenda): RedirectResponse
     {
+        // Normalisasi email
+        $email = strtolower(trim($request->input('email', '')));
+
         // Cek apakah agenda masih membuka volunteer
         if (!$agenda->is_published) {
             return back()->with('error', 'Agenda ini belum dipublish.');
@@ -231,18 +234,7 @@ class AgendaController extends Controller
             return back()->with('error', 'Agenda ini tidak membuka pendaftaran volunteer.');
         }
 
-        // Cek deadline
-        if (now()->greaterThan($agenda->deadline_pendaftaran)) {
-            return back()->with('error', 'Pendaftaran volunteer sudah ditutup.');
-        }
-
-        // Cek kuota
-        $volunteerDiterima = $agenda->volunteers()->where('status', 'diterima')->count();
-        if ($volunteerDiterima >= $agenda->kuota_volunteer) {
-            return back()->with('error', 'Kuota volunteer sudah penuh.');
-        }
-
-        // Validasi input
+        // Validasi input terlebih dahulu (tanpa email agar bisa di-handle secara aman)
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
@@ -250,26 +242,61 @@ class AgendaController extends Controller
             'alasan' => ['nullable', 'string'],
         ]);
 
-        // Cek apakah email sudah mendaftar di agenda ini
-        $existing = Volunteer::where('agenda_id', $agenda->id)
-            ->where('email', $validated['email'])
-            ->first();
+        // Gunakan email yang sudah dinormalisasi
+        $validated['email'] = $email;
 
-        if ($existing) {
-            return back()->with('error', 'Anda sudah mendaftar sebagai volunteer untuk agenda ini.');
-        }
+        // Gunakan transaction dengan pessimistic locking untuk mencegah race condition
+        $result = \Illuminate\Support\Facades\DB::transaction(function () use ($agenda, $validated, $email) {
+            // Lock row agenda untuk mencegah race condition
+            $lockedAgenda = Agenda::where('id', $agenda->id)->lockForUpdate()->first();
 
-        // Buat pendaftaran volunteer
-        Volunteer::create([
-            'agenda_id' => $agenda->id,
-            'nama' => $validated['nama'],
-            'email' => $validated['email'],
-            'no_hp' => $validated['no_hp'],
-            'alasan' => $validated['alasan'],
-            'status' => 'pending',
-        ]);
+            // Cek ulang status publish dan deadline di dalam transaction
+            if (!$lockedAgenda->is_published) {
+                return back()->with('error', 'Agenda ini belum dipublish.');
+            }
 
-        return back()->with('success', 'Pendaftaran volunteer berhasil. Silakan tunggu konfirmasi dari Pemda.');
+            if (now()->greaterThan($lockedAgenda->deadline_pendaftaran)) {
+                return back()->with('error', 'Pendaftaran volunteer sudah ditutup.');
+            }
+
+            if (!$lockedAgenda->kuota_volunteer) {
+                return back()->with('error', 'Agenda ini tidak membuka pendaftaran volunteer.');
+            }
+
+            // Hitung ulang jumlah volunteer yang diterima (case-insensitive)
+            $volunteerDiterima = Volunteer::where('agenda_id', $lockedAgenda->id)
+                ->where('status', 'diterima')
+                ->whereRaw('LOWER(email) = ?', [$email])
+                ->count();
+
+            // Cek duplikasi email (case-insensitive)
+            $existing = Volunteer::where('agenda_id', $lockedAgenda->id)
+                ->whereRaw('LOWER(email) = ?', [$email])
+                ->first();
+
+            if ($existing) {
+                return back()->with('error', 'Anda sudah mendaftar sebagai volunteer untuk agenda ini.');
+            }
+
+            // Cek kuota
+            if ($volunteerDiterima >= $lockedAgenda->kuota_volunteer) {
+                return back()->with('error', 'Kuota volunteer sudah penuh.');
+            }
+
+            // Buat pendaftaran volunteer
+            Volunteer::create([
+                'agenda_id' => $lockedAgenda->id,
+                'nama' => $validated['nama'],
+                'email' => $validated['email'],
+                'no_hp' => $validated['no_hp'],
+                'alasan' => $validated['alasan'],
+                'status' => 'pending',
+            ]);
+
+            return back()->with('success', 'Pendaftaran volunteer berhasil. Silakan tunggu konfirmasi dari Pemda.');
+        });
+
+        return $result;
     }
 
     public function listVolunteer(Request $request, Agenda $agenda): View
@@ -295,7 +322,47 @@ class AgendaController extends Controller
             'status' => ['required', 'in:diterima,ditolak'],
         ]);
 
-        $volunteer->update($validated);
+        // State transition guard
+        if (!$volunteer->canTransitionTo($validated['status'])) {
+            $currentStatus = $volunteer->status;
+            
+            if (in_array($currentStatus, [Volunteer::STATUS_DITERIMA, Volunteer::STATUS_DITOLAK])) {
+                return back()->with('error', "Volunteer dengan status '{$currentStatus}' adalah final dan tidak dapat diubah.");
+            }
+            
+            return back()->with('error', "Transisi status dari '{$currentStatus}' ke '{$validated['status']}' tidak diizinkan.");
+        }
+
+        // Gunakan transaction dengan locking untuk mencegah race condition saat update status
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($volunteer, $validated) {
+                // Lock row volunteer untuk mencegah race condition
+                $lockedVolunteer = Volunteer::where('id', $volunteer->id)->lockForUpdate()->first();
+                
+                // Jika status sudah final, tidak bisa diubah lagi
+                if ($lockedVolunteer->status !== 'pending') {
+                    throw new \RuntimeException('Status volunteer sudah final dan tidak dapat diubah.');
+                }
+
+                // Jika akan diterima, cek kuota terlebih dahulu
+                if ($validated['status'] === 'diterima') {
+                    $agenda = Agenda::where('id', $lockedVolunteer->agenda_id)->lockForUpdate()->first();
+                    
+                    // Hitung jumlah volunteer yang sudah diterima
+                    $volunteerDiterima = Volunteer::where('agenda_id', $agenda->id)
+                        ->where('status', 'diterima')
+                        ->count();
+
+                    if ($volunteerDiterima >= $agenda->kuota_volunteer) {
+                        throw new \RuntimeException('Kuota volunteer sudah penuh.');
+                    }
+                }
+
+                $lockedVolunteer->update(['status' => $validated['status']]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
         return back()->with('status', 'Status volunteer berhasil diperbarui.');
     }

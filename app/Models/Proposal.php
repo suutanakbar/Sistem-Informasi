@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Proposal extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public const CREATED_AT = 'dibuat_pada';
     public const UPDATED_AT = 'diperbarui_pada';
@@ -33,6 +34,34 @@ class Proposal extends Model
         return [
             'anggaran_dibutuhkan' => 'integer',
         ];
+    }
+
+    // State machine untuk proposal
+    public const STATUS_DIAJUKAN = 'diajukan';
+    public const STATUS_DIPROSES_PEMDA = 'diproses_pemda';
+    public const STATUS_DANA_CAIR = 'dana_cair';
+    public const STATUS_DITOLAK = 'ditolak';
+
+    public const ALLOWED_TRANSITIONS = [
+        self::STATUS_DIAJUKAN => [self::STATUS_DIPROSES_PEMDA, self::STATUS_DITOLAK],
+        self::STATUS_DIPROSES_PEMDA => [self::STATUS_DANA_CAIR, self::STATUS_DITOLAK],
+    ];
+
+    public function canTransitionTo(string $newStatus): bool
+    {
+        $currentStatus = $this->status;
+        
+        // Final states cannot be changed
+        if (in_array($currentStatus, [self::STATUS_DANA_CAIR, self::STATUS_DITOLAK])) {
+            return false;
+        }
+        
+        // Check if transition is allowed
+        if (!isset(self::ALLOWED_TRANSITIONS[$currentStatus])) {
+            return false;
+        }
+        
+        return in_array($newStatus, self::ALLOWED_TRANSITIONS[$currentStatus]);
     }
 
     public function pengaju(): BelongsTo

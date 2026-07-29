@@ -44,4 +44,30 @@ class Volunteer extends Model
             return $query->where('status', $status);
         });
     }
+
+    // State machine untuk volunteer
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_DITERIMA = 'diterima';
+    public const STATUS_DITOLAK = 'ditolak';
+
+    public const ALLOWED_TRANSITIONS = [
+        self::STATUS_PENDING => [self::STATUS_DITERIMA, self::STATUS_DITOLAK],
+    ];
+
+    public function canTransitionTo(string $newStatus): bool
+    {
+        $currentStatus = $this->status;
+        
+        // Final states cannot be changed
+        if (in_array($currentStatus, [self::STATUS_DITERIMA, self::STATUS_DITOLAK])) {
+            return false;
+        }
+        
+        // Check if transition is allowed
+        if (!isset(self::ALLOWED_TRANSITIONS[$currentStatus])) {
+            return false;
+        }
+        
+        return in_array($newStatus, self::ALLOWED_TRANSITIONS[$currentStatus]);
+    }
 }

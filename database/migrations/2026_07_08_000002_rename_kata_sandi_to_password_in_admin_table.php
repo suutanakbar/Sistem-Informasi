@@ -9,7 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('admin', function (Blueprint $table) {
-            $table->renameColumn('kata_sandi', 'password');
+            // Handle both cases: column might already be named 'password'
+            // or still named 'kata_sandi' from older schema
+            if (Schema::hasColumn('admin', 'kata_sandi')) {
+                $table->renameColumn('kata_sandi', 'password');
+            }
         });
     }
 

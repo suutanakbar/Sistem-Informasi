@@ -249,10 +249,18 @@ class PublicDashboardController extends Controller
     public function showAgenda(Agenda $agenda): View
     {
         abort_if(!$agenda->is_published, 404);
-
-        $agenda->load('admin', 'volunteers');
         
-        $volunteerDiterima = $agenda->volunteers()->where('status', 'diterima')->count();
+        // Block access to past agendas
+        if ($agenda->waktu_mulai < now()) {
+            abort(404);
+        }
+
+        $agenda->load('admin');
+        
+        // Count accepted volunteers only (no need to load all volunteer data)
+        $volunteerDiterima = $agenda->volunteers()
+            ->where('status', 'diterima')
+            ->count();
 
         return view('public.agenda-show', compact('agenda', 'volunteerDiterima'));
     }

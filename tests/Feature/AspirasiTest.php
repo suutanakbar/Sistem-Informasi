@@ -183,7 +183,7 @@ class AspirasiTest extends TestCase
         // Admin bisa delete
         $response = $this->delete(route('aspirasi.destroy', $aspirasi));
         $response->assertRedirect();
-        $this->assertDatabaseMissing('aspirasi', ['id' => $aspirasi->id]);
+        $this->assertSoftDeleted('aspirasi', ['id' => $aspirasi->id]);
     }
 
     public function test_pengurus_bisa_mengupload_file(): void

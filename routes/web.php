@@ -34,8 +34,9 @@ Route::get('/publik/aspirasi/{aspirasi}', [PublicDashboardController::class, 'sh
 Route::get('/publik/ormada', [PublicDashboardController::class, 'ormada'])->name('public.ormada');
 Route::get('/publik/ormada/{profilOrmada}', [PublicDashboardController::class, 'showOrmada'])->name('public.ormada.show');
 
-// Public volunteer registration (no auth required)
+// Public volunteer registration (no auth required) with rate limiting
 Route::post('/agenda/{agenda}/daftar-volunteer', [AgendaController::class, 'daftarVolunteer'])
+    ->middleware('throttle:5,1')
     ->name('agenda.daftar-volunteer');
 
 Route::middleware('guest')->group(function () {

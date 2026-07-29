@@ -157,6 +157,18 @@ class ProposalController extends Controller
             'catatan_pemda' => ['nullable', 'string'],
         ]);
 
+        // State transition guard
+        if (!$proposal->canTransitionTo($validated['status'])) {
+            $currentStatus = $proposal->status;
+            $newStatus = $validated['status'];
+            
+            if (in_array($currentStatus, [Proposal::STATUS_DANA_CAIR, Proposal::STATUS_DITOLAK])) {
+                return back()->with('error', "Proposal dengan status '{$currentStatus}' adalah final dan tidak dapat diubah.");
+            }
+            
+            return back()->with('error', "Transisi status dari '{$currentStatus}' ke '{$newStatus}' tidak diizinkan.");
+        }
+
         $proposal->update($validated);
 
         return back()->with('status', 'Status proposal berhasil diperbarui.');

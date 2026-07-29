@@ -34,8 +34,7 @@ class PublicDashboardTest extends TestCase
             'nama_lengkap' => 'Andika Pratama',
             'nim' => '2401419001',
             'program_studi' => 'Pendidikan Seni Rupa',
-            'status_aktif' => 'fungsionaris',
-            'jabatan' => 'Ketua Umum',
+            'status_aktif' => 'mahasiswa_biasa',
             'is_pengurus' => 'YA',
             'no_hp' => '081234567890',
         ]);
@@ -90,7 +89,7 @@ class PublicDashboardTest extends TestCase
             'nama_lengkap' => 'Bagus Wijaya',
             'nim' => '21060119120015',
             'program_studi' => 'Teknik Elektro',
-            'status_aktif' => 'mahasiswa',
+            'status_aktif' => 'mahasiswa_biasa',
             'is_pengurus' => 'TIDAK',
             'no_hp' => '089999999999',
         ]);
