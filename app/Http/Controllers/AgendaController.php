@@ -263,12 +263,6 @@ class AgendaController extends Controller
                 return back()->with('error', 'Agenda ini tidak membuka pendaftaran volunteer.');
             }
 
-            // Hitung ulang jumlah volunteer yang diterima (case-insensitive)
-            $volunteerDiterima = Volunteer::where('agenda_id', $lockedAgenda->id)
-                ->where('status', 'diterima')
-                ->whereRaw('LOWER(email) = ?', [$email])
-                ->count();
-
             // Cek duplikasi email (case-insensitive)
             $existing = Volunteer::where('agenda_id', $lockedAgenda->id)
                 ->whereRaw('LOWER(email) = ?', [$email])
@@ -277,6 +271,11 @@ class AgendaController extends Controller
             if ($existing) {
                 return back()->with('error', 'Anda sudah mendaftar sebagai volunteer untuk agenda ini.');
             }
+
+            // Hitung jumlah volunteer yang diterima TOTAL (tidak filter by email)
+            $volunteerDiterima = Volunteer::where('agenda_id', $lockedAgenda->id)
+                ->where('status', 'diterima')
+                ->count();
 
             // Cek kuota
             if ($volunteerDiterima >= $lockedAgenda->kuota_volunteer) {

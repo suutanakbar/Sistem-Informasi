@@ -62,6 +62,7 @@ class AspirasiTest extends TestCase
         $response = $this->post(route('aspirasi.store'), [
             'topik_aspirasi' => 'Aspirasi Test',
             'detail_aspirasi' => 'Detail aspirasi test',
+            'profil_ormada_id' => $this->profilOrmada->id,
         ]);
         
         $response->assertRedirect();
@@ -198,6 +199,7 @@ class AspirasiTest extends TestCase
             'topik_aspirasi' => 'Aspirasi dengan File',
             'detail_aspirasi' => 'Detail',
             'file' => $file,
+            'profil_ormada_id' => $this->profilOrmada->id,
         ]);
         
         $response->assertRedirect();
