@@ -1,0 +1,992 @@
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\AgendaUpcomingTest::test_upcoming_agenda_scope_excludes_past_agenda(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\AgendaUpcomingTest::test_published_scope_works_correctly(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\AgendaUpcomingTest::test_public_agenda_page_only_shows_upcoming_agenda(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\AgendaUpcomingTest::test_agenda_show_page_blocks_past_agenda(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\PrivacyTest::test_public_ormada_page_does_not_expose_nim_and_phone(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\PrivacyTest::test_public_ormada_list_does_not_expose_nim_and_phone(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\PrivacyTest::test_public_agenda_does_not_expose_volunteer_sensitive_data(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\PrivacyTest::test_anggota_model_sensitive_fields_are_identified(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\RateLimitTest::test_volunteer_registration_rate_limited(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SessionSecurityTest::test_session_id_regenerated_after_login(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SessionSecurityTest::test_login_form_contains_csrf_token(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SessionSecurityTest::test_logout_invalidates_session(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SoftDeleteTest::test_anggota_ormada_can_be_soft_deleted(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SoftDeleteTest::test_profil_ormada_can_be_soft_deleted(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SoftDeleteTest::test_proposal_can_be_soft_deleted(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SoftDeleteTest::test_aspirasi_can_be_soft_deleted(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SoftDeleteTest::test_soft_deleted_anggota_not_shown_in_public_views(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SoftDeleteTest::test_soft_deleted_profil_not_shown_in_public_ormada_list(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_proposal_status_dana_cair_blocks_all_transitions(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_proposal_status_ditolak_blocks_all_transitions(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_proposal_valid_transitions_from_diajukan(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_proposal_valid_transitions_from_diproses_pemda(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_proposal_controller_prevents_invalid_status_change(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_volunteer_cannot_change_from_diterima(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_volunteer_cannot_change_from_ditolak(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\StateTransitionTest::test_volunteer_can_transition_from_pending(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ValidationTest::test_email_case_insensitive_duplicate_volunteer(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ValidationTest::test_proposal_rejects_exe_file_with_pdf_extension(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ValidationTest::test_proposal_rejects_pdf_file_too_large(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ValidationTest::test_postingan_rejects_foto_too_large(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ValidationTest::test_agenda_rejects_poster_too_large(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ValidationTest::test_proposal_accepts_valid_pdf_file(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\VolunteerRaceConditionTest::test_race_condition_volunteer_registration_does_not_exceed_quota(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\VolunteerRaceConditionTest::test_race_condition_volunteer_approval_does_not_exceed_quota(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\VolunteerRaceConditionTest::test_direct_db_insert_cannot_skip_quota_check(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true                                                                                            1.45s  
+
+   PASS  Tests\Feature\AdminLoginTest
+  ✓ admin can login using email and password                                                                    28.28s  
+  ✓ login rejects invalid password                                                                               0.74s  
+  ✓ login rehashes old password without password column                                                          0.64s  
+  ✓ login rehashes imported dummy hash on password                                                               0.18s  
+  ✓ admin can logout                                                                                             0.06s  
+
+   FAIL  Tests\Feature\AgendaTest
+  ✓ pengurus bisa membuat agenda                                                                                 1.91s  
+  ✓ pengurus bisa melihat agenda miliknya                                                                        1.66s  
+  ✓ pengurus tidak bisa melihat agenda ormada lain                                                               0.47s  
+  ✓ pemda bisa publish agenda                                                                                    0.10s  
+  ✓ public bisa melihat agenda yang published                                                                    0.25s  
+  ✓ public tidak bisa melihat agenda yang unpublished                                                            0.15s  
+  ✓ admin bisa mengelola semua agenda                                                                            0.46s  
+  ⨯ pengurus bisa upload poster                                                                                 14.51s  
+  ✓ validasi waktu mulai harus sebelum waktu selesai                                                             9.99s  
+  ✓ public bisa daftar volunteer jika kuota tersedia                                                             2.10s  
+  ✓ public tidak bisa daftar volunteer jika kuota penuh                                                          0.27s  
+  ⨯ pemda bisa approve volunteer                                                                                 0.38s  
+  ✓ validasi kuota volunteer tidak melebihi kapasitas                                                            0.03s  
+
+   PASS  Tests\Feature\AgendaUpcomingTest
+  ✓ upcoming agenda scope excludes past agenda                                                                   0.17s  
+  ✓ published scope works correctly                                                                              0.03s  
+  ✓ public agenda page only shows upcoming agenda                                                                0.09s  
+  ✓ agenda show page blocks past agenda                                                                          0.14s  
+
+   FAIL  Tests\Feature\AspirasiTest
+  ⨯ pengurus bisa membuat aspirasi                                                                               0.14s  
+  ✓ pengurus bisa melihat aspirasi miliknya                                                                      0.22s  
+  ✓ pengurus tidak bisa melihat aspirasi ormada lain                                                             0.07s  
+  ✓ pemda bisa menanggapi aspirasi                                                                               0.04s  
+  ✓ public bisa melihat aspirasi publik                                                                          0.30s  
+  ✓ admin bisa mengelola semua aspirasi                                                                          0.27s  
+  ⨯ pengurus bisa mengupload file                                                                                0.51s  
+
+   WARN  Tests\Feature\ExampleTest
+  ! the application returns a successful response → Test code or tested code did not close its own output buffe… 0.55s  
+
+   FAIL  Tests\Feature\PostinganTest
+  ✓ pengurus bisa membuat postingan                                                                              0.14s  
+  ✓ pengurus bisa melihat postingan miliknya                                                                     0.20s  
+  ✓ pengurus tidak bisa melihat postingan ormada lain                                                            0.04s  
+  ✓ pemda bisa publish postingan                                                                                 0.04s  
+  ✓ public bisa melihat postingan yang published                                                                 0.14s  
+  ✓ public tidak bisa melihat postingan yang unpublished                                                         0.04s  
+  ✓ admin bisa mengelola semua postingan                                                                         0.41s  
+  ⨯ pengurus bisa upload foto                                                                                    0.04s  
+
+   PASS  Tests\Feature\PrivacyTest
+  ✓ public ormada page does not expose nim and phone                                                             0.36s  
+  ✓ public ormada list does not expose nim and phone                                                             0.17s  
+  ✓ public agenda does not expose volunteer sensitive data                                                       0.24s  
+  ✓ anggota model sensitive fields are identified                                                                0.13s  
+
+   PASS  Tests\Feature\ProposalTest
+  ✓ pengurus bisa melihat daftar proposal                                                                        0.30s  
+  ✓ pengurus bisa membuat proposal                                                                               0.12s  
+  ✓ pengurus bisa melihat detail proposal miliknya                                                               0.10s  
+  ✓ pemda bisa melihat proposal yang ditujukan kepadanya                                                         0.29s  
+  ✓ pemda bisa update status proposal                                                                            0.04s  
+  ✓ pengurus bisa edit proposal miliknya                                                                         0.09s  
+  ✓ pengurus bisa update proposal miliknya                                                                       0.04s  
+  ✓ pengurus tidak bisa melihat proposal ormada lain                                                             0.04s  
+  ✓ admin bisa melihat semua proposal                                                                            0.18s  
+
+   FAIL  Tests\Feature\PublicDashboardTest
+  ⨯ guest can view public dashboard with aggregate data                                                          0.08s  
+  ! authenticated user sees dashboard link on public dashboard → Test code or tested code did not close its own… 0.04s  
+  ✓ guest cannot access internal member pages                                                                    0.06s  
+
+   PASS  Tests\Feature\RateLimitTest
+  ✓ volunteer registration rate limited                                                                          2.52s  
+
+   PASS  Tests\Feature\SessionSecurityTest
+  ✓ session id regenerated after login                                                                           0.86s  
+  ✓ login form contains csrf token                                                                               0.04s  
+  ✓ logout invalidates session                                                                                   0.04s  
+
+   PASS  Tests\Feature\SoftDeleteTest
+  ✓ anggota ormada can be soft deleted                                                                           0.04s  
+  ✓ profil ormada can be soft deleted                                                                            0.05s  
+  ✓ proposal can be soft deleted                                                                                 0.03s  
+  ✓ aspirasi can be soft deleted                                                                                 0.03s  
+  ✓ soft deleted anggota not shown in public views                                                               0.03s  
+  ✓ soft deleted profil not shown in public ormada list                                                          0.04s  
+
+   PASS  Tests\Feature\StateTransitionTest
+  ✓ proposal status dana cair blocks all transitions                                                             0.05s  
+  ✓ proposal status ditolak blocks all transitions                                                               0.03s  
+  ✓ proposal valid transitions from diajukan                                                                     0.04s  
+  ✓ proposal valid transitions from diproses pemda                                                               0.03s  
+  ✓ proposal controller prevents invalid status change                                                           0.03s  
+  ✓ volunteer cannot change from diterima                                                                        0.03s  
+  ✓ volunteer cannot change from ditolak                                                                         0.03s  
+  ✓ volunteer can transition from pending                                                                        0.03s  
+
+   PASS  Tests\Feature\ValidationTest
+  ✓ email case insensitive duplicate volunteer                                                                   0.05s  
+  ✓ proposal rejects exe file with pdf extension                                                                 0.03s  
+  ✓ proposal rejects pdf file too large                                                                          0.03s  
+  ✓ postingan rejects foto too large                                                                             0.19s  
+  ✓ agenda rejects poster too large                                                                              0.15s  
+  ✓ proposal accepts valid pdf file                                                                              0.07s  
+
+   PASS  Tests\Feature\VolunteerRaceConditionTest
+  ✓ race condition volunteer registration does not exceed quota                                                  0.04s  
+  ✓ race condition volunteer approval does not exceed quota                                                      0.03s  
+  ✓ direct db insert cannot skip quota check                                                                     0.03s  
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\AgendaTest > pengurus bisa upload poster                                      LogicException   
+  GD extension is not installed.
+
+  at vendor\laravel\framework\src\Illuminate\Http\Testing\FileFactory.php:77
+     73▕      */
+     74▕     protected function generateImage($width, $height, $extension)
+     75▕     {
+     76▕         if (! function_exists('imagecreatetruecolor')) {
+  ➜  77▕             throw new LogicException('GD extension is not installed.');
+     78▕         }
+     79▕ 
+     80▕         return tap(tmpfile(), function ($temp) use ($width, $height, $extension) {
+     81▕             ob_start();
+
+  1   vendor\laravel\framework\src\Illuminate\Http\Testing\FileFactory.php:77
+  2   vendor\laravel\framework\src\Illuminate\Http\Testing\FileFactory.php:59
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\AgendaTest > pemda bisa approve volunteer                                                      
+  Session is missing expected key [status].
+Failed asserting that false is true.
+
+  at tests\Feature\AgendaTest.php:218
+    214▕         $response = $this->patch(route('volunteer.update-status', $volunteer), [
+    215▕             'status' => 'diterima',
+    216▕         ]);
+    217▕ 
+  ➜ 218▕         $response->assertSessionHas('status');
+    219▕         $this->assertDatabaseHas('volunteers', [
+    220▕             'id' => $volunteer->id,
+    221▕             'status' => 'diterima',
+    222▕         ]);
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\AspirasiTest > pengurus bisa membuat aspirasi                                                  
+  Failed asserting that a row in the table [aspirasi] matches the attributes {
+    "topik_aspirasi": "Aspirasi Test"
+}.
+
+The table is empty.
+
+  at tests\Feature\AspirasiTest.php:68
+     64▕             'detail_aspirasi' => 'Detail aspirasi test',
+     65▕         ]);
+     66▕         
+     67▕         $response->assertRedirect();
+  ➜  68▕         $this->assertDatabaseHas('aspirasi', ['topik_aspirasi' => 'Aspirasi Test']);
+     69▕     }
+     70▕ 
+     71▕     public function test_pengurus_bisa_melihat_aspirasi_miliknya(): void
+     72▕     {
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\AspirasiTest > pengurus bisa mengupload file                                                   
+  Failed asserting that a row in the table [aspirasi] matches the attributes {
+    "topik_aspirasi": "Aspirasi dengan File"
+}.
+
+The table is empty.
+
+  at tests\Feature\AspirasiTest.php:204
+    200▕             'file' => $file,
+    201▕         ]);
+    202▕         
+    203▕         $response->assertRedirect();
+  ➜ 204▕         $this->assertDatabaseHas('aspirasi', [
+    205▕             'topik_aspirasi' => 'Aspirasi dengan File',
+    206▕         ]);
+    207▕         
+    208▕         $aspirasi = Aspirasi::where('topik_aspirasi', 'Aspirasi dengan File')->first();
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\PostinganTest > pengurus bisa upload foto                                     LogicException   
+  GD extension is not installed.
+
+  at vendor\laravel\framework\src\Illuminate\Http\Testing\FileFactory.php:77
+     73▕      */
+     74▕     protected function generateImage($width, $height, $extension)
+     75▕     {
+     76▕         if (! function_exists('imagecreatetruecolor')) {
+  ➜  77▕             throw new LogicException('GD extension is not installed.');
+     78▕         }
+     79▕ 
+     80▕         return tap(tmpfile(), function ($temp) use ($width, $height, $extension) {
+     81▕             ob_start();
+
+  1   vendor\laravel\framework\src\Illuminate\Http\Testing\FileFactory.php:77
+  2   vendor\laravel\framework\src\Illuminate\Http\Testing\FileFactory.php:59
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\PublicDashboardTest > guest can view public dashboard with aggregate data                      
+  Expected: <script>\r\n
+    window.publicCalendarEvents = [];\r\n
+</script>\r\n
+\r\n
+<!-- TEST -->\r\n
+\n
+<!DOCTYPE html>\r\n
+<html lang="en">\r\n
+<head>\r\n
+    <meta charset="utf-8">\r\n
+    <meta name="viewport" content="width=device-width, initial-scale=1">\r\n
+    <title>Laravel</title>\r\n
+    <link rel="preconnect" href="https://fonts.googleapis.com">\r\n
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\r\n
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">\r\n
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">\r\n
+            <script type="module" src="http://[::1]:5173/@vite/client"></script><link rel="stylesheet" href="http://[::1]:5173/resources/css/app.css" /><script type="module" src="http://[::1]:5173/resources/js/app.js"></script>        <style>\r\n
+        body { font-family: 'Inter', sans-serif; }\r\n
+        .hero-gradient {\r\n
+            background: linear-gradient(135deg, #0055A4 0%, #003D7A 100%);\r\n
+        }\r\n
+        .stat-card {\r\n
+            transition: all 0.3s ease;\r\n
+        }\r\n
+        .stat-card:hover {\r\n
+            transform: translateY(-4px);\r\n
+            box-shadow: 0 10px 25px rgba(0, 85, 164, 0.15);\r\n
+        }\r\n
+        .content-card {\r\n
+            transition: all 0.3s ease;\r\n
+        }\r\n
+        .content-card:hover {\r\n
+            transform: translateY(-2px);\r\n
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);\r\n
+        }\r\n
+        .top-bar {\r\n
+            border-bottom: 1px solid #e5e7eb;\r\n
+            padding: 8px 0;\r\n
+            font-size: 14px;\r\n
+        }\r\n
+        /* Header: smaller, cleaner, responsive */\r\n
+        .main-header {\r\n
+            padding: 8px 0;\r\n
+            text-align: center;\r\n
+            border-bottom: 1px solid #e6e6e6;\r\n
+            background: #ffffff;\r\n
+        }\r\n
+        .logo-text {\r\n
+            font-size: 20px;\r\n
+            font-weight: 800;\r\n
+            letter-spacing: -0.5px;\r\n
+            line-height: 1.2;\r\n
+            margin: 0;\r\n
+            text-transform: uppercase;\r\n
+        }\r\n
+        .tagline {\r\n
+            font-size: 10px;\r\n
+            letter-spacing: 1px;\r\n
+            text-transform: uppercase;\r\n
+            margin-top: 4px;\r\n
+            color: #6b7280;\r\n
+        }\r\n
+        .nav-bar {\r\n
+            border-bottom: 1px solid #e6e6e6;\r\n
+            padding: 4px 0;\r\n
+        }\r\n
+\r\n
+        /* Responsive scaling for larger screens */\r\n
+        @media (min-width: 768px) {\r\n
+            .main-header { padding: 12px 0; }\r\n
+            .logo-text { font-size: 28px; }\r\n
+            .tagline { font-size: 11px; }\r\n
+        }\r\n
+        @media (min-width: 1024px) {\r\n
+            .main-header { padding: 14px 0; }\r\n
+            .logo-text { font-size: 32px; }\r\n
+            .tagline { font-size: 12px; }\r\n
+        }\r\n
+        .nav-item {\r\n
+            position: relative;\r\n
+            padding: 4px 10px;\r\n
+            font-weight: 600;\r\n
+            font-size: 12px;\r\n
+            text-transform: uppercase;\r\n
+            letter-spacing: 0.5px;\r\n
+        }\r\n
+        .nav-item:hover {\r\n
+            color: #0055A4;\r\n
+        }\r\n
+        .dropdown-indicator {\r\n
+            font-size: 10px;\r\n
+            margin-left: 4px;\r\n
+        }\r\n
+        .font-newspaper { font-family: 'Playfair Display', serif; }\r\n
+    </style>\r\n
+</head>\r\n
+<body class="bg-gray-50 text-gray-900">\r\n
+    <div class="min-h-screen flex flex-col">\r\n
+        <header class="bg-white sticky top-0 z-50">\r\n
+<!-- ========================= -->\r\n
+<!-- TOP BAR -->\r\n
+<!-- ========================= -->\r\n
+\r\n
+<div class="border-b border-gray-300 bg-white">\r\n
+\r\n
+    <div class="mx-auto max-w-7xl px-4">\r\n
+\r\n
+        <div class="flex items-center justify-between h-8">\r\n
+\r\n
+            <!-- Left -->\r\n
+\r\n
+            <div class="flex items-center gap-3 text-[11px] uppercase tracking-widest text-gray-500">\r\n
+\r\n
+                <span>Wednesday, 29 July 2026</span>\r\n
+\r\n
+                <span class="w-px h-3 bg-gray-300"></span>\r\n
+\r\n
+                <span>Temanggung</span>\r\n
+\r\n
+            </div>\r\n
+\r\n
+            <!-- Center -->\r\n
+\r\n
+            <div class="hidden lg:block">\r\n
+\r\n
+                <span class="text-[11px] uppercase tracking-[3px] font-semibold text-gray-500">\r\n
+\r\n
+                    Sistem Informasi Organisasi Mahasiswa Daerah\r\n
+\r\n
+                </span>\r\n
+\r\n
+            </div>\r\n
+\r\n
+            <!-- Right -->\r\n
+\r\n
+            <div class="flex items-center gap-3">\r\n
+\r\n
+                \r\n
+                <a\r\n
+                    href="http://127.0.0.1:8000/login"\r\n
+                    class="text-xs uppercase tracking-widest font-semibold hover:text-blue-700 transition">\r\n
+\r\n
+                    Login\r\n
+\r\n
+                </a>\r\n
+\r\n
+                \r\n
+            </div>\r\n
+\r\n
+        </div>\r\n
+\r\n
+    </div>\r\n
+\r\n
+</div> \r\n
+<!-- ====================================== -->\r\n
+<!-- MAIN HEADER -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<div class="bg-white border-b border-gray-300">\r\n
+\r\n
+    <div class="mx-auto max-w-7xl px-4 py-2">\r\n
+\r\n
+        <div class="grid grid-cols-3 items-center">\r\n
+\r\n
+            <!-- Search -->\r\n
+\r\n
+            <div class="flex items-center">\r\n
+\r\n
+                <button\r\n
+                    class="flex items-center gap-2 uppercase tracking-widest text-[10px] font-semibold hover:text-blue-700 transition">\r\n
+\r\n
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor"\r\n
+                        viewBox="0 0 24 24">\r\n
+\r\n
+                        <path stroke-linecap="round"\r\n
+                              stroke-linejoin="round"\r\n
+                              stroke-width="2"\r\n
+                              d="M21 21l-5.2-5.2M10.8 18a7.2 7.2 0 100-14.4 7.2 7.2 0 000 14.4z"/>\r\n
+\r\n
+                    </svg>\r\n
+\r\n
+                    Search\r\n
+\r\n
+                </button>\r\n
+\r\n
+            </div>\r\n
+\r\n
+\r\n
+            <!-- Logo -->\r\n
+\r\n
+            <div class="text-center">\r\n
+\r\n
+                <a href="http://127.0.0.1:8000">\r\n
+\r\n
+                    <h1\r\n
+                        class="text-xl lg:text-2xl font-black"\r\n
+                        style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                        SI ORMADA\r\n
+\r\n
+                    </h1>\r\n
+\r\n
+                    <div\r\n
+                        class="mt-0.5 uppercase tracking-[1px] text-[10px] text-gray-500">\r\n
+\r\n
+                        TEMANGGUNG\r\n
+\r\n
+                    </div>\r\n
+\r\n
+                </a>\r\n
+\r\n
+            </div>\r\n
+\r\n
+\r\n
+            <!-- Social -->\r\n
+\r\n
+            <div class="flex justify-end gap-2">\r\n
+\r\n
+                <a href="#"\r\n
+                    class="uppercase text-[10px] tracking-widest font-semibold hover:text-blue-700">\r\n
+\r\n
+                    Facebook\r\n
+\r\n
+                </a>\r\n
+\r\n
+                <a href="#"\r\n
+                    class="uppercase text-[10px] tracking-widest font-semibold hover:text-blue-700">\r\n
+\r\n
+                    Instagram\r\n
+\r\n
+                </a>\r\n
+\r\n
+                <a href="#"\r\n
+                    class="uppercase text-[10px] tracking-widest font-semibold hover:text-blue-700">\r\n
+\r\n
+                    Email\r\n
+\r\n
+                </a>\r\n
+\r\n
+            </div>\r\n
+\r\n
+        </div>\r\n
+\r\n
+    </div>\r\n
+\r\n
+</div>\r\n
+\r\n
+\r\n
+<!-- ====================================== -->\r\n
+<!-- NAVIGATION -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<nav class="border-b-2 border-black border-t border-gray-300 bg-white">\r\n
+\r\n
+    <div class="mx-auto max-w-7xl">\r\n
+\r\n
+        <ul class="flex justify-center text-[10px]">\r\n
+\r\n
+            <li>\r\n
+                <a href="http://127.0.0.1:8000"\r\n
+                    class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">\r\n
+\r\n
+                    Beranda\r\n
+\r\n
+                </a>\r\n
+            </li>\r\n
+\r\n
+            <li>\r\n
+                <a href="http://127.0.0.1:8000/publik/aspirasi"\r\n
+                    class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">\r\n
+\r\n
+                    Aspirasi\r\n
+\r\n
+                </a>\r\n
+            </li>\r\n
+\r\n
+            <li>\r\n
+                <a href="http://127.0.0.1:8000/publik/agenda"\r\n
+                    class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">\r\n
+\r\n
+                    Agenda\r\n
+\r\n
+                </a>\r\n
+            </li>\r\n
+\r\n
+            <li>\r\n
+                <a href="http://127.0.0.1:8000/publik/postingan"\r\n
+                    class="block px-2 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">\r\n
+\r\n
+                    Berita\r\n
+\r\n
+                </a>\r\n
+            </li>\r\n
+\r\n
+            <li>\r\n
+                <a href="http://127.0.0.1:8000/publik/ormada"\r\n
+                    class="block px-4 py-1.5 uppercase tracking-widest font-bold hover:bg-black hover:text-white transition">\r\n
+\r\n
+                    Profil Ormada\r\n
+\r\n
+                </a>\r\n
+            </li>\r\n
+\r\n
+        </ul>\r\n
+\r\n
+    </div>\r\n
+\r\n
+</nav>\r\n
+        </header>\r\n
+\r\n
+        <main class="flex-1">\r\n
+            \r\n
+\r\n
+\r\n
+<!-- ====================================== -->\r\n
+<!-- HERO NEWSPAPER -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<section class="mt-4">\r\n
+    <div class="max-w-7xl mx-auto px-4">\r\n
+        <div class="border border-gray-300">\r\n
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">\r\n
+\r\n
+            \r\n
+            \r\n
+            \r\n
+\r\n
+            <section class="xl:col-span-6">\r\n
+\r\n
+                <div class="border border-gray-300">\r\n
+\r\n
+                    <div class="border-b border-gray-300 py-2">\r\n
+\r\n
+                        <h2 class="text-center text-xl font-black uppercase"\r\n
+                            style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                            Kalender Agenda\r\n
+\r\n
+                        </h2>\r\n
+\r\n
+                    </div>\r\n
+\r\n
+                    <div id="calendar-public" style="height:360px;"></div>\r\n
+\r\n
+                </div>\r\n
+\r\n
+            </section>\r\n
+\r\n
+\r\n
+            \r\n
+            \r\n
+            \r\n
+\r\n
+            <section class="xl:col-span-6">\r\n
+\r\n
+                <h3 class="text-base font-black uppercase tracking-widest border-b border-gray-300 pb-2 mb-4"\r\n
+                    style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                    Aspirasi\r\n
+\r\n
+                </h3>\r\n
+\r\n
+                                <div class="text-center py-8">\r\n
+                    <p class="text-xs text-gray-500">Belum ada aspirasi.</p>\r\n
+                </div>\r\n
+                \r\n
+            </aside>\r\n
+\r\n
+\r\n
+            </div>\r\n
+        </div>\r\n
+    </div>\r\n
+</section>\r\n
+\r\n
+<!-- ====================================== -->\r\n
+<!-- Aspirasi -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<section id="tmgnews" class="mt-5">\r\n
+    <div class="max-w-7xl mx-auto px-4">\r\n
+        <div class="border border-gray-300">\r\n
+\r\n
+        <!-- Header -->\r\n
+        <div class="border-b border-gray-300 pb-2 mb-3">\r\n
+            <div class="flex items-center justify-between">\r\n
+                <h2 class="text-lg font-black uppercase tracking-wide"\r\n
+                    style="font-family:'Playfair Display',serif;">\r\n
+                    Berita\r\n
+                </h2>\r\n
+                <a href="http://127.0.0.1:8000/publik/postingan"\r\n
+                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700 transition">\r\n
+                    View All →\r\n
+                </a>\r\n
+            </div>\r\n
+        </div>\r\n
+\r\n
+\r\n
+        <!-- Featured News Section -->\r\n
+        \r\n
+        </div>\r\n
+    </div>\r\n
+</section>\r\n
+\r\n
+<!-- ====================================== -->\r\n
+<!-- PROFIL ORMADA -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<section id="profil" class="mt-6">\r\n
+    <div class="max-w-7xl mx-auto px-4">\r\n
+        <div class="border border-gray-300">\r\n
+\r\n
+        <!-- Header -->\r\n
+        <div class="border-b border-gray-300 pb-2 mb-3">\r\n
+            <div class="flex items-center justify-between">\r\n
+                <h2 class="text-lg font-black uppercase"\r\n
+                    style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                    Profil Ormada\r\n
+\r\n
+                </h2>\r\n
+                <a href="http://127.0.0.1:8000/publik/ormada"\r\n
+                   class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700">\r\n
+\r\n
+                    View All →\r\n
+\r\n
+                </a>\r\n
+            </div>\r\n
+        </div>\r\n
+\r\n
+\r\n
+        <!-- Grid -->\r\n
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">\r\n
+\r\n
+            \r\n
+            <article class="group border border-gray-200 rounded-sm overflow-hidden">\r\n
+\r\n
+                    <!-- Logo -->\r\n
+\r\n
+                    <div class="overflow-hidden border-b border-gray-200">\r\n
+\r\n
+                        \r\n
+                            <div class="w-full h-36 bg-gray-100 flex items-center justify-center">\r\n
+\r\n
+                                <span class="text-3xl font-black">\r\n
+\r\n
+                                    UN\r\n
+\r\n
+                                </span>\r\n
+\r\n
+                            </div>\r\n
+\r\n
+                        \r\n
+                    </div>\r\n
+\r\n
+\r\n
+                    <!-- Content -->\r\n
+\r\n
+                    <div class="p-4">\r\n
+\r\n
+                        <div class="uppercase text-[11px] tracking-[3px] font-bold text-gray-500">\r\n
+\r\n
+                            ORGANISASI MAHASISWA\r\n
+\r\n
+                        </div>\r\n
+\r\n
+                        <h3\r\n
+                            class="mt-2 text-base font-black leading-tight group-hover:text-blue-700 transition"\r\n
+                            style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                            Universitas Negeri Semarang\r\n
+\r\n
+                        </h3>\r\n
+\r\n
+                        <p class="mt-1 text-[11px] text-gray-600 leading-5">\r\n
+\r\n
+                            Memiliki\r\n
+                            <strong>1</strong>\r\n
+                            anggota dan\r\n
+                            <strong>0</strong>\r\n
+                            pengurus aktif.\r\n
+\r\n
+                        </p>\r\n
+\r\n
+                        <a href="http://127.0.0.1:8000/publik/ormada/1"\r\n
+                           class="inline-block mt-2 uppercase tracking-widest text-[11px] font-bold hover:text-blue-700">\r\n
+\r\n
+                            Lihat Profil →\r\n
+\r\n
+                        </a>\r\n
+\r\n
+                    </div>\r\n
+\r\n
+                </article>\r\n
+\r\n
+                \r\n
+            </div>\r\n
+        </div>\r\n
+\r\n
+        </div>\r\n
+    </div>\r\n
+</section>\r\n
+\r\n
+<!-- ====================================== -->\r\n
+<!-- AGENDA -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<section id="agenda" class="mt-6">\r\n
+    <div class="max-w-7xl mx-auto px-4">\r\n
+        <div class="border border-gray-300">\r\n
+\r\n
+        <div class="border-b border-gray-300 pb-2 mb-3">\r\n
+            <div class="flex items-center justify-between">\r\n
+                <h2 class="text-lg font-black uppercase tracking-wide"\r\n
+                    style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                    Agenda\r\n
+\r\n
+                </h2>\r\n
+                <a href="http://127.0.0.1:8000/publik/agenda"\r\n
+                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700">\r\n
+\r\n
+                    View All →\r\n
+\r\n
+                </a>\r\n
+            </div>\r\n
+        </div>\r\n
+\r\n
+        \r\n
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">\r\n
+\r\n
+            \r\n
+            \r\n
+            \r\n
+\r\n
+            <div class="xl:col-span-8">\r\n
+\r\n
+                \r\n
+            </div>\r\n
+\r\n
+            \r\n
+            \r\n
+            \r\n
+\r\n
+            <div class="xl:col-span-4 space-y-3">\r\n
+\r\n
+                \r\n
+            </div>\r\n
+\r\n
+        </div>\r\n
+\r\n
+        </div>\r\n
+    </div>\r\n
+</section>\r\n
+\r\n
+<!-- <footer class="mt-5 border-t pt-4 pb-4">\r\n
+    <div class="text-center">\r\n
+        <h2 class="text-2xl font-black">\r\n
+            SI ORMADA TEMANGGUNG\r\n
+        </h2>\r\n
+        <p class="mt-2 text-gray-500 text-sm">\r\n
+            Sistem Informasi Organisasi Mahasiswa Daerah Temanggung Lintas Kampus\r\n
+        </p>\r\n
+        <p class="mt-6 text-xs text-gray-400">\r\n
+            © 2026 SI Ormada Temanggung\r\n
+        </p>\r\n
+    </div>\r\n
+</footer> -->\r\n
+\r\n
+</main>\r\n
+\r\n
+        </main>\r\n
+\r\n
+<!-- ====================================== -->\r\n
+<!-- FOOTER -->\r\n
+<!-- ====================================== -->\r\n
+\r\n
+<footer class="mt-12 border-t-2 border-black bg-white">\r\n
+\r\n
+    <div class="max-w-7xl mx-auto px-4 py-8">\r\n
+\r\n
+        <!-- Logo -->\r\n
+\r\n
+        <div class="text-center">\r\n
+\r\n
+            <h2\r\n
+                class="text-xl lg:text-2xl font-black"\r\n
+                style="font-family:'Playfair Display',serif;">\r\n
+\r\n
+                SI ORMADA\r\n
+\r\n
+            </h2>\r\n
+\r\n
+            <p\r\n
+                class="mt-0.5 uppercase tracking-[3px] text-[10px] text-gray-500">\r\n
+\r\n
+                TEMANGGUNG\r\n
+\r\n
+            </p>\r\n
+\r\n
+        </div>\r\n
+\r\n
+\r\n
+        <!-- Description -->\r\n
+\r\n
+        <div class="max-w-3xl mx-auto text-center mt-4">\r\n
+\r\n
+            <p class="text-gray-600 leading-5 text-xs">\r\n
+\r\n
+                Sistem Informasi Organisasi Mahasiswa Daerah Kabupaten\r\n
+                Temanggung yang menyediakan informasi berita, agenda,\r\n
+                profil organisasi mahasiswa, serta layanan aspirasi\r\n
+                sebagai media komunikasi antara mahasiswa dan pemerintah\r\n
+                daerah.\r\n
+\r\n
+            </p>\r\n
+\r\n
+        </div>\r\n
+\r\n
+\r\n
+        <!-- Menu -->\r\n
+\r\n
+        <div\r\n
+            class="flex flex-wrap justify-center gap-4 mt-6 uppercase tracking-widest text-xs font-semibold">\r\n
+\r\n
+            <a href="http://127.0.0.1:8000"\r\n
+               class="hover:text-blue-700 transition">\r\n
+\r\n
+                Beranda\r\n
+\r\n
+            </a>\r\n
+\r\n
+            <a href="http://127.0.0.1:8000/publik/aspirasi"\r\n
+               class="hover:text-blue-700 transition">\r\n
+\r\n
+                Aspirasi\r\n
+\r\n
+            </a>\r\n
+\r\n
+            <a href="http://127.0.0.1:8000/publik/agenda"\r\n
+               class="hover:text-blue-700 transition">\r\n
+\r\n
+                Agenda\r\n
+\r\n
+            </a>\r\n
+\r\n
+            <a href="http://127.0.0.1:8000/publik/postingan"\r\n
+               class="hover:text-blue-700 transition">\r\n
+\r\n
+                Berita\r\n
+\r\n
+            </a>\r\n
+\r\n
+            <a href="http://127.0.0.1:8000/publik/ormada"\r\n
+               class="hover:text-blue-700 transition">\r\n
+\r\n
+                Profil Ormada\r\n
+\r\n
+            </a>\r\n
+\r\n
+        </div>\r\n
+\r\n
+\r\n
+        <!-- Divider -->\r\n
+\r\n
+        <div class="border-t border-gray-300 my-6"></div>\r\n
+\r\n
+\r\n
+        <!-- Bottom -->\r\n
+\r\n
+        <div\r\n
+            class="flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">\r\n
+\r\n
+            <div>\r\n
+\r\n
+                © 2026 SI Ormada Temanggung\r\n
+\r\n
+            </div>\r\n
+\r\n
+            <div class="flex gap-4 uppercase tracking-widest text-[10px]">\r\n
+\r\n
+                <a href="#">Instagram</a>\r\n
+\r\n
+                <a href="#">Email</a>\r\n
+\r\n
+                <a href="#">Pemkab Temanggung</a>\r\n
+\r\n
+            </div>\r\n
+\r\n
+        </div>\r\n
+\r\n
+    </div>\r\n
+\r\n
+</footer>\r\n
+\r\n
+\r\n
+</body>\r\n
+\r\n
+</html>
+
+  To contain: Ormada terdaftar
+
+  at tests\Feature\PublicDashboardTest.php:46
+     42▕         $this->get(route('public.home'))
+     43▕             ->assertOk()
+     44▕             ->assertSee('SI Ormada Temanggung')
+     45▕             ->assertSee('Universitas Negeri Semarang')
+  ➜  46▕             ->assertSee('Ormada terdaftar')
+     47▕             ->assertSee('Anggota terdata')
+     48▕             ->assertSee('Login')
+     49▕             ->assertDontSee('Andika Pratama')
+     50▕             ->assertDontSee('2401419001')
+
+
+  Tests:    6 failed, 2 risky, 74 passed (223 assertions)
+  Duration: 86.79s
+

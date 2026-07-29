@@ -77,7 +77,7 @@ class VolunteerController extends Controller
                         ->where('status', 'diterima')
                         ->count();
 
-                    if ($volunteerDiterima >= $agenda->kuota_volunteer) {
+                    if ($agenda->kuota_volunteer !== null && $volunteerDiterima >= $agenda->kuota_volunteer) {
                         throw new \RuntimeException('Kuota volunteer sudah penuh.');
                     }
                 }
