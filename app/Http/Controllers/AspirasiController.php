@@ -81,14 +81,12 @@ class AspirasiController extends Controller
 
         $validated = $this->validateAspirasi($request);
         
-        // Set profil ormada
-        if ($user->isPengurusOrmada()) {
-            $profil = $user->profilOrmada()->first();
-            $validated['profil_ormada_id'] = $profil->id;
-        } else {
-            // Admin bisa pilih profil ormada (opsional)
-            $validated['profil_ormada_id'] = $request->input('profil_ormada_id');
+        // Set profil ormada (server-side, tidak percaya input client)
+        $profil = $user->profilOrmada()->first();
+        if (!$profil) {
+            return redirect()->route('aspirasi.create')->with('error', 'Anda belum memiliki profil ormada.');
         }
+        $validated['profil_ormada_id'] = $profil->id;
 
         // Handle file upload
         if ($request->hasFile('file')) {
@@ -210,7 +208,8 @@ class AspirasiController extends Controller
             'topik_aspirasi' => ['required', 'string', 'max:255'],
             'detail_aspirasi' => ['required', 'string'],
             'file' => [$aspirasi ? 'nullable' : 'nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
-            'profil_ormada_id' => [$aspirasi ? 'nullable' : 'required', 'exists:profil_ormada,id'],
+            // profil_ormada_id ditentukan server-side, tidak perlu validasi dari client
+            'profil_ormada_id' => ['nullable', 'exists:profil_ormada,id'],
         ];
 
         return $request->validate($rules);

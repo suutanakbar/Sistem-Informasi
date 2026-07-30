@@ -62,11 +62,13 @@ class AspirasiTest extends TestCase
         $response = $this->post(route('aspirasi.store'), [
             'topik_aspirasi' => 'Aspirasi Test',
             'detail_aspirasi' => 'Detail aspirasi test',
-            'profil_ormada_id' => $this->profilOrmada->id,
         ]);
         
         $response->assertRedirect();
-        $this->assertDatabaseHas('aspirasi', ['topik_aspirasi' => 'Aspirasi Test']);
+        $this->assertDatabaseHas('aspirasi', [
+            'topik_aspirasi' => 'Aspirasi Test',
+            'profil_ormada_id' => $this->profilOrmada->id,
+        ]);
     }
 
     public function test_pengurus_bisa_melihat_aspirasi_miliknya(): void
@@ -199,15 +201,57 @@ class AspirasiTest extends TestCase
             'topik_aspirasi' => 'Aspirasi dengan File',
             'detail_aspirasi' => 'Detail',
             'file' => $file,
-            'profil_ormada_id' => $this->profilOrmada->id,
         ]);
         
         $response->assertRedirect();
         $this->assertDatabaseHas('aspirasi', [
             'topik_aspirasi' => 'Aspirasi dengan File',
+            'profil_ormada_id' => $this->profilOrmada->id,
         ]);
         
         $aspirasi = Aspirasi::where('topik_aspirasi', 'Aspirasi dengan File')->first();
         $this->assertNotNull($aspirasi->file);
+    }
+
+    public function test_pengurus_tidak_bisa_mengirim_aspirasi_atas_nama_profil_ormada_lain(): void
+    {
+        // Setup: buat pengurus lain dengan profil ormada sendiri
+        $pengurusLain = Admin::create([
+            'nama' => 'Pengurus Lain',
+            'email' => 'pengurus_lain@test.com',
+            'password' => bcrypt('password'),
+            'peran' => 'pengurus_ormada',
+        ]);
+        $profilLain = ProfilOrmada::create([
+            'admin_id' => $pengurusLain->id,
+            'nama_universitas' => 'Universitas Lain',
+            'alamat_universitas' => 'Jl. Lain No. 1',
+            'deskripsi' => 'Deskripsi lain',
+            'total_mahasiswa_univ' => 500,
+        ]);
+
+        $this->actingAs($this->pengurus);
+
+        // Coba kirim aspirasi dengan menyertakan profil_ormada_id milik pengurus lain
+        $response = $this->post(route('aspirasi.store'), [
+            'topik_aspirasi' => 'Aspirasi Penipuan',
+            'detail_aspirasi' => 'Mencoba menyalahgunakan sistem',
+            'profil_ormada_id' => $profilLain->id, // upaya IDOR
+        ]);
+
+        // Harus tetap redirect sukses (validasi terpenuhi)
+        $response->assertRedirect();
+
+        // Tapi aspirasi HARUS disimpan ke profil ormada pengurus yang login, bukan yang disusun
+        $this->assertDatabaseHas('aspirasi', [
+            'topik_aspirasi' => 'Aspirasi Penipuan',
+            'profil_ormada_id' => $this->profilOrmada->id, // server-side assignment
+        ]);
+
+        // Pastikan TIDAK tersimpan ke profil ormada lain
+        $this->assertDatabaseMissing('aspirasi', [
+            'topik_aspirasi' => 'Aspirasi Penipuan',
+            'profil_ormada_id' => $profilLain->id,
+        ]);
     }
 }

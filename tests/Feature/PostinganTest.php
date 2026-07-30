@@ -117,6 +117,10 @@ class PostinganTest extends TestCase
 
     public function test_pengurus_bisa_upload_foto(): void
     {
+        if (!function_exists('imagecreatetruecolor')) {
+            $this->markTestSkipped('GD extension is not installed.');
+        }
+
         Storage::fake('public');
 
         $this->actingAs($this->pengurus);
