@@ -1,4 +1,4 @@
-<header class="bg-white sticky top-0 z-50">
+<header class="bg-white relative z-10">
 <!-- ========================= -->
 <!-- TOP BAR -->
 <!-- ========================= -->
