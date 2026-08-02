@@ -22,6 +22,7 @@ class Volunteer extends Model
         'no_hp',
         'alasan',
         'status',
+        'catatan_penolakan',
     ];
 
     protected function casts(): array

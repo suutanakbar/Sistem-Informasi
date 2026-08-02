@@ -3,567 +3,342 @@
 
 <?php
     $headline = $postingans->first();
+    $sideNews = $postingans->skip(1)->take(2);
+    $gridNews = $postingans->skip(3)->take(4);
+    $headlineAgenda = $agendas->first();
+    $respondedAspirasi = $aspirasis->firstWhere('tanggapan_pemda', '!=', null) ?? $aspirasis->first();
 ?>
 
 
-<!-- ====================================== -->
-<!-- HERO NEWSPAPER -->
-<!-- ====================================== -->
+
+
 
 <section class="mt-4">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-            <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+        <div class="border-b border-gray-300 pb-6">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-            
-            
-            
+                
+                <div class="xl:col-span-2">
+                    <?php if($headline): ?>
+                        <a href="<?php echo e(route('public.postingan.show', $headline)); ?>" class="group block">
+                            <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold">
+                                <?php echo e(ucfirst($headline->jenis_konten ?? $headline->jenis)); ?>
 
-            <section class="xl:col-span-6">
+                            </div>
+                            <h1 class="mt-2 text-2xl xl:text-3xl font-black leading-tight group-hover:text-blue-700 transition"
+                                style="font-family:'Playfair Display',serif;">
+                                <?php echo e($headline->judul); ?>
 
-                <div class="border border-gray-300">
-
-                    <div class="border-b border-gray-300 py-2">
-
-                        <h2 class="text-center text-xl font-black uppercase"
-                            style="font-family:'Playfair Display',serif;">
-
-                            Kalender Agenda
-
-                        </h2>
-
-                    </div>
-
-                    <div id="calendar-public" style="height:360px;"></div>
-
-                </div>
-
-            </section>
-
-
-            
-            
-            
-
-            <section class="xl:col-span-6">
-
-                <h3 class="text-base font-black uppercase tracking-widest border-b border-gray-300 pb-2 mb-4"
-                    style="font-family:'Playfair Display',serif;">
-
-                    Aspirasi
-
-                </h3>
-
-                <?php if($aspirasis->isNotEmpty()): ?>
-                <div class="space-y-4">
-
-                    <?php $__currentLoopData = $aspirasis->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aspirasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                    <a href="<?php echo e(route('public.aspirasi.show',$aspirasi)); ?>"
-                       class="block group pb-3 mb-3 border-b border-gray-200 last:border-b-0 last:pb-0 last:mb-0">
-
-                        <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold">
-
-                            <?php echo e($aspirasi->tanggapan_pemda ? 'DITANGGAPI' : 'MENUNGGU'); ?>
-
-
-                        </div>
-
-                        <h4 class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                            <?php echo e($aspirasi->topik_aspirasi); ?>
-
-
-                        </h4>
-
-                        <div class="mt-1 text-xs text-gray-500">
-
-                            <?php echo e($aspirasi->profilOrmada->nama_universitas ?? '-'); ?>
-
-
-                        </div>
-
-                        <p class="mt-1 text-[11px] leading-5 text-gray-600 line-clamp-3">
-
-                            <?php echo e(Str::limit(strip_tags($aspirasi->detail_aspirasi),90)); ?>
-
-
-                        </p>
-
-                        <div class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">
-
-                            Lihat Selengkapnya →
-
-                        </div>
-
-                    </a>
-
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                </div>
-                <?php else: ?>
-                <div class="text-center py-8">
-                    <p class="text-xs text-gray-500">Belum ada aspirasi.</p>
-                </div>
-                <?php endif; ?>
-
-            </aside>
-
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ====================================== -->
-<!-- Aspirasi -->
-<!-- ====================================== -->
-
-<section id="tmgnews" class="mt-5">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-
-        <!-- Header -->
-        <div class="border-b border-gray-300 pb-2 mb-3">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-black uppercase tracking-wide"
-                    style="font-family:'Playfair Display',serif;">
-                    Berita
-                </h2>
-                <a href="<?php echo e(route('public.postingan')); ?>"
-                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700 transition">
-                    View All →
-                </a>
-            </div>
-        </div>
-
-
-        <!-- Featured News Section -->
-        <?php if($postingans->isNotEmpty()): ?>
-        <?php $featured = $postingans->first(); ?>
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-            
-            <!-- Featured Article (Left - 50%) -->
-            <article class="bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
-                <a href="<?php echo e(route('public.postingan.show', $featured)); ?>" class="block">
-                    <?php if($featured->foto): ?>
-                    <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
-                        <img src="<?php echo e(storage_url($featured->foto)); ?>" alt="<?php echo e($featured->judul); ?>" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
-                    </div>
-                    <?php endif; ?>
-                    <div class="p-5">
-                        <!-- Badges -->
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
-                                <?php echo e(ucfirst($featured->jenis_konten ?? $featured->jenis)); ?>
-
-                            </span>
-                            <?php if($featured->is_published): ?>
-                            <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Published</span>
-                            <?php else: ?>
-                            <span class="px-2 py-1 text-[10px] font-medium bg-yellow-100 text-yellow-800 rounded-full">Draft</span>
+                            </h1>
+                            <?php if($headline->foto): ?>
+                                <div class="mt-4 w-full bg-gray-100">
+                                    <img src="<?php echo e(storage_url($headline->foto)); ?>" alt="<?php echo e($headline->judul); ?>"
+                                         class="w-full h-64 object-cover">
+                                </div>
                             <?php endif; ?>
-                        </div>
+                            <p class="mt-3 text-gray-600 text-sm leading-6">
+                                <?php echo e(Str::limit(strip_tags($headline->isi_konten), 220)); ?>
 
-                        <!-- Title -->
-                        <h3 class="text-xl sm:text-2xl font-black leading-tight mb-2 group-hover:text-blue-700 transition" style="font-family:'Playfair Display',serif;">
-                            <?php echo e($featured->judul); ?>
+                            </p>
+                            <div class="mt-2 text-[10px] uppercase tracking-widest text-gray-400">
+                                <?php echo e(($headline->tanggal_publish ?? $headline->dibuat_pada)->format('d M Y')); ?>
 
-                        </h3>
+                            </div>
+                        </a>
+                    <?php else: ?>
+                        <p class="text-sm text-gray-500">Belum ada berita.</p>
+                    <?php endif; ?>
+                </div>
 
-                        <!-- Summary -->
-                        <p class="text-gray-600 leading-5 text-xs sm:text-sm mb-3 line-clamp-3">
-                            <?php echo e(Str::limit(strip_tags($featured->isi_konten),200)); ?>
+                
+                <div class="flex flex-col gap-4">
 
-                        </p>
+                    <?php if($headlineAgenda): ?>
+                        <a href="<?php echo e(route('public.agenda.show', $headlineAgenda)); ?>" class="group block border border-gray-200 rounded-sm overflow-hidden">
+                            <?php if($headlineAgenda->gambar_poster): ?>
+                                <img src="<?php echo e(storage_url($headlineAgenda->gambar_poster)); ?>"
+                                     class="w-full h-24 object-cover">
+                            <?php endif; ?>
+                            <div class="p-3">
+                                <div class="uppercase tracking-[2px] text-[9px] text-gray-500 font-bold">
+                                    Agenda Terdekat
+                                </div>
+                                <h3 class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
+                                    style="font-family:'Playfair Display',serif;">
+                                    <?php echo e($headlineAgenda->nama_agenda); ?>
 
-                        <!-- Date -->
-                        <div class="flex items-center gap-1 text-[10px] text-gray-500 uppercase tracking-widest">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <?php echo e(($featured->tanggal_publish ?? $featured->dibuat_pada)->format('d M Y')); ?>
+                                </h3>
+                                <div class="mt-1 text-[10px] text-gray-500 uppercase tracking-widest">
+                                    <?php echo e($headlineAgenda->waktu_mulai->format('d M Y')); ?> &middot; <?php echo e($headlineAgenda->tempat); ?>
 
-                        </div>
+                                </div>
+                            </div>
+                        </a>
+                    <?php endif; ?>
 
-                        <!-- Footer -->
-                        <div class="mt-3 pt-2 border-t border-gray-200">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                Baca selengkapnya →
-                            </span>
-                        </div>
-                    </div>
-                </a>
-            </article>
+                    <?php if($respondedAspirasi): ?>
+                        <a href="<?php echo e(route('public.aspirasi.show', $respondedAspirasi)); ?>" class="group block border border-gray-200 rounded-sm p-3 bg-gray-50">
+                            <div class="uppercase tracking-[2px] text-[9px] text-gray-500 font-bold">
+                                <?php echo e($respondedAspirasi->tanggapan_pemda ? 'Aspirasi Ditanggapi' : 'Aspirasi Menunggu'); ?>
 
-            <!-- Side Articles (Right - 50% Vertical Stack) -->
-            <?php if($postingans->count() > 1): ?>
-            <div class="flex flex-col gap-4">
-                <?php $__currentLoopData = $postingans->skip(1)->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $postingan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
-                    <a href="<?php echo e(route('public.postingan.show', $postingan)); ?>" class="block">
-                        <?php if($postingan->foto): ?>
-                        <div class="w-full p-2 bg-gray-100 flex items-center justify-center">
-                            <img src="<?php echo e(storage_url($postingan->foto)); ?>" alt="<?php echo e($postingan->judul); ?>" class="w-full h-32 object-cover object-center transition duration-500 group-hover:scale-105">
-                        </div>
-                        <?php endif; ?>
-                        <div class="p-3">
-                            <!-- Badges -->
-                            <div class="flex items-center gap-1 mb-1">
-                                <span class="px-1 py-0.5 text-[8px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-wider">
-                                    <?php echo e(ucfirst($postingan->jenis_konten ?? $postingan->jenis)); ?>
+                            </div>
+                            <h4 class="mt-1 text-xs font-black leading-tight group-hover:text-blue-700 transition"
+                                style="font-family:'Playfair Display',serif;">
+                                <?php echo e($respondedAspirasi->topik_aspirasi); ?>
 
-                                </span>
-                                <?php if($postingan->is_published): ?>
-                                <span class="px-1 py-0.5 text-[8px] font-medium bg-green-100 text-green-800 rounded-full">Pub</span>
+                            </h4>
+                            <div class="mt-1 text-[10px] text-gray-500">
+                                <?php echo e($respondedAspirasi->profilOrmada->nama_universitas ?? '-'); ?>
+
+                            </div>
+                        </a>
+                    <?php endif; ?>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<section class="mt-6">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="border-b border-gray-300 pb-6">
+
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-black uppercase tracking-wide" style="font-family:'Playfair Display',serif;">
+                    Terbaru
+                </h2>
+                <div class="flex gap-3 text-[10px] uppercase tracking-widest text-gray-500">
+                    <a href="<?php echo e(route('public.postingan')); ?>" class="text-gray-900 font-bold">Semua</a>
+                    <a href="<?php echo e(route('public.postingan', ['jenis' => 'berita'])); ?>" class="hover:text-blue-700 transition">Berita</a>
+                    <a href="<?php echo e(route('public.agenda')); ?>" class="hover:text-blue-700 transition">Agenda</a>
+                    <a href="<?php echo e(route('public.postingan', ['jenis' => 'prestasi'])); ?>" class="hover:text-blue-700 transition">Prestasi</a>
+                </div>
+            </div>
+
+            <?php if($sideNews->isNotEmpty() || $gridNews->isNotEmpty()): ?>
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+                    <?php if($sideNews->isNotEmpty()): ?>
+                        <?php $__currentLoopData = $sideNews->take(1); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route('public.postingan.show', $item)); ?>" class="group xl:col-span-2 block border border-gray-200 rounded-sm overflow-hidden">
+                                <?php if($item->foto): ?>
+                                    <img src="<?php echo e(storage_url($item->foto)); ?>" alt="<?php echo e($item->judul); ?>"
+                                         class="w-full h-40 object-cover">
                                 <?php endif; ?>
+                                <div class="p-3">
+                                    <div class="uppercase tracking-[2px] text-[9px] text-gray-500 font-bold">
+                                        <?php echo e(ucfirst($item->jenis_konten ?? $item->jenis)); ?>
+
+                                    </div>
+                                    <h3 class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
+                                        style="font-family:'Playfair Display',serif;">
+                                        <?php echo e($item->judul); ?>
+
+                                    </h3>
+                                </div>
+                            </a>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+
+                    <div class="flex flex-col gap-3">
+                        <?php $__currentLoopData = $sideNews->skip(1)->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route('public.postingan.show', $item)); ?>" class="group flex gap-2 items-start">
+                                <?php if($item->foto): ?>
+                                    <img src="<?php echo e(storage_url($item->foto)); ?>" alt="<?php echo e($item->judul); ?>"
+                                         class="w-14 h-14 object-cover rounded-sm flex-shrink-0">
+                                <?php endif; ?>
+                                <div class="text-xs font-bold leading-tight group-hover:text-blue-700 transition"
+                                     style="font-family:'Playfair Display',serif;">
+                                    <?php echo e($item->judul); ?>
+
+                                </div>
+                            </a>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+
+                </div>
+            <?php else: ?>
+                <p class="text-sm text-gray-500">Belum ada konten terbaru.</p>
+            <?php endif; ?>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<section class="mt-6">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="border-b border-gray-300 pb-6">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                
+                <div class="flex flex-col gap-4">
+                    <div class="uppercase tracking-widest text-[11px] font-bold text-gray-500 border-b border-gray-200 pb-2">
+                        Profil Ormada
+                    </div>
+                    <?php $__empty_1 = true; $__currentLoopData = $profilOrmadas->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $profil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <a href="<?php echo e(route('public.ormada.show', $profil)); ?>" class="group flex gap-3 items-center">
+                            <?php if($profil->logo): ?>
+                                <img src="<?php echo e(profil_logo_url($profil->logo)); ?>" alt="<?php echo e($profil->nama_universitas); ?>"
+                                     class="w-12 h-12 object-cover rounded-sm flex-shrink-0 border border-gray-200">
+                            <?php else: ?>
+                                <div class="w-12 h-12 bg-gray-100 rounded-sm flex items-center justify-center flex-shrink-0 border border-gray-200">
+                                    <span class="text-xs font-black"><?php echo e(strtoupper(substr($profil->nama_universitas, 0, 2))); ?></span>
+                                </div>
+                            <?php endif; ?>
+                            <div>
+                                <h3 class="text-xs font-black leading-tight group-hover:text-blue-700 transition"
+                                    style="font-family:'Playfair Display',serif;">
+                                    <?php echo e($profil->nama_universitas); ?>
+
+                                </h3>
+                                <p class="mt-0.5 text-[10px] text-gray-500">
+                                    <?php echo e(number_format($profil->anggota_count)); ?> anggota
+                                </p>
                             </div>
+                        </a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <p class="text-xs text-gray-500">Belum ada profil ormada.</p>
+                    <?php endif; ?>
+                </div>
 
-                            <!-- Title -->
-                            <h3 class="text-[11px] sm:text-xs font-black leading-tight mb-1 line-clamp-2 group-hover:text-blue-700 transition flex-1" style="font-family:'Playfair Display',serif;">
-                                <?php echo e($postingan->judul); ?>
-
-                            </h3>
-
-                            <!-- Date -->
-                            <div class="flex items-center gap-1 text-[8px] text-gray-500 uppercase tracking-wider">
-                                <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
-                                </svg>
-                                <?php echo e(($postingan->tanggal_publish ?? $postingan->dibuat_pada)->format('d M Y')); ?>
+                
+                <div class="xl:col-span-2">
+                    <?php $secondAgenda = $agendas->skip(1)->first(); ?>
+                    <?php if($secondAgenda): ?>
+                        <a href="<?php echo e(route('public.agenda.show', $secondAgenda)); ?>" class="group block">
+                            <?php if($secondAgenda->gambar_poster): ?>
+                                <img src="<?php echo e(storage_url($secondAgenda->gambar_poster)); ?>"
+                                     class="w-full h-56 object-cover rounded-sm">
+                            <?php endif; ?>
+                            <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold mt-3">
+                                <?php echo e(strtoupper($secondAgenda->kategori)); ?>
 
                             </div>
+                            <h2 class="mt-1 text-xl font-black leading-tight group-hover:text-blue-700 transition"
+                                style="font-family:'Playfair Display',serif;">
+                                <?php echo e($secondAgenda->nama_agenda); ?>
 
-                            <!-- Footer -->
-                            <div class="mt-2 pt-1.5 border-t border-gray-200">
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                    Baca selengkapnya →
-                                </span>
-                            </div>
+                            </h2>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<section class="mt-6 mb-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+
+            <?php if($gridNews->isNotEmpty()): ?>
+                <?php $__currentLoopData = $gridNews->take(1); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <a href="<?php echo e(route('public.postingan.show', $item)); ?>" class="group block">
+                        <?php if($item->foto): ?>
+                            <img src="<?php echo e(storage_url($item->foto)); ?>" alt="<?php echo e($item->judul); ?>"
+                                 class="w-full h-16 object-cover rounded-sm">
+                        <?php endif; ?>
+                        <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">
+                            <?php echo e(ucfirst($item->jenis_konten ?? $item->jenis)); ?>
+
+                        </div>
+                        <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                             style="font-family:'Playfair Display',serif;">
+                            <?php echo e(Str::limit($item->judul, 30)); ?>
+
                         </div>
                     </a>
-                </article>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
             <?php endif; ?>
-        </div>
-        <?php endif; ?>
 
-        </div>
-    </div>
-</section>
-
-<!-- ====================================== -->
-<!-- PROFIL ORMADA -->
-<!-- ====================================== -->
-
-<section id="profil" class="mt-6">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-
-        <!-- Header -->
-        <div class="border-b border-gray-300 pb-2 mb-3">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-black uppercase"
-                    style="font-family:'Playfair Display',serif;">
-
-                    Profil Ormada
-
-                </h2>
-                <a href="<?php echo e(route('public.ormada')); ?>"
-                   class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700">
-
-                    View All →
-
-                </a>
-            </div>
-        </div>
-
-
-        <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-
-            <?php $__currentLoopData = $profilOrmadas->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $profil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-            <article class="group border border-gray-200 rounded-sm overflow-hidden">
-
-                    <!-- Logo -->
-
-                    <div class="overflow-hidden border-b border-gray-200">
-
-                        <?php if($profil->logo): ?>
-
-                            <img
-                                src="<?php echo e(profil_logo_url($profil->logo)); ?>"
-                                class="w-full h-36 object-cover transition duration-500 group-hover:scale-105">
-
-                        <?php else: ?>
-
-                            <div class="w-full h-36 bg-gray-100 flex items-center justify-center">
-
-                                <span class="text-3xl font-black">
-
-                                    <?php echo e(strtoupper(substr($profil->nama_universitas,0,2))); ?>
-
-
-                                </span>
-
-                            </div>
-
-                        <?php endif; ?>
-
-                    </div>
-
-
-                    <!-- Content -->
-
-                    <div class="p-4">
-
-                        <div class="uppercase text-[11px] tracking-[3px] font-bold text-gray-500">
-
-                            ORGANISASI MAHASISWA
-
-                        </div>
-
-                        <h3
-                            class="mt-2 text-base font-black leading-tight group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                            <?php echo e($profil->nama_universitas); ?>
-
-
-                        </h3>
-
-                        <p class="mt-1 text-[11px] text-gray-600 leading-5">
-
-                            Memiliki
-                            <strong><?php echo e(number_format($profil->anggota_count)); ?></strong>
-                            anggota dan
-                            <strong><?php echo e(number_format($profil->pengurus_count)); ?></strong>
-                            pengurus aktif.
-
-                        </p>
-
-                        <a href="<?php echo e(route('public.ormada.show',$profil)); ?>"
-                           class="inline-block mt-2 uppercase tracking-widest text-[11px] font-bold hover:text-blue-700">
-
-                            Lihat Profil →
-
-                        </a>
-
-                    </div>
-
-                </article>
-
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-            </div>
-        </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- ====================================== -->
-<!-- AGENDA -->
-<!-- ====================================== -->
-
-<section id="agenda" class="mt-6">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-
-        <div class="border-b border-gray-300 pb-2 mb-3">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-black uppercase tracking-wide"
-                    style="font-family:'Playfair Display',serif;">
-
-                    Agenda
-
-                </h2>
-                <a href="<?php echo e(route('public.agenda')); ?>"
-                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700">
-
-                    View All →
-
-                </a>
-            </div>
-        </div>
-
-        <?php
-            $headlineAgenda = $agendas->first();
-        ?>
-
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
-
-            
-            
-            
-
-            <div class="xl:col-span-8">
-
-                <?php if($headlineAgenda): ?>
-
-                <article class="border border-gray-200 rounded-sm overflow-hidden">
-
+            <?php if($headlineAgenda): ?>
+                <a href="<?php echo e(route('public.agenda.show', $headlineAgenda)); ?>" class="group block">
                     <?php if($headlineAgenda->gambar_poster): ?>
-
-                        <img
-                            src="<?php echo e(storage_url($headlineAgenda->gambar_poster)); ?>"
-                            class="w-full h-48 object-cover">
-
+                        <img src="<?php echo e(storage_url($headlineAgenda->gambar_poster)); ?>"
+                             class="w-full h-16 object-cover rounded-sm">
                     <?php endif; ?>
+                    <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">Agenda</div>
+                    <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                         style="font-family:'Playfair Display',serif;">
+                        <?php echo e(Str::limit($headlineAgenda->nama_agenda, 30)); ?>
 
-                    <div class="p-4">
+                    </div>
+                </a>
+            <?php endif; ?>
 
-                        <div
-                            class="uppercase tracking-[4px] text-xs font-bold text-gray-500">
+            <?php if($respondedAspirasi): ?>
+                <a href="<?php echo e(route('public.aspirasi.show', $respondedAspirasi)); ?>" class="group block">
+                    <div class="w-full h-16 bg-gray-100 rounded-sm flex items-center justify-center">
+                        <span class="text-[9px] text-gray-400 uppercase tracking-widest">Aspirasi</span>
+                    </div>
+                    <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">Aspirasi</div>
+                    <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                         style="font-family:'Playfair Display',serif;">
+                        <?php echo e(Str::limit($respondedAspirasi->topik_aspirasi, 30)); ?>
 
-                            <?php echo e(strtoupper($headlineAgenda->kategori)); ?>
+                    </div>
+                </a>
+            <?php endif; ?>
 
+            <?php $thirdProfil = $profilOrmadas->skip(2)->first(); ?>
+            <?php if($thirdProfil): ?>
+                <a href="<?php echo e(route('public.ormada.show', $thirdProfil)); ?>" class="group block">
+                    <?php if($thirdProfil->logo): ?>
+                        <img src="<?php echo e(profil_logo_url($thirdProfil->logo)); ?>"
+                             class="w-full h-16 object-cover rounded-sm">
+                    <?php else: ?>
+                        <div class="w-full h-16 bg-gray-100 rounded-sm flex items-center justify-center">
+                            <span class="text-sm font-black"><?php echo e(strtoupper(substr($thirdProfil->nama_universitas, 0, 2))); ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">Ormada</div>
+                    <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                         style="font-family:'Playfair Display',serif;">
+                        <?php echo e(Str::limit($thirdProfil->nama_universitas, 30)); ?>
+
+                    </div>
+                </a>
+            <?php endif; ?>
+
+            <?php if($gridNews->count() > 1): ?>
+                <?php $__currentLoopData = $gridNews->skip(1)->take(1); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <a href="<?php echo e(route('public.postingan.show', $item)); ?>" class="group block">
+                        <?php if($item->foto): ?>
+                            <img src="<?php echo e(storage_url($item->foto)); ?>" alt="<?php echo e($item->judul); ?>"
+                                 class="w-full h-16 object-cover rounded-sm">
+                        <?php endif; ?>
+                        <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">
+                            <?php echo e(ucfirst($item->jenis_konten ?? $item->jenis)); ?>
 
                         </div>
-
-                        <h2
-                            class="mt-2 text-lg leading-tight font-black"
-                            style="font-family:'Playfair Display',serif;">
-
-                            <?php echo e($headlineAgenda->nama_agenda); ?>
-
-
-                        </h2>
-
-                        <p
-                            class="mt-2 text-gray-600 text-xs leading-5">
-
-                            <?php echo e(Str::limit(strip_tags($headlineAgenda->deskripsi_agenda),250)); ?>
-
-
-                        </p>
-
-                        <div
-                            class="mt-3 flex gap-3 text-[11px] text-gray-500 uppercase tracking-widest">
-
-                            <span>
-
-                                📅
-                                <?php echo e($headlineAgenda->waktu_mulai->format('d M Y')); ?>
-
-
-                            </span>
-
-                            <span>
-
-                                📍
-                                <?php echo e($headlineAgenda->tempat); ?>
-
-
-                            </span>
+                        <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                             style="font-family:'Playfair Display',serif;">
+                            <?php echo e(Str::limit($item->judul, 30)); ?>
 
                         </div>
-
-                        <a
-                            href="<?php echo e(route('public.agenda.show',$headlineAgenda)); ?>"
-                            class="inline-block mt-3 text-[11px] font-bold uppercase tracking-widest hover:text-blue-700">
-
-                            Detail Agenda →
-
-                        </a>
-
-                    </div>
-
-                </article>
-
-                <?php endif; ?>
-
-            </div>
-
-            
-            
-            
-
-            <div class="xl:col-span-4 space-y-3">
-
-                <?php $__currentLoopData = $agendas->skip(1)->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $agenda): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                <article class="group border-b border-gray-300 pb-3">
-
-                    <?php if($agenda->gambar_poster): ?>
-
-                        <img
-                            src="<?php echo e(storage_url($agenda->gambar_poster)); ?>"
-                            class="w-full h-20 object-cover mb-2">
-
-                    <?php endif; ?>
-
-                    <div
-                        class="uppercase tracking-[3px] text-[10px] font-bold text-gray-500">
-
-                        <?php echo e(strtoupper($agenda->kategori)); ?>
-
-
-                    </div>
-
-                        <h3
-                            class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                        <?php echo e($agenda->nama_agenda); ?>
-
-
-                    </h3>
-
-                        <p
-                            class="mt-1 text-[11px] text-gray-600 leading-5 line-clamp-2">
-
-                        <?php echo e(Str::limit(strip_tags($agenda->deskripsi_agenda),100)); ?>
-
-
-                    </p>
-
-                        <div
-                            class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">
-
-                        <?php echo e($agenda->waktu_mulai->format('d M Y')); ?>
-
-
-                    </div>
-
-                </article>
-
+                    </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-            </div>
-
-        </div>
+            <?php endif; ?>
 
         </div>
     </div>
 </section>
-
-<!-- <footer class="mt-5 border-t pt-4 pb-4">
-    <div class="text-center">
-        <h2 class="text-2xl font-black">
-            SI ORMADA TEMANGGUNG
-        </h2>
-        <p class="mt-2 text-gray-500 text-sm">
-            Sistem Informasi Organisasi Mahasiswa Daerah Temanggung Lintas Kampus
-        </p>
-        <p class="mt-6 text-xs text-gray-400">
-            © <?php echo e(date('Y')); ?> SI Ormada Temanggung
-        </p>
-    </div>
-</footer> -->
-
-</main>
 
 <?php $__env->stopSection(); ?>
-
-<?php $__env->startPush('scripts'); ?>
-<script>
-    window.publicCalendarEvents = <?php echo json_encode($calendarEvents ?? [], 15, 512) ?>;
-</script>
-
-<!-- TEST -->
-
 <?php echo $__env->make('layouts.public', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\magang\resources\views/public/dashboard.blade.php ENDPATH**/ ?>

@@ -42,6 +42,7 @@ class VolunteerController extends Controller
 
         $validated = $request->validate([
             'status' => ['required', 'in:diterima,ditolak'],
+            'catatan_penolakan' => ['nullable', 'string', 'max:1000'],
         ]);
 
         // State transition guard
@@ -82,7 +83,10 @@ class VolunteerController extends Controller
                     }
                 }
 
-                $lockedVolunteer->update(['status' => $validated['status']]);
+                $lockedVolunteer->update([
+                    'status' => $validated['status'],
+                    'catatan_penolakan' => $validated['status'] === 'ditolak' ? $validated['catatan_penolakan'] : null,
+                ]);
             });
         } catch (\RuntimeException $e) {
             return redirect()->route('volunteer.index')

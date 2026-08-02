@@ -222,15 +222,23 @@ class AgendaController extends Controller
 
     public function daftarVolunteer(Request $request, Agenda $agenda): RedirectResponse
     {
+        \Log::info('=== VOLUNTEER REGISTRATION START ===', [
+            'agenda_id' => $agenda->id,
+            'email' => $request->input('email'),
+            'ip' => $request->ip(),
+        ]);
+        
         // Normalisasi email
         $email = strtolower(trim($request->input('email', '')));
 
         // Cek apakah agenda masih membuka volunteer
         if (!$agenda->is_published) {
+            \Log::warning('Volunteer registration failed: agenda not published', ['agenda_id' => $agenda->id]);
             return back()->with('error', 'Agenda ini belum dipublish.');
         }
         
         if (!$agenda->kuota_volunteer || !$agenda->deadline_pendaftaran) {
+            \Log::warning('Volunteer registration failed: no quota or deadline', ['agenda_id' => $agenda->id]);
             return back()->with('error', 'Agenda ini tidak membuka pendaftaran volunteer.');
         }
 
@@ -252,14 +260,17 @@ class AgendaController extends Controller
 
             // Cek ulang status publish dan deadline di dalam transaction
             if (!$lockedAgenda->is_published) {
+                \Log::warning('Volunteer registration failed: not published (in transaction)', ['agenda_id' => $lockedAgenda->id]);
                 return back()->with('error', 'Agenda ini belum dipublish.');
             }
 
             if (now()->greaterThan($lockedAgenda->deadline_pendaftaran)) {
+                \Log::warning('Volunteer registration failed: deadline passed', ['agenda_id' => $lockedAgenda->id, 'deadline' => $lockedAgenda->deadline_pendaftaran]);
                 return back()->with('error', 'Pendaftaran volunteer sudah ditutup.');
             }
 
             if (!$lockedAgenda->kuota_volunteer) {
+                \Log::warning('Volunteer registration failed: no quota (in transaction)', ['agenda_id' => $lockedAgenda->id]);
                 return back()->with('error', 'Agenda ini tidak membuka pendaftaran volunteer.');
             }
 
@@ -269,6 +280,11 @@ class AgendaController extends Controller
                 ->first();
 
             if ($existing) {
+                \Log::warning('Volunteer registration failed: duplicate email', [
+                    'email' => $email,
+                    'agenda_id' => $lockedAgenda->id,
+                    'existing_status' => $existing->status,
+                ]);
                 return back()->with('error', 'Anda sudah mendaftar sebagai volunteer untuk agenda ini.');
             }
 
@@ -279,11 +295,16 @@ class AgendaController extends Controller
 
             // Cek kuota
             if ($volunteerDiterima >= $lockedAgenda->kuota_volunteer) {
+                \Log::warning('Volunteer registration failed: quota full', [
+                    'agenda_id' => $lockedAgenda->id,
+                    'kuota' => $lockedAgenda->kuota_volunteer,
+                    'diterima' => $volunteerDiterima,
+                ]);
                 return back()->with('error', 'Kuota volunteer sudah penuh.');
             }
 
             // Buat pendaftaran volunteer
-            Volunteer::create([
+            $volunteer = Volunteer::create([
                 'agenda_id' => $lockedAgenda->id,
                 'nama' => $validated['nama'],
                 'email' => $validated['email'],
@@ -291,10 +312,18 @@ class AgendaController extends Controller
                 'alasan' => $validated['alasan'],
                 'status' => 'pending',
             ]);
-
+            
+            \Log::info('Volunteer created SUCCESS', [
+                'volunteer_id' => $volunteer->id,
+                'status' => $volunteer->status,
+                'agenda_id' => $lockedAgenda->id,
+            ]);
+            
             return back()->with('success', 'Pendaftaran volunteer berhasil. Silakan tunggu konfirmasi dari Pemda.');
         });
 
+        \Log::info('=== VOLUNTEER REGISTRATION END ===');
+        
         return $result;
     }
 
@@ -319,6 +348,7 @@ class AgendaController extends Controller
 
         $validated = $request->validate([
             'status' => ['required', 'in:diterima,ditolak'],
+            'catatan_penolakan' => ['nullable', 'string', 'max:1000'],
         ]);
 
         // State transition guard
@@ -357,7 +387,10 @@ class AgendaController extends Controller
                     }
                 }
 
-                $lockedVolunteer->update(['status' => $validated['status']]);
+                $lockedVolunteer->update([
+                    'status' => $validated['status'],
+                    'catatan_penolakan' => $validated['status'] === 'ditolak' ? $validated['catatan_penolakan'] : null,
+                ]);
             });
         } catch (\RuntimeException $e) {
             return back()->with('error', $e->getMessage());

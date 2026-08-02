@@ -42,7 +42,7 @@
                                 {{ $volunteer->agenda->admin->nama ?? 'Umum' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($volunteer->status === 'menunggu')
+                                @if($volunteer->status === 'pending')
                                     <span class="inline-flex rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">Menunggu</span>
                                 @elseif($volunteer->status === 'diterima')
                                     <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">Diterima</span>
@@ -51,7 +51,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                @if($volunteer->status === 'menunggu')
+                                @if($volunteer->status === 'pending')
                                     <form action="{{ route('volunteer.update-status', $volunteer) }}" method="POST" class="inline-block" onsubmit="return confirm('Terima volunteer ini?')">
                                         @csrf
                                         @method('PATCH')
@@ -62,8 +62,17 @@
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="ditolak">
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Tolak</button>
+                                        <button type="button" onclick="document.getElementById('catatan-{{ $volunteer->id }}').classList.toggle('hidden')" class="text-red-600 hover:text-red-900">Tolak</button>
+                                        <div id="catatan-{{ $volunteer->id }}" class="hidden mt-2">
+                                            <textarea name="catatan_penolakan" rows="3" placeholder="Alasan penolakan..." class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"></textarea>
+                                            <button type="submit" class="mt-2 px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700">Kirim Penolakan</button>
+                                        </div>
                                     </form>
+                                @elseif($volunteer->status === 'ditolak' && $volunteer->catatan_penolakan)
+                                    <div class="text-left">
+                                        <p class="text-xs text-gray-500 mb-1">Alasan ditolak:</p>
+                                        <p class="text-sm text-red-700">{{ $volunteer->catatan_penolakan }}</p>
+                                    </div>
                                 @else
                                     <span class="text-zinc-400">-</span>
                                 @endif
