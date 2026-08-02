@@ -3,543 +3,319 @@
 
 @php
     $headline = $postingans->first();
+    $sideNews = $postingans->skip(1)->take(2);
+    $gridNews = $postingans->skip(3)->take(4);
+    $headlineAgenda = $agendas->first();
+    $respondedAspirasi = $aspirasis->firstWhere('tanggapan_pemda', '!=', null) ?? $aspirasis->first();
 @endphp
 
-
-<!-- ====================================== -->
-<!-- HERO NEWSPAPER -->
-<!-- ====================================== -->
+{{-- ====================================== --}}
+{{-- HERO: HEADLINE BERITA + AGENDA/ASPIRASI --}}
+{{-- ====================================== --}}
 
 <section class="mt-4">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-            <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+        <div class="border-b border-gray-300 pb-6">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-            {{-- ================================= --}}
-            {{-- KALENDER (utama) --}}
-            {{-- ================================= --}}
-
-            <section class="xl:col-span-6">
-
-                <div class="border border-gray-300">
-
-                    <div class="border-b border-gray-300 py-2">
-
-                        <h2 class="text-center text-xl font-black uppercase"
-                            style="font-family:'Playfair Display',serif;">
-
-                            Kalender Agenda
-
-                        </h2>
-
-                    </div>
-
-                    <div id="calendar-public" style="height:360px;"></div>
-
-                </div>
-
-            </section>
-
-
-            {{-- ================================= --}}
-            {{-- ASPIRASI --}}
-            {{-- ================================= --}}
-
-            <section class="xl:col-span-6">
-
-                <h3 class="text-base font-black uppercase tracking-widest border-b border-gray-300 pb-2 mb-4"
-                    style="font-family:'Playfair Display',serif;">
-
-                    Aspirasi
-
-                </h3>
-
-                @if($aspirasis->isNotEmpty())
-                <div class="space-y-4">
-
-                    @foreach($aspirasis->take(4) as $aspirasi)
-
-                    <a href="{{ route('public.aspirasi.show',$aspirasi) }}"
-                       class="block group pb-3 mb-3 border-b border-gray-200 last:border-b-0 last:pb-0 last:mb-0">
-
-                        <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold">
-
-                            {{ $aspirasi->tanggapan_pemda ? 'DITANGGAPI' : 'MENUNGGU' }}
-
-                        </div>
-
-                        <h4 class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                            {{ $aspirasi->topik_aspirasi }}
-
-                        </h4>
-
-                        <div class="mt-1 text-xs text-gray-500">
-
-                            {{ $aspirasi->profilOrmada->nama_universitas ?? '-' }}
-
-                        </div>
-
-                        <p class="mt-1 text-[11px] leading-5 text-gray-600 line-clamp-3">
-
-                            {{ Str::limit(strip_tags($aspirasi->detail_aspirasi),90) }}
-
-                        </p>
-
-                        <div class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">
-
-                            Lihat Selengkapnya →
-
-                        </div>
-
-                    </a>
-
-                    @endforeach
-
-                </div>
-                @else
-                <div class="text-center py-8">
-                    <p class="text-xs text-gray-500">Belum ada aspirasi.</p>
-                </div>
-                @endif
-
-            </aside>
-
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ====================================== -->
-<!-- Aspirasi -->
-<!-- ====================================== -->
-
-<section id="tmgnews" class="mt-5">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-
-        <!-- Header -->
-        <div class="border-b border-gray-300 pb-2 mb-3">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-black uppercase tracking-wide"
-                    style="font-family:'Playfair Display',serif;">
-                    Berita
-                </h2>
-                <a href="{{ route('public.postingan') }}"
-                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700 transition">
-                    View All →
-                </a>
-            </div>
-        </div>
-
-
-        <!-- Featured News Section -->
-        @if($postingans->isNotEmpty())
-        @php $featured = $postingans->first(); @endphp
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-            
-            <!-- Featured Article (Left - 50%) -->
-            <article class="bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
-                <a href="{{ route('public.postingan.show', $featured) }}" class="block">
-                    @if($featured->foto)
-                    <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
-                        <img src="{{ storage_url($featured->foto) }}" alt="{{ $featured->judul }}" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
-                    </div>
-                    @endif
-                    <div class="p-5">
-                        <!-- Badges -->
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
-                                {{ ucfirst($featured->jenis_konten ?? $featured->jenis) }}
-                            </span>
-                            @if($featured->is_published)
-                            <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Published</span>
-                            @else
-                            <span class="px-2 py-1 text-[10px] font-medium bg-yellow-100 text-yellow-800 rounded-full">Draft</span>
+                {{-- Headline berita --}}
+                <div class="xl:col-span-2">
+                    @if($headline)
+                        <a href="{{ route('public.postingan.show', $headline) }}" class="group block">
+                            <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold">
+                                {{ ucfirst($headline->jenis_konten ?? $headline->jenis) }}
+                            </div>
+                            <h1 class="mt-2 text-2xl xl:text-3xl font-black leading-tight group-hover:text-blue-700 transition"
+                                style="font-family:'Playfair Display',serif;">
+                                {{ $headline->judul }}
+                            </h1>
+                            @if($headline->foto)
+                                <div class="mt-4 w-full bg-gray-100">
+                                    <img src="{{ storage_url($headline->foto) }}" alt="{{ $headline->judul }}"
+                                         class="w-full h-64 object-cover">
+                                </div>
                             @endif
-                        </div>
+                            <p class="mt-3 text-gray-600 text-sm leading-6">
+                                {{ Str::limit(strip_tags($headline->isi_konten), 220) }}
+                            </p>
+                            <div class="mt-2 text-[10px] uppercase tracking-widest text-gray-400">
+                                {{ ($headline->tanggal_publish ?? $headline->dibuat_pada)->format('d M Y') }}
+                            </div>
+                        </a>
+                    @else
+                        <p class="text-sm text-gray-500">Belum ada berita.</p>
+                    @endif
+                </div>
 
-                        <!-- Title -->
-                        <h3 class="text-xl sm:text-2xl font-black leading-tight mb-2 group-hover:text-blue-700 transition" style="font-family:'Playfair Display',serif;">
-                            {{ $featured->judul }}
-                        </h3>
+                {{-- Agenda terdekat & aspirasi ditanggapi --}}
+                <div class="flex flex-col gap-4">
 
-                        <!-- Summary -->
-                        <p class="text-gray-600 leading-5 text-xs sm:text-sm mb-3 line-clamp-3">
-                            {{ Str::limit(strip_tags($featured->isi_konten),200) }}
-                        </p>
+                    @if($headlineAgenda)
+                        <a href="{{ route('public.agenda.show', $headlineAgenda) }}" class="group block border border-gray-200 rounded-sm overflow-hidden">
+                            @if($headlineAgenda->gambar_poster)
+                                <img src="{{ storage_url($headlineAgenda->gambar_poster) }}"
+                                     class="w-full h-24 object-cover">
+                            @endif
+                            <div class="p-3">
+                                <div class="uppercase tracking-[2px] text-[9px] text-gray-500 font-bold">
+                                    Agenda Terdekat
+                                </div>
+                                <h3 class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
+                                    style="font-family:'Playfair Display',serif;">
+                                    {{ $headlineAgenda->nama_agenda }}
+                                </h3>
+                                <div class="mt-1 text-[10px] text-gray-500 uppercase tracking-widest">
+                                    {{ $headlineAgenda->waktu_mulai->format('d M Y') }} &middot; {{ $headlineAgenda->tempat }}
+                                </div>
+                            </div>
+                        </a>
+                    @endif
 
-                        <!-- Date -->
-                        <div class="flex items-center gap-1 text-[10px] text-gray-500 uppercase tracking-widest">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            {{ ($featured->tanggal_publish ?? $featured->dibuat_pada)->format('d M Y') }}
-                        </div>
+                    @if($respondedAspirasi)
+                        <a href="{{ route('public.aspirasi.show', $respondedAspirasi) }}" class="group block border border-gray-200 rounded-sm p-3 bg-gray-50">
+                            <div class="uppercase tracking-[2px] text-[9px] text-gray-500 font-bold">
+                                {{ $respondedAspirasi->tanggapan_pemda ? 'Aspirasi Ditanggapi' : 'Aspirasi Menunggu' }}
+                            </div>
+                            <h4 class="mt-1 text-xs font-black leading-tight group-hover:text-blue-700 transition"
+                                style="font-family:'Playfair Display',serif;">
+                                {{ $respondedAspirasi->topik_aspirasi }}
+                            </h4>
+                            <div class="mt-1 text-[10px] text-gray-500">
+                                {{ $respondedAspirasi->profilOrmada->nama_universitas ?? '-' }}
+                            </div>
+                        </a>
+                    @endif
 
-                        <!-- Footer -->
-                        <div class="mt-3 pt-2 border-t border-gray-200">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                Baca selengkapnya →
-                            </span>
-                        </div>
-                    </div>
-                </a>
-            </article>
+                </div>
 
-            <!-- Side Articles (Right - 50% Vertical Stack) -->
-            @if($postingans->count() > 1)
-            <div class="flex flex-col gap-4">
-                @foreach($postingans->skip(1)->take(2) as $postingan)
-                <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
-                    <a href="{{ route('public.postingan.show', $postingan) }}" class="block">
-                        @if($postingan->foto)
-                        <div class="w-full p-2 bg-gray-100 flex items-center justify-center">
-                            <img src="{{ storage_url($postingan->foto) }}" alt="{{ $postingan->judul }}" class="w-full h-32 object-cover object-center transition duration-500 group-hover:scale-105">
-                        </div>
-                        @endif
-                        <div class="p-3">
-                            <!-- Badges -->
-                            <div class="flex items-center gap-1 mb-1">
-                                <span class="px-1 py-0.5 text-[8px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-wider">
-                                    {{ ucfirst($postingan->jenis_konten ?? $postingan->jenis) }}
-                                </span>
-                                @if($postingan->is_published)
-                                <span class="px-1 py-0.5 text-[8px] font-medium bg-green-100 text-green-800 rounded-full">Pub</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ====================================== --}}
+{{-- TERBARU: TAB KATEGORI --}}
+{{-- ====================================== --}}
+
+<section class="mt-6">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="border-b border-gray-300 pb-6">
+
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-black uppercase tracking-wide" style="font-family:'Playfair Display',serif;">
+                    Terbaru
+                </h2>
+                <div class="flex gap-3 text-[10px] uppercase tracking-widest text-gray-500">
+                    <a href="{{ route('public.postingan') }}" class="text-gray-900 font-bold">Semua</a>
+                    <a href="{{ route('public.postingan', ['jenis' => 'berita']) }}" class="hover:text-blue-700 transition">Berita</a>
+                    <a href="{{ route('public.agenda') }}" class="hover:text-blue-700 transition">Agenda</a>
+                    <a href="{{ route('public.postingan', ['jenis' => 'prestasi']) }}" class="hover:text-blue-700 transition">Prestasi</a>
+                </div>
+            </div>
+
+            @if($sideNews->isNotEmpty() || $gridNews->isNotEmpty())
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+                    @if($sideNews->isNotEmpty())
+                        @foreach($sideNews->take(1) as $item)
+                            <a href="{{ route('public.postingan.show', $item) }}" class="group xl:col-span-2 block border border-gray-200 rounded-sm overflow-hidden">
+                                @if($item->foto)
+                                    <img src="{{ storage_url($item->foto) }}" alt="{{ $item->judul }}"
+                                         class="w-full h-40 object-cover">
                                 @endif
-                            </div>
+                                <div class="p-3">
+                                    <div class="uppercase tracking-[2px] text-[9px] text-gray-500 font-bold">
+                                        {{ ucfirst($item->jenis_konten ?? $item->jenis) }}
+                                    </div>
+                                    <h3 class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
+                                        style="font-family:'Playfair Display',serif;">
+                                        {{ $item->judul }}
+                                    </h3>
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
 
-                            <!-- Title -->
-                            <h3 class="text-[11px] sm:text-xs font-black leading-tight mb-1 line-clamp-2 group-hover:text-blue-700 transition flex-1" style="font-family:'Playfair Display',serif;">
-                                {{ $postingan->judul }}
-                            </h3>
+                    <div class="flex flex-col gap-3">
+                        @foreach($sideNews->skip(1)->take(2) as $item)
+                            <a href="{{ route('public.postingan.show', $item) }}" class="group flex gap-2 items-start">
+                                @if($item->foto)
+                                    <img src="{{ storage_url($item->foto) }}" alt="{{ $item->judul }}"
+                                         class="w-14 h-14 object-cover rounded-sm flex-shrink-0">
+                                @endif
+                                <div class="text-xs font-bold leading-tight group-hover:text-blue-700 transition"
+                                     style="font-family:'Playfair Display',serif;">
+                                    {{ $item->judul }}
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
 
-                            <!-- Date -->
-                            <div class="flex items-center gap-1 text-[8px] text-gray-500 uppercase tracking-wider">
-                                <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
-                                </svg>
-                                {{ ($postingan->tanggal_publish ?? $postingan->dibuat_pada)->format('d M Y') }}
-                            </div>
+                </div>
+            @else
+                <p class="text-sm text-gray-500">Belum ada konten terbaru.</p>
+            @endif
 
-                            <!-- Footer -->
-                            <div class="mt-2 pt-1.5 border-t border-gray-200">
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                    Baca selengkapnya →
-                                </span>
+        </div>
+    </div>
+</section>
+
+{{-- ====================================== --}}
+{{-- HIGHLIGHT CAMPURAN --}}
+{{-- ====================================== --}}
+
+<section class="mt-6">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="border-b border-gray-300 pb-6">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                {{-- List kecil: profil ormada --}}
+                <div class="flex flex-col gap-4">
+                    <div class="uppercase tracking-widest text-[11px] font-bold text-gray-500 border-b border-gray-200 pb-2">
+                        Profil Ormada
+                    </div>
+                    @forelse($profilOrmadas->take(3) as $profil)
+                        <a href="{{ route('public.ormada.show', $profil) }}" class="group flex gap-3 items-center">
+                            @if($profil->logo)
+                                <img src="{{ profil_logo_url($profil->logo) }}" alt="{{ $profil->nama_universitas }}"
+                                     class="w-12 h-12 object-cover rounded-sm flex-shrink-0 border border-gray-200">
+                            @else
+                                <div class="w-12 h-12 bg-gray-100 rounded-sm flex items-center justify-center flex-shrink-0 border border-gray-200">
+                                    <span class="text-xs font-black">{{ strtoupper(substr($profil->nama_universitas, 0, 2)) }}</span>
+                                </div>
+                            @endif
+                            <div>
+                                <h3 class="text-xs font-black leading-tight group-hover:text-blue-700 transition"
+                                    style="font-family:'Playfair Display',serif;">
+                                    {{ $profil->nama_universitas }}
+                                </h3>
+                                <p class="mt-0.5 text-[10px] text-gray-500">
+                                    {{ number_format($profil->anggota_count) }} anggota
+                                </p>
                             </div>
+                        </a>
+                    @empty
+                        <p class="text-xs text-gray-500">Belum ada profil ormada.</p>
+                    @endforelse
+                </div>
+
+                {{-- Gambar besar: agenda berikutnya --}}
+                <div class="xl:col-span-2">
+                    @php $secondAgenda = $agendas->skip(1)->first(); @endphp
+                    @if($secondAgenda)
+                        <a href="{{ route('public.agenda.show', $secondAgenda) }}" class="group block">
+                            @if($secondAgenda->gambar_poster)
+                                <img src="{{ storage_url($secondAgenda->gambar_poster) }}"
+                                     class="w-full h-56 object-cover rounded-sm">
+                            @endif
+                            <div class="uppercase tracking-[3px] text-[10px] text-gray-500 font-bold mt-3">
+                                {{ strtoupper($secondAgenda->kategori) }}
+                            </div>
+                            <h2 class="mt-1 text-xl font-black leading-tight group-hover:text-blue-700 transition"
+                                style="font-family:'Playfair Display',serif;">
+                                {{ $secondAgenda->nama_agenda }}
+                            </h2>
+                        </a>
+                    @endif
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ====================================== --}}
+{{-- THUMBNAIL STRIP --}}
+{{-- ====================================== --}}
+
+<section class="mt-6 mb-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+
+            @if($gridNews->isNotEmpty())
+                @foreach($gridNews->take(1) as $item)
+                    <a href="{{ route('public.postingan.show', $item) }}" class="group block">
+                        @if($item->foto)
+                            <img src="{{ storage_url($item->foto) }}" alt="{{ $item->judul }}"
+                                 class="w-full h-16 object-cover rounded-sm">
+                        @endif
+                        <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">
+                            {{ ucfirst($item->jenis_konten ?? $item->jenis) }}
+                        </div>
+                        <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                             style="font-family:'Playfair Display',serif;">
+                            {{ Str::limit($item->judul, 30) }}
                         </div>
                     </a>
-                </article>
                 @endforeach
-            </div>
             @endif
-        </div>
-        @endif
 
-        </div>
-    </div>
-</section>
-
-<!-- ====================================== -->
-<!-- PROFIL ORMADA -->
-<!-- ====================================== -->
-
-<section id="profil" class="mt-6">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-
-        <!-- Header -->
-        <div class="border-b border-gray-300 pb-2 mb-3">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-black uppercase"
-                    style="font-family:'Playfair Display',serif;">
-
-                    Profil Ormada
-
-                </h2>
-                <a href="{{ route('public.ormada') }}"
-                   class="text-[11px] uppercase tracking-widest font-semibold hover:text-blue-700">
-
-                    View All →
-
-                </a>
-            </div>
-        </div>
-
-
-        <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-
-            @foreach($profilOrmadas->take(4) as $profil)
-
-            <article class="group border border-gray-200 rounded-sm overflow-hidden">
-
-                    <!-- Logo -->
-
-                    <div class="overflow-hidden border-b border-gray-200">
-
-                        @if($profil->logo)
-
-                            <img
-                                src="{{ profil_logo_url($profil->logo) }}"
-                                class="w-full h-36 object-cover transition duration-500 group-hover:scale-105">
-
-                        @else
-
-                            <div class="w-full h-36 bg-gray-100 flex items-center justify-center">
-
-                                <span class="text-3xl font-black">
-
-                                    {{ strtoupper(substr($profil->nama_universitas,0,2)) }}
-
-                                </span>
-
-                            </div>
-
-                        @endif
-
-                    </div>
-
-
-                    <!-- Content -->
-
-                    <div class="p-4">
-
-                        <div class="uppercase text-[11px] tracking-[3px] font-bold text-gray-500">
-
-                            ORGANISASI MAHASISWA
-
-                        </div>
-
-                        <h3
-                            class="mt-2 text-base font-black leading-tight group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                            {{ $profil->nama_universitas }}
-
-                        </h3>
-
-                        <p class="mt-1 text-[11px] text-gray-600 leading-5">
-
-                            Memiliki
-                            <strong>{{ number_format($profil->anggota_count) }}</strong>
-                            anggota dan
-                            <strong>{{ number_format($profil->pengurus_count) }}</strong>
-                            pengurus aktif.
-
-                        </p>
-
-                        <a href="{{ route('public.ormada.show',$profil) }}"
-                           class="inline-block mt-2 uppercase tracking-widest text-[11px] font-bold hover:text-blue-700">
-
-                            Lihat Profil →
-
-                        </a>
-
-                    </div>
-
-                </article>
-
-                @endforeach
-
-            </div>
-        </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- ====================================== -->
-<!-- AGENDA -->
-<!-- ====================================== -->
-
-<section id="agenda" class="mt-6">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="border border-gray-300">
-
-        <div class="border-b border-gray-300 pb-2 mb-3">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-black uppercase tracking-wide"
-                    style="font-family:'Playfair Display',serif;">
-
-                    Agenda
-
-                </h2>
-                <a href="{{ route('public.agenda') }}"
-                   class="text-[11px] font-semibold uppercase tracking-widest hover:text-blue-700">
-
-                    View All →
-
-                </a>
-            </div>
-        </div>
-
-        @php
-            $headlineAgenda = $agendas->first();
-        @endphp
-
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
-
-            {{-- ========================= --}}
-            {{-- HEADLINE AGENDA --}}
-            {{-- ========================= --}}
-
-            <div class="xl:col-span-8">
-
-                @if($headlineAgenda)
-
-                <article class="border border-gray-200 rounded-sm overflow-hidden">
-
+            @if($headlineAgenda)
+                <a href="{{ route('public.agenda.show', $headlineAgenda) }}" class="group block">
                     @if($headlineAgenda->gambar_poster)
-
-                        <img
-                            src="{{ storage_url($headlineAgenda->gambar_poster) }}"
-                            class="w-full h-48 object-cover">
-
+                        <img src="{{ storage_url($headlineAgenda->gambar_poster) }}"
+                             class="w-full h-16 object-cover rounded-sm">
                     @endif
-
-                    <div class="p-4">
-
-                        <div
-                            class="uppercase tracking-[4px] text-xs font-bold text-gray-500">
-
-                            {{ strtoupper($headlineAgenda->kategori) }}
-
-                        </div>
-
-                        <h2
-                            class="mt-2 text-lg leading-tight font-black"
-                            style="font-family:'Playfair Display',serif;">
-
-                            {{ $headlineAgenda->nama_agenda }}
-
-                        </h2>
-
-                        <p
-                            class="mt-2 text-gray-600 text-xs leading-5">
-
-                            {{ Str::limit(strip_tags($headlineAgenda->deskripsi_agenda),250) }}
-
-                        </p>
-
-                        <div
-                            class="mt-3 flex gap-3 text-[11px] text-gray-500 uppercase tracking-widest">
-
-                            <span>
-
-                                📅
-                                {{ $headlineAgenda->waktu_mulai->format('d M Y') }}
-
-                            </span>
-
-                            <span>
-
-                                📍
-                                {{ $headlineAgenda->tempat }}
-
-                            </span>
-
-                        </div>
-
-                        <a
-                            href="{{ route('public.agenda.show',$headlineAgenda) }}"
-                            class="inline-block mt-3 text-[11px] font-bold uppercase tracking-widest hover:text-blue-700">
-
-                            Detail Agenda →
-
-                        </a>
-
+                    <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">Agenda</div>
+                    <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                         style="font-family:'Playfair Display',serif;">
+                        {{ Str::limit($headlineAgenda->nama_agenda, 30) }}
                     </div>
+                </a>
+            @endif
 
-                </article>
+            @if($respondedAspirasi)
+                <a href="{{ route('public.aspirasi.show', $respondedAspirasi) }}" class="group block">
+                    <div class="w-full h-16 bg-gray-100 rounded-sm flex items-center justify-center">
+                        <span class="text-[9px] text-gray-400 uppercase tracking-widest">Aspirasi</span>
+                    </div>
+                    <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">Aspirasi</div>
+                    <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                         style="font-family:'Playfair Display',serif;">
+                        {{ Str::limit($respondedAspirasi->topik_aspirasi, 30) }}
+                    </div>
+                </a>
+            @endif
 
-                @endif
-
-            </div>
-
-            {{-- ========================= --}}
-            {{-- LIST AGENDA --}}
-            {{-- ========================= --}}
-
-            <div class="xl:col-span-4 space-y-3">
-
-                @foreach($agendas->skip(1)->take(3) as $agenda)
-
-                <article class="group border-b border-gray-300 pb-3">
-
-                    @if($agenda->gambar_poster)
-
-                        <img
-                            src="{{ storage_url($agenda->gambar_poster) }}"
-                            class="w-full h-20 object-cover mb-2">
-
+            @php $thirdProfil = $profilOrmadas->skip(2)->first(); @endphp
+            @if($thirdProfil)
+                <a href="{{ route('public.ormada.show', $thirdProfil) }}" class="group block">
+                    @if($thirdProfil->logo)
+                        <img src="{{ profil_logo_url($thirdProfil->logo) }}"
+                             class="w-full h-16 object-cover rounded-sm">
+                    @else
+                        <div class="w-full h-16 bg-gray-100 rounded-sm flex items-center justify-center">
+                            <span class="text-sm font-black">{{ strtoupper(substr($thirdProfil->nama_universitas, 0, 2)) }}</span>
+                        </div>
                     @endif
-
-                    <div
-                        class="uppercase tracking-[3px] text-[10px] font-bold text-gray-500">
-
-                        {{ strtoupper($agenda->kategori) }}
-
+                    <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">Ormada</div>
+                    <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                         style="font-family:'Playfair Display',serif;">
+                        {{ Str::limit($thirdProfil->nama_universitas, 30) }}
                     </div>
+                </a>
+            @endif
 
-                        <h3
-                            class="mt-1 text-sm font-black leading-tight group-hover:text-blue-700 transition"
-                            style="font-family:'Playfair Display',serif;">
-
-                        {{ $agenda->nama_agenda }}
-
-                    </h3>
-
-                        <p
-                            class="mt-1 text-[11px] text-gray-600 leading-5 line-clamp-2">
-
-                        {{ Str::limit(strip_tags($agenda->deskripsi_agenda),100) }}
-
-                    </p>
-
-                        <div
-                            class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">
-
-                        {{ $agenda->waktu_mulai->format('d M Y') }}
-
-                    </div>
-
-                </article>
-
+            @if($gridNews->count() > 1)
+                @foreach($gridNews->skip(1)->take(1) as $item)
+                    <a href="{{ route('public.postingan.show', $item) }}" class="group block">
+                        @if($item->foto)
+                            <img src="{{ storage_url($item->foto) }}" alt="{{ $item->judul }}"
+                                 class="w-full h-16 object-cover rounded-sm">
+                        @endif
+                        <div class="mt-1 uppercase tracking-widest text-[9px] text-gray-500 font-bold">
+                            {{ ucfirst($item->jenis_konten ?? $item->jenis) }}
+                        </div>
+                        <div class="text-[11px] font-bold leading-tight group-hover:text-blue-700 transition"
+                             style="font-family:'Playfair Display',serif;">
+                            {{ Str::limit($item->judul, 30) }}
+                        </div>
+                    </a>
                 @endforeach
-
-            </div>
-
-        </div>
+            @endif
 
         </div>
     </div>
 </section>
-
-<!-- <footer class="mt-5 border-t pt-4 pb-4">
-    <div class="text-center">
-        <h2 class="text-2xl font-black">
-            SI ORMADA TEMANGGUNG
-        </h2>
-        <p class="mt-2 text-gray-500 text-sm">
-            Sistem Informasi Organisasi Mahasiswa Daerah Temanggung Lintas Kampus
-        </p>
-        <p class="mt-6 text-xs text-gray-400">
-            © {{ date('Y') }} SI Ormada Temanggung
-        </p>
-    </div>
-</footer> -->
-
-</main>
 
 @endsection
-
-@push('scripts')
-<script>
-    window.publicCalendarEvents = @json($calendarEvents ?? []);
-</script>
-
-<!-- TEST -->
