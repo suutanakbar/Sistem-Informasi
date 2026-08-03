@@ -2,31 +2,31 @@
 @section('title', $profilOrmada->nama_universitas . ' - SI Ormada Temanggung')
 @section('content')
     <!-- Page Header -->
-    <section class="hero-gradient text-white py-12 sm:py-16">
+    <section class="bg-white border-t border-b border-gray-300 py-8">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <a href="{{ route('public.home') }}" class="inline-flex items-center text-sm text-blue-100 hover:text-white mb-4 transition">
+            <a href="{{ route('public.ormada') }}" class="inline-flex items-center text-sm text-gray-600 hover:text-blue-700 mb-4 transition">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
-                Kembali ke Beranda
+                Kembali ke Profil Ormada
             </a>
             <div class="max-w-4xl">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="px-3 py-1 text-xs font-semibold bg-white/20 text-white rounded-full border border-white/30">
-                        Profil Ormada
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
+                        Ormada
                     </span>
                 </div>
                 <div class="flex items-start gap-6">
                     @if($profilOrmada->logo)
-                    <img src="{{ profil_logo_url($profilOrmada->logo) }}" alt="Logo {{ $profilOrmada->nama_universitas }}" class="h-20 w-20 sm:h-24 sm:w-24 rounded-xl object-cover shadow-lg border-2 border-white/30">
+                    <img src="{{ asset('storage/' . $profilOrmada->logo) }}" alt="Logo {{ $profilOrmada->nama_universitas }}" class="h-20 w-20 sm:h-24 sm:w-24 rounded-xl object-cover shadow-lg border-2 border-gray-200">
                     @else
-                    <div class="flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center rounded-xl bg-white/20 text-2xl sm:text-3xl font-bold text-white shadow-lg border-2 border-white/30">
+                    <div class="flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center rounded-xl bg-blue-700 text-2xl sm:text-3xl font-bold text-white shadow-lg border-2 border-gray-200">
                         {{ strtoupper(substr($profilOrmada->nama_universitas, 0, 2)) }}
                     </div>
                     @endif
                     <div class="flex-1">
-                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-3">{{ $profilOrmada->nama_universitas }}</h2>
-                        <div class="flex flex-wrap items-center gap-4 text-sm text-blue-100">
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-3" style="font-family:'Playfair Display',serif;">{{ $profilOrmada->nama_universitas }}</h2>
+                        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                             <span class="flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -49,45 +49,45 @@
     </section>
 
     <!-- Statistics Cards -->
-    <section class="bg-white py-12 sm:py-16">
+    <section class="bg-white py-12">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                <div class="stat-card bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                <div class="border border-gray-200 rounded-sm p-6 hover:shadow-md transition-shadow">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-blue-700 text-sm font-medium">Total Anggota</p>
-                            <p class="mt-2 text-3xl sm:text-4xl font-bold text-blue-900">{{ number_format($profilOrmada->anggota_count) }}</p>
+                            <p class="text-gray-600 text-xs font-medium uppercase tracking-wider">Total Anggota</p>
+                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($profilOrmada->anggota_count) }}</p>
                         </div>
-                        <div class="bg-blue-700 rounded-lg p-3">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="bg-blue-50 rounded-lg p-3">
+                            <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                             </svg>
                         </div>
                     </div>
                 </div>
 
-                <div class="stat-card bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                <div class="border border-gray-200 rounded-sm p-6 hover:shadow-md transition-shadow">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-green-700 text-sm font-medium">Pengurus Aktif</p>
-                            <p class="mt-2 text-3xl sm:text-4xl font-bold text-green-900">{{ number_format($profilOrmada->pengurus_count) }}</p>
+                            <p class="text-gray-600 text-xs font-medium uppercase tracking-wider">Pengurus Aktif</p>
+                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($profilOrmada->pengurus_count) }}</p>
                         </div>
-                        <div class="bg-green-700 rounded-lg p-3">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <svg class="w-6 h-6 text-green-700" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                     </div>
                 </div>
 
-                <div class="stat-card bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200">
+                <div class="border border-gray-200 rounded-sm p-6 hover:shadow-md transition-shadow">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-indigo-700 text-sm font-medium">Mahasiswa</p>
-                            <p class="mt-2 text-3xl sm:text-4xl font-bold text-indigo-900">{{ number_format($profilOrmada->anggota_count - $profilOrmada->pengurus_count) }}</p>
+                            <p class="text-gray-600 text-xs font-medium uppercase tracking-wider">Mahasiswa</p>
+                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($profilOrmada->anggota_count - $profilOrmada->pengurus_count) }}</p>
                         </div>
-                        <div class="bg-indigo-700 rounded-lg p-3">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="bg-indigo-50 rounded-lg p-3">
+                            <svg class="w-6 h-6 text-indigo-700" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                             </svg>
                         </div>
@@ -98,17 +98,17 @@
     </section>
 
     <!-- Deskripsi -->
-    <section class="bg-gray-50 py-12 sm:py-16">
+    <section class="bg-gray-50 py-12">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 shadow-sm">
-                <h3 class="text-2xl font-bold text-gray-900 mb-4">Tentang Ormada</h3>
+            <div class="border border-gray-200 rounded-sm p-6 sm:p-8 hover:shadow-md transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Tentang Ormada</h3>
                 <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $profilOrmada->deskripsi ?: 'Belum ada deskripsi profil untuk ormada ini.' }}</p>
             </div>
         </div>
     </section>
 
     <!-- Anggota Terbaru -->
-    <section class="bg-white py-12 sm:py-16">
+    <section class="bg-white py-12">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h3 class="text-3xl sm:text-4xl font-bold text-gray-900">Anggota Terbaru</h3>
