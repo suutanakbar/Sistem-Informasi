@@ -18,6 +18,11 @@
         <input type="file" name="logo" accept="image/*" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
     </label>
     <label class="block md:col-span-2">
+        <span class="text-sm font-medium text-zinc-700">Gambar Hover (Universitas)</span>
+        <input type="file" name="hover_image" accept="image/*" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">
+        <p class="mt-1 text-xs text-gray-500">Gambar ini akan muncul saat mouse dihover di halaman publik</p>
+    </label>
+    <label class="block md:col-span-2">
         <span class="text-sm font-medium text-zinc-700">Deskripsi</span>
         <textarea name="deskripsi" rows="5" class="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2">{{ old('deskripsi', $profilOrmada?->deskripsi) }}</textarea>
     </label>

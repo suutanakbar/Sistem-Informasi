@@ -71,6 +71,10 @@ class ProfilOrmadaController extends Controller
             $validated['logo'] = $request->file('logo')->store('profil-ormada/logo', 'public');
         }
 
+        if ($request->hasFile('hover_image')) {
+            $validated['hover_image'] = $request->file('hover_image')->store('profil-ormada/hover', 'public');
+        }
+
         $profilOrmada = ProfilOrmada::create($validated);
 
         return redirect()
@@ -142,6 +146,14 @@ class ProfilOrmadaController extends Controller
             $validated['logo'] = $request->file('logo')->store('profil-ormada/logo', 'public');
         }
 
+        if ($request->hasFile('hover_image')) {
+            if ($profilOrmada->hover_image) {
+                Storage::disk('public')->delete($profilOrmada->hover_image);
+            }
+
+            $validated['hover_image'] = $request->file('hover_image')->store('profil-ormada/hover', 'public');
+        }
+
         $profilOrmada->update($validated);
 
         return redirect()
@@ -156,6 +168,7 @@ class ProfilOrmadaController extends Controller
             'alamat_universitas' => ['required', 'string', 'max:255'],
             'total_mahasiswa_univ' => ['nullable', 'integer', 'min:0'],
             'logo' => ['nullable', 'image', 'max:2048'],
+            'hover_image' => ['nullable', 'image', 'max:2048'],
             'deskripsi' => ['nullable', 'string'],
         ]);
     }

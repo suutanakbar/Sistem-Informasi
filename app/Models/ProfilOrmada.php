@@ -23,6 +23,7 @@ class ProfilOrmada extends Model
         'alamat_universitas',
         'total_mahasiswa_univ',
         'logo',
+        'hover_image',
         'deskripsi',
     ];
 

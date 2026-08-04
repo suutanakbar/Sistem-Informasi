@@ -16,51 +16,57 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-16">
-                <?php $__currentLoopData = $profilOrmadas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $profil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
-                    <a href="<?php echo e(route('public.ormada.show', $profil)); ?>" class="block">
-                        <?php if($profil->logo): ?>
-                        <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
-                            <img src="<?php echo e(asset('storage/' . $profil->logo)); ?>" alt="<?php echo e($profil->nama_universitas); ?>" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
-                        </div>
-                        <?php endif; ?>
-                        <div class="p-4">
-                            <!-- Badges -->
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
+            <div class="border-b border-gray-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 divide-x divide-y divide-gray-200">
+                    <?php $__currentLoopData = $profilOrmadas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $profil): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <article class="group">
+                        <a href="<?php echo e(route('public.ormada.show', $profil)); ?>" class="block p-6">
+
+                            <!-- Meta atas -->
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-[10px] font-bold uppercase tracking-[2px] text-gray-500">
+                                    <?php echo e($profil->created_at?->translatedFormat('d. F Y') ?? '—'); ?>
+
+                                </span>
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider border border-gray-300 text-gray-700">
                                     Ormada
                                 </span>
                             </div>
 
+                            <!-- Logo -->
+                            <?php if($profil->logo || $profil->hover_image): ?>
+                            <div class="w-full aspect-[4/3] mb-4 bg-gray-100 overflow-hidden relative">
+                                <?php if($profil->logo): ?>
+                                <img src="<?php echo e(asset('storage/' . $profil->logo)); ?>" alt="<?php echo e($profil->nama_universitas); ?>" class="w-full h-full object-contain transition-all duration-500 group-hover:opacity-0">
+                                <?php endif; ?>
+                                <?php if($profil->hover_image): ?>
+                                <img src="<?php echo e(asset('storage/' . $profil->hover_image)); ?>" alt="<?php echo e($profil->nama_universitas); ?> - Universitas" class="absolute inset-0 w-full h-full object-contain p-4 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+
                             <!-- Title -->
-                            <h3 class="text-base font-black leading-tight mb-2 group-hover:text-blue-700 transition" style="font-family:'Playfair Display',serif;">
+                            <h3 class="text-lg font-black uppercase leading-tight tracking-tight mb-2 group-hover:text-blue-700 transition">
                                 <?php echo e($profil->nama_universitas); ?>
 
                             </h3>
 
                             <!-- Summary -->
-                            <p class="text-gray-600 leading-5 text-xs mb-3 line-clamp-3">
+                            <p class="text-xs text-gray-600 leading-5 mb-4 line-clamp-3">
                                 <?php echo e(\Illuminate\Support\Str::limit(strip_tags($profil->deskripsi), 150)); ?>
 
                             </p>
 
                             <!-- Stats -->
-                            <div class="flex items-center gap-4 text-[10px] text-gray-500 mb-2">
-                                <span>👥 <?php echo e(number_format($profil->anggota_count)); ?> Anggota</span>
-                                <span>⭐ <?php echo e(number_format($profil->pengurus_count)); ?> Pengurus</span>
+                            <div class="flex items-center gap-5 text-[10px] uppercase tracking-wider text-gray-500 pt-4 border-t border-gray-200">
+                                <span><span class="font-bold text-gray-800">Anggota</span> <?php echo e(number_format($profil->anggota_count)); ?></span>
+                                <span><span class="font-bold text-gray-800">Pengurus</span> <?php echo e(number_format($profil->pengurus_count)); ?></span>
                             </div>
 
-                            <!-- Footer -->
-                            <div class="mt-3 pt-2 border-t border-gray-200">
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                    Lihat Profil →
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </a>
+                    </article>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
             </div>
 
             <div class="mt-8">
@@ -70,5 +76,4 @@
         </div>
     </section>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.public', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\magang\resources\views/public/ormada.blade.php ENDPATH**/ ?>
