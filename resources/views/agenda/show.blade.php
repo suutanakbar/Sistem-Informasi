@@ -179,9 +179,9 @@
                             <tr>
                                 <td class="px-5 py-3 font-medium">{{ $volunteer->nama }}</td>
                                 <td class="px-5 py-3">{{ $volunteer->email }}</td>
-                                <td class="px-5 py-3">{{ $volunteer->no_telepon }}</td>
+                                <td class="px-5 py-3">{{ $volunteer->no_hp }}</td>
                                 <td class="px-5 py-3">
-                                    @if($volunteer->status === 'menunggu')
+                                @if($volunteer->status === 'pending')
                                         <span class="inline-flex rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">Menunggu</span>
                                     @elseif($volunteer->status === 'diterima')
                                         <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">Diterima</span>

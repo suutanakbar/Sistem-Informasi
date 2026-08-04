@@ -26,11 +26,11 @@ class VolunteerController extends Controller
             });
         }
 
-        $volunteers = $query->latest('dibuat_pada')->get();
+        $volunteers = $query->latest('dibuat_pada')->paginate(10);
 
-        $layout = $user->isPemda() ? 'layouts.pemda' : 'layouts.admin';
+        $view = $user->isPemda() ? 'volunteer.index-pemda' : 'volunteer.index-admin';
 
-        return view('volunteer.index', compact('volunteers', 'layout'));
+        return view($view, compact('volunteers'));
     }
 
     public function updateStatus(Request $request, Volunteer $volunteer): RedirectResponse
@@ -41,7 +41,7 @@ class VolunteerController extends Controller
         abort_unless($user->isPemda() || $user->isAdmin(), 403);
 
         $validated = $request->validate([
-            'status' => ['required', 'in:diterima,ditolak'],
+            'status' => ['required', 'in:diterima,ditolak,pending'],
             'catatan_penolakan' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -49,25 +49,15 @@ class VolunteerController extends Controller
         if (!$volunteer->canTransitionTo($validated['status'])) {
             $currentStatus = $volunteer->status;
             
-            if (in_array($currentStatus, [Volunteer::STATUS_DITERIMA, Volunteer::STATUS_DITOLAK])) {
-                return redirect()->route('volunteer.index')
-                    ->with('error', "Volunteer dengan status '{$currentStatus}' adalah final dan tidak dapat diubah.");
-            }
-            
-            return redirect()->route('volunteer.index')
+            return back()
                 ->with('error', "Transisi status dari '{$currentStatus}' ke '{$validated['status']}' tidak diizinkan.");
         }
 
-        // Gunakan transaction dengan locking untuk mencegah race condition saat update status
+        // Gunakan transaction dengan locking untuk mencegah race condition
         try {
             \Illuminate\Support\Facades\DB::transaction(function () use ($volunteer, $validated) {
                 // Lock row volunteer untuk mencegah race condition
                 $lockedVolunteer = Volunteer::where('id', $volunteer->id)->lockForUpdate()->first();
-                
-                // Jika status sudah final, tidak bisa diubah lagi
-                if ($lockedVolunteer->status !== 'pending') {
-                    throw new \RuntimeException('Status volunteer sudah final dan tidak dapat diubah.');
-                }
 
                 // Jika akan diterima, cek kuota terlebih dahulu
                 if ($validated['status'] === 'diterima') {
@@ -85,15 +75,45 @@ class VolunteerController extends Controller
 
                 $lockedVolunteer->update([
                     'status' => $validated['status'],
-                    'catatan_penolakan' => $validated['status'] === 'ditolak' ? $validated['catatan_penolakan'] : null,
+                    'catatan_penolakan' => $validated['status'] === 'ditolak' ? ($validated['catatan_penolakan'] ?? null) : null,
                 ]);
             });
         } catch (\RuntimeException $e) {
-            return redirect()->route('volunteer.index')
+            return back()
                 ->with('error', $e->getMessage());
         }
 
-        return redirect()->route('volunteer.index')
+        return back()
             ->with('status', 'Status volunteer berhasil diperbarui.');
+    }
+
+    public function edit(Request $request, Volunteer $volunteer): View
+    {
+        $user = $request->user();
+        
+        // Hanya Pemda atau Admin yang bisa edit
+        abort_unless($user->isPemda() || $user->isAdmin(), 403);
+
+        return view('volunteer.edit', compact('volunteer'));
+    }
+
+    public function update(Request $request, Volunteer $volunteer): RedirectResponse
+    {
+        $user = $request->user();
+        
+        // Hanya Pemda atau Admin yang bisa update
+        abort_unless($user->isPemda() || $user->isAdmin(), 403);
+
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'no_hp' => ['required', 'string', 'max:20'],
+            'alasan' => ['nullable', 'string'],
+        ]);
+
+        $volunteer->update($validated);
+
+        return redirect()->route('volunteer.index')
+            ->with('status', 'Data volunteer berhasil diperbarui.');
     }
 }

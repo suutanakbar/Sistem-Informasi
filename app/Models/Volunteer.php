@@ -53,16 +53,13 @@ class Volunteer extends Model
 
     public const ALLOWED_TRANSITIONS = [
         self::STATUS_PENDING => [self::STATUS_DITERIMA, self::STATUS_DITOLAK],
+        self::STATUS_DITERIMA => [self::STATUS_DITOLAK, self::STATUS_PENDING],
+        self::STATUS_DITOLAK => [self::STATUS_DITERIMA, self::STATUS_PENDING],
     ];
 
     public function canTransitionTo(string $newStatus): bool
     {
         $currentStatus = $this->status;
-        
-        // Final states cannot be changed
-        if (in_array($currentStatus, [self::STATUS_DITERIMA, self::STATUS_DITOLAK])) {
-            return false;
-        }
         
         // Check if transition is allowed
         if (!isset(self::ALLOWED_TRANSITIONS[$currentStatus])) {

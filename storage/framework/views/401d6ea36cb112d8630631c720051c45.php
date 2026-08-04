@@ -124,6 +124,14 @@
             </div>
         </div>
 
+        <?php if($agenda->kuota_volunteer): ?>
+        <div class="mt-4">
+            <a href="<?php echo e(route('volunteer.index')); ?>" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                Kelola Volunteer
+            </a>
+        </div>
+        <?php endif; ?>
+
         <?php if(!$agenda->is_published): ?>
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <p class="text-sm text-yellow-800 mb-3">Agenda ini masih dalam status draft.</p>
@@ -172,6 +180,7 @@
                             <th class="px-5 py-3">Email</th>
                             <th class="px-5 py-3">No. Telepon</th>
                             <th class="px-5 py-3">Status</th>
+                            <th class="px-5 py-3">Alasan</th>
                             <th class="px-5 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -180,9 +189,9 @@
                             <tr>
                                 <td class="px-5 py-3 font-medium"><?php echo e($volunteer->nama); ?></td>
                                 <td class="px-5 py-3"><?php echo e($volunteer->email); ?></td>
-                                <td class="px-5 py-3"><?php echo e($volunteer->no_telepon); ?></td>
+                                <td class="px-5 py-3"><?php echo e($volunteer->no_hp); ?></td>
                                 <td class="px-5 py-3">
-                                    <?php if($volunteer->status === 'menunggu'): ?>
+                                    <?php if($volunteer->status === 'pending'): ?>
                                         <span class="inline-flex rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">Menunggu</span>
                                     <?php elseif($volunteer->status === 'diterima'): ?>
                                         <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">Diterima</span>
@@ -190,8 +199,17 @@
                                         <span class="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-800">Ditolak</span>
                                     <?php endif; ?>
                                 </td>
+                                <td class="px-5 py-3 text-sm text-gray-900">
+                                    <?php if($volunteer->status === 'ditolak'): ?>
+                                        <?php echo e($volunteer->catatan_penolakan ?? '-'); ?>
+
+                                    <?php else: ?>
+                                        <?php echo e($volunteer->alasan ?? '-'); ?>
+
+                                    <?php endif; ?>
+                                </td>
                                 <td class="px-5 py-3 text-right text-sm font-medium">
-                                    <?php if($volunteer->status === 'menunggu'): ?>
+                                    <?php if($volunteer->status === 'pending'): ?>
                                         <form action="<?php echo e(route('volunteer.update-status', $volunteer)); ?>" method="POST" class="inline-block" onsubmit="return confirm('Terima volunteer ini?')">
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('PATCH'); ?>
@@ -204,14 +222,38 @@
                                             <input type="hidden" name="status" value="ditolak">
                                             <button type="submit" class="text-red-600 hover:text-red-900">Tolak</button>
                                         </form>
-                                    <?php else: ?>
-                                        <span class="text-zinc-400">-</span>
+                                    <?php elseif($volunteer->status === 'diterima'): ?>
+                                        <form action="<?php echo e(route('volunteer.update-status', $volunteer)); ?>" method="POST" class="inline-block" onsubmit="return confirm('Tolak volunteer ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('PATCH'); ?>
+                                            <input type="hidden" name="status" value="ditolak">
+                                            <button type="submit" class="text-red-600 hover:text-red-900">Tolak</button>
+                                        </form>
+                                        <form action="<?php echo e(route('volunteer.update-status', $volunteer)); ?>" method="POST" class="inline-block ml-2" onsubmit="return confirm('Batalkan penerimaan volunteer ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('PATCH'); ?>
+                                            <input type="hidden" name="status" value="pending">
+                                            <button type="submit" class="text-yellow-600 hover:text-yellow-900">Batalkan</button>
+                                        </form>
+                                    <?php elseif($volunteer->status === 'ditolak'): ?>
+                                        <form action="<?php echo e(route('volunteer.update-status', $volunteer)); ?>" method="POST" class="inline-block" onsubmit="return confirm('Terima volunteer ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('PATCH'); ?>
+                                            <input type="hidden" name="status" value="diterima">
+                                            <button type="submit" class="text-green-600 hover:text-green-900">Terima</button>
+                                        </form>
+                                        <form action="<?php echo e(route('volunteer.update-status', $volunteer)); ?>" method="POST" class="inline-block ml-2" onsubmit="return confirm('Batalkan penolakan volunteer ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('PATCH'); ?>
+                                            <input type="hidden" name="status" value="pending">
+                                            <button type="submit" class="text-yellow-600 hover:text-yellow-900">Batalkan</button>
+                                        </form>
                                     <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
-                                <td colspan="5" class="px-5 py-6 text-center text-zinc-500">
+                                <td colspan="6" class="px-5 py-6 text-center text-zinc-500">
                                     Belum ada pendaftar volunteer.
                                 </td>
                             </tr>

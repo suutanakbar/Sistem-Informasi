@@ -74,6 +74,10 @@ Route::middleware('auth')->group(function () {
         
         Route::get('/volunteer', [VolunteerController::class, 'index'])
             ->name('volunteer.index');
+        Route::get('/volunteer/{volunteer}/edit', [VolunteerController::class, 'edit'])
+            ->name('volunteer.edit');
+        Route::put('/volunteer/{volunteer}', [VolunteerController::class, 'update'])
+            ->name('volunteer.update');
         Route::patch('/volunteer/{volunteer}/status', [VolunteerController::class, 'updateStatus'])
             ->name('volunteer.update-status');
         

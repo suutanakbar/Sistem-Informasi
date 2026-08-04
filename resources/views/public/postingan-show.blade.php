@@ -69,11 +69,6 @@
                         <span class="font-bold uppercase tracking-wider">• {{ $postingan->admin->nama }}</span>
                     </div>
 
-                    <!-- Summary/Excerpt -->
-                    <div class="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 pb-6 border-b border-gray-200">
-                        {{ Str::limit(strip_tags($postingan->isi_konten), 300) }}
-                    </div>
-
                     <!-- Full Content -->
                     <div class="text-gray-700 whitespace-pre-line leading-relaxed text-sm sm:text-base">
                         {{ $postingan->isi_konten }}
