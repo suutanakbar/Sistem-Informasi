@@ -1,42 +1,42 @@
 
 <?php $__env->startSection('title', 'Berita - SI Ormada Temanggung'); ?>
 <?php $__env->startSection('content'); ?>
-    <section class="bg-white">
-        <div class="max-w-7xl mx-auto px-4">
+    <section class="bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 pb-16">
 
-            <div class="border-t border-b border-gray-300 py-8 mb-12">
+            <div class="border-t border-b border-gray-300 py-8 mb-10 bg-white -mx-4 px-4">
                 <div class="flex items-start justify-between">
                     <div>
                         <div class="text-[10px] font-bold uppercase tracking-[3px] text-gray-500 mb-2">EDISI 005 / 2026</div>
-                        <h1 class="text-4xl lg:text-5xl font-black uppercase" style="font-family:'Playfair Display',serif;">Berita</h1>
+                        <h1 class="text-4xl lg:text-5xl font-black uppercase pb-4 border-b border-gray-300" style="font-family:'Playfair Display',serif;">Berita</h1>
                     </div>
-                    <p class="hidden lg:block text-sm text-gray-600 max-w-sm text-right">
+                    <p class="hidden lg:block text-sm text-gray-600 max-w-sm text-right pt-1">
                         Kumpulan berita terbaru seputar kegiatan ormada, prestasi mahasiswa, dan informasi terkini.
                     </p>
                 </div>
             </div>
 
             <?php if($postingans->isNotEmpty()): ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-16">
+            <div class="columns-1 md:columns-2 xl:columns-3 gap-6">
                 <?php $__currentLoopData = $postingans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $postingan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
+                <article class="break-inside-avoid mb-6 bg-white border border-gray-200 group">
                     <a href="<?php echo e(route('public.postingan.show', $postingan)); ?>" class="block">
                         <?php if($postingan->foto): ?>
-                        <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
-                            <img src="<?php echo e(storage_url($postingan->foto)); ?>" alt="<?php echo e($postingan->judul); ?>" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
+                        <div class="w-full overflow-hidden">
+                            <img src="<?php echo e(storage_url($postingan->foto)); ?>" alt="<?php echo e($postingan->judul); ?>" class="w-full h-auto object-cover transition duration-500 group-hover:opacity-90">
                         </div>
                         <?php endif; ?>
                         <div class="p-4">
                             <!-- Badges -->
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700">
                                     <?php echo e(ucfirst($postingan->jenis_konten ?? $postingan->jenis)); ?>
 
                                 </span>
                                 <?php if($postingan->is_published): ?>
-                                <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Published</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-green-700">Published</span>
                                 <?php else: ?>
-                                <span class="px-2 py-1 text-[10px] font-medium bg-yellow-100 text-yellow-800 rounded-full">Draft</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-yellow-700">Draft</span>
                                 <?php endif; ?>
                             </div>
 
@@ -47,7 +47,7 @@
                             </h3>
 
                             <!-- Summary -->
-                            <p class="text-gray-600 leading-5 text-xs mb-3 line-clamp-3">
+                            <p class="text-gray-600 leading-5 text-xs mb-3">
                                 <?php echo e(\Illuminate\Support\Str::limit(strip_tags($postingan->isi_konten), 150)); ?>
 
                             </p>
@@ -62,15 +62,15 @@
                             </div>
 
                             <!-- Author -->
-                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">
                                 <?php echo e($postingan->admin->nama ?? 'Admin'); ?>
 
                             </div>
 
                             <!-- Footer -->
-                            <div class="mt-3 pt-2 border-t border-gray-200">
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                    Detail →
+                            <div class="pt-3 border-t border-gray-200">
+                                <span class="inline-flex items-center px-4 py-1.5 border border-gray-900 rounded-full text-[10px] font-bold uppercase tracking-wider text-gray-900 group-hover:bg-gray-900 group-hover:text-white transition">
+                                    Detail
                                 </span>
                             </div>
                         </div>
