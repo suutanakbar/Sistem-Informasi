@@ -16,69 +16,157 @@
                 </div>
             </div>
 
-            @if($agendas->isNotEmpty())
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-16">
-                @foreach($agendas as $agenda)
-                <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
-                    <a href="{{ route('public.agenda.show', $agenda) }}" class="block">
-                        @if($agenda->gambar_poster)
-                        <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
-                            <img src="{{ asset('storage/' . $agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
-                        </div>
-                        @endif
-                        <div class="p-4">
-                            <!-- Badges -->
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
-                                    {{ str_replace('_', ' ', $agenda->kategori) }}
-                                </span>
-                                @if($agenda->kuota_volunteer)
-                                <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Volunteer</span>
-                                @endif
-                            </div>
+            {{-- Tab Mendatang/Arsip + List/Calendar Toggle --}}
+            <div class="flex justify-between items-center mb-6">
+                {{-- Tabs --}}
+                <div class="flex gap-2">
+                    <a href="{{ route('public.agenda', ['tab' => 'mendatang']) }}" 
+                       class="px-4 py-2 text-sm font-bold {{ $currentTab === 'mendatang' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        Mendatang
+                    </a>
+                    <a href="{{ route('public.agenda', ['tab' => 'arsip']) }}" 
+                       class="px-4 py-2 text-sm font-bold {{ $currentTab === 'arsip' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        Arsip
+                    </a>
+                </div>
 
-                            <!-- Title -->
-                            <h3 class="text-base font-black leading-tight mb-2 group-hover:text-blue-700 transition" style="font-family:'Playfair Display',serif;">
-                                {{ $agenda->nama_agenda }}
-                            </h3>
+                {{-- List/Calendar Toggle --}}
+                @if($currentTab === 'mendatang')
+                <div class="flex gap-2">
+                    <button id="btn-list" class="px-4 py-2 text-sm font-bold bg-gray-900 text-white">List</button>
+                    <button id="btn-calendar" class="px-4 py-2 text-sm font-bold bg-gray-200 text-gray-700">Calendar</button>
+                </div>
+                @endif
+            </div>
 
-                            <!-- Summary -->
-                            <p class="text-gray-600 leading-5 text-xs mb-3 line-clamp-3">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($agenda->deskripsi_agenda), 150) }}
-                            </p>
-
-                            <!-- Time & Place -->
-                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-                                📍 {{ $agenda->tempat }}
-                            </div>
-
-                            <!-- Date -->
-                            <div class="flex items-center gap-1 text-[10px] text-gray-500 mb-2 uppercase tracking-widest">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                {{ $agenda->waktu_mulai->format('d M Y H:i') }} WIB
-                            </div>
-
-                            @if($agenda->kuota_volunteer)
-                            <div class="text-[10px] text-gray-500 mb-2">
-                                Kuota: {{ $agenda->kuota_volunteer }} volunteers
+            {{-- List View --}}
+            <div id="list-view">
+                @if($agendas->isNotEmpty())
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-16">
+                    @foreach($agendas as $agenda)
+                    <article class="group bg-white border border-gray-200 rounded-sm hover:shadow-md transition-shadow">
+                        <a href="{{ route('public.agenda.show', $agenda) }}" class="block">
+                            @if($agenda->gambar_poster)
+                            <div class="w-full p-4 bg-gray-100 flex items-center justify-center">
+                                <img src="{{ asset('storage/' . $agenda->gambar_poster) }}" alt="{{ $agenda->nama_agenda }}" class="w-full h-auto object-contain object-center transition duration-500 group-hover:scale-105">
                             </div>
                             @endif
+                            <div class="p-4">
+                                <!-- Badges -->
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="px-2 py-1 text-[10px] font-medium bg-blue-100 text-blue-800 rounded-full uppercase tracking-widest">
+                                        {{ str_replace('_', ' ', $agenda->kategori) }}
+                                    </span>
+                                    @if($agenda->kuota_volunteer)
+                                    <span class="px-2 py-1 text-[10px] font-medium bg-green-100 text-green-800 rounded-full">Volunteer</span>
+                                    @endif
+                                </div>
 
-                            <!-- Footer -->
-                            <div class="mt-3 pt-2 border-t border-gray-200">
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
-                                    Detail →
-                                </span>
+                                <!-- Title -->
+                                <h3 class="text-base font-black leading-tight mb-2 group-hover:text-blue-700 transition" style="font-family:'Playfair Display',serif;">
+                                    {{ $agenda->nama_agenda }}
+                                </h3>
+
+                                <!-- Summary -->
+                                <p class="text-gray-600 leading-5 text-xs mb-3 line-clamp-3">
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($agenda->deskripsi_agenda), 150) }}
+                                </p>
+
+                                <!-- Time & Place -->
+                                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                    📍 {{ $agenda->tempat }}
+                                </div>
+
+                                <!-- Date -->
+                                <div class="flex items-center gap-1 text-[10px] text-gray-500 mb-2 uppercase tracking-widest">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ $agenda->waktu_mulai->format('d M Y H:i') }} WIB
+                                </div>
+
+                                @if($agenda->kuota_volunteer)
+                                <div class="text-[10px] text-gray-500 mb-2">
+                                    Kuota: {{ $agenda->kuota_volunteer }} volunteers
+                                </div>
+                                @endif
+
+                                <!-- Footer -->
+                                <div class="mt-3 pt-2 border-t border-gray-200">
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 group-hover:text-blue-800 transition">
+                                        Detail →
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </article>
-                @endforeach
+                        </a>
+                    </article>
+                    @endforeach
+                </div>
+                @endif
             </div>
-            @endif
+
+            {{-- Calendar View --}}
+            <div id="calendar-view" class="hidden pb-16">
+                <div id="calendar"></div>
+            </div>
 
         </div>
     </section>
+
+    @push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const listView = document.getElementById('list-view');
+        const calendarView = document.getElementById('calendar-view');
+        const btnList = document.getElementById('btn-list');
+        const btnCalendar = document.getElementById('btn-calendar');
+        
+        let calendar = null;
+        
+        // Toggle List View
+        btnList.addEventListener('click', function() {
+            listView.classList.remove('hidden');
+            calendarView.classList.add('hidden');
+            btnList.classList.add('bg-gray-900', 'text-white');
+            btnList.classList.remove('bg-gray-200', 'text-gray-700');
+            btnCalendar.classList.add('bg-gray-200', 'text-gray-700');
+            btnCalendar.classList.remove('bg-gray-900', 'text-white');
+        });
+        
+        // Toggle Calendar View
+        btnCalendar.addEventListener('click', function() {
+            listView.classList.add('hidden');
+            calendarView.classList.remove('hidden');
+            btnCalendar.classList.add('bg-gray-900', 'text-white');
+            btnCalendar.classList.remove('bg-gray-200', 'text-gray-700');
+            btnList.classList.add('bg-gray-200', 'text-gray-700');
+            btnList.classList.remove('bg-gray-900', 'text-white');
+            
+            // Initialize calendar on first click
+            if (!calendar) {
+                calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+                    initialView: 'dayGridMonth',
+                    events: '{{ route("public.agenda.calendar") }}',
+                    eventClick: function(info) {
+                        // Skip deadline events (background events)
+                        if (info.event.extendedProps.type === 'deadline') {
+                            return;
+                        }
+                        // Navigate to agenda detail page using event URL
+                        if (info.event.url) {
+                            window.location.href = info.event.url;
+                        }
+                    },
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    }
+                });
+                calendar.render();
+            }
+        });
+    });
+    </script>
+    @endpush
 @endsection

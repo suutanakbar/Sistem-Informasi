@@ -211,13 +211,20 @@ class PublicDashboardController extends Controller
     public function agenda(Request $request): View
     {
         $agendaIndex = $request->get('agenda_index', 0);
+        $tab = $request->query('tab', 'mendatang');
         
-        $agendas = Agenda::query()
-            ->with('admin')
-            ->published()
-            ->upcoming()
-            ->limit(12)
-            ->get();
+        $query = Agenda::query()->with('admin')->published();
+
+        if ($tab === 'arsip') {
+            // Show past agendas (archive)
+            $query->where('waktu_mulai', '<', now())
+                  ->orderByDesc('waktu_mulai');
+        } else {
+            // Show upcoming agendas (default)
+            $query->upcoming();
+        }
+
+        $agendas = $query->limit(12)->get();
 
         if ($agendaIndex >= $agendas->count()) {
             $agendaIndex = 0;
@@ -243,6 +250,7 @@ class PublicDashboardController extends Controller
             'agendas' => $agendas,
             'agendaIndex' => $agendaIndex,
             'agendasData' => $agendasData,
+            'currentTab' => $tab,
         ]);
     }
 
@@ -250,8 +258,8 @@ class PublicDashboardController extends Controller
     {
         abort_if(!$agenda->is_published, 404);
         
-        // Block access to past agendas
-        if ($agenda->waktu_mulai < now()) {
+        // Block access to agendas that have ended
+        if ($agenda->waktu_selesai && $agenda->waktu_selesai < now()) {
             abort(404);
         }
 
@@ -298,14 +306,14 @@ class PublicDashboardController extends Controller
                 'title' => $agenda->nama_agenda,
                 'start' => $agenda->waktu_mulai->toIso8601String(),
                 'end' => $agenda->waktu_selesai ? $agenda->waktu_selesai->toIso8601String() : null,
+                'url' => route('public.agenda.show', $agenda),
                 'backgroundColor' => $this->getCategoryColor($agenda->kategori),
                 'borderColor' => $this->getCategoryColor($agenda->kategori),
                 'extendedProps' => [
+                    'type' => 'acara',
                     'kategori' => $agenda->kategori,
                     'tempat' => $agenda->tempat,
                     'deskripsi' => $agenda->deskripsi_agenda,
-                    'detail_url' => route('public.agenda.show', $agenda),
-                    'type' => 'acara',
                     'foto' => $agenda->gambar_poster ? asset('storage/' . $agenda->gambar_poster) : null,
                 ],
             ];
