@@ -4,12 +4,13 @@
 
 | Atribut | Nilai |
 |---|---|
-| Versi | 1.0 |
+| Versi | 2.2 |
 | Status | Dokumentasi testing terbaru |
-| Terakhir diperbarui | 28 Juli 2026 |
-| Sumber acuan | Implementasi commit 8f93c5f |
-| Framework Testing | PHPUnit 10.x + Laravel Testing |
+| Terakhir diperbarui | 5 Agustus 2026 |
+| Sumber acuan | Implementasi commit ce61f8e |
+| Framework Testing | PHPUnit 11.5.50 + Laravel 12 Testing |
 | Coverage Target | 80% untuk fitur utama |
+| Current Test Files | 16 files (15 Feature + 1 Unit) |
 
 ## 1. Test Strategy
 
@@ -20,16 +21,18 @@ Memastikan kualitas sistem melalui automated testing untuk:
 - Data validation & integrity
 - File upload/download operations
 - Business logic edge cases
+- Security vulnerabilities (XSS, CSRF, SQL injection)
+- Rate limiting dan race conditions
 
 ### 1.2 Testing Pyramid
 ```
-        /\
-       /  \     E2E/Integration Tests (20%)
-      /____\
-     /      \   Feature Tests (50%)
-    /________\
-   /          \ Unit Tests (30%)
-  /____________\
+       /\
+      /  \     E2E/Integration Tests (20%)
+     /____\
+    /      \   Feature Tests (50%)
+   /________\
+  /          \ Unit Tests (30%)
+ /____________\
 ```
 
 ### 1.3 Jenis Test
@@ -39,16 +42,18 @@ Memastikan kualitas sistem melalui automated testing untuk:
 ## 2. Test Tools & Stack
 
 ### 2.1 Core Tools
-- **PHPUnit 10.x**: Framework testing PHP
-- **Laravel Test Case**: `Illuminate\Foundation\Testing\RefreshDatabase`
-- **Database**: SQLite memory (testing) atau MySQL dedicated test database
+- **PHPUnit 11.5.50**: Framework testing PHP (latest)
+- **Laravel 12 Test Case**: `Illuminate\Foundation\Testing\RefreshDatabase`
+- **Database**: SQLite in-memory (testing) atau MySQL dedicated test database
 - **File Uploads**: `Storage::fake()` untuk testing upload
+- **Laravel Pint**: Code style enforcement
 
 ### 2.2 Helpers & Traits
 ```php
 use RefreshDatabase;          // Reset database setiap test
 use WithFaker;                // Generate fake data
 use DatabaseTransactions;     // Rollback setelah test
+use Storage::fake();          // Fake file storage
 ```
 
 ## 3. Test Hierarchy
@@ -58,20 +63,35 @@ use DatabaseTransactions;     // Rollback setelah test
 tests/
 ├── Feature/
 │   ├── AdminLoginTest.php
-│   ├── AdminAkunTest.php
 │   ├── AgendaTest.php
+│   ├── AgendaUpcomingTest.php
 │   ├── AspirasiTest.php
-│   ├── ProfilOrmadaTest.php
-│   ├── AnggotaOrmadaTest.php
-│   ├── ProposalTest.php
+│   ├── ExampleTest.php
 │   ├── PostinganTest.php
+│   ├── PrivacyTest.php
+│   ├── ProposalTest.php
 │   ├── PublicDashboardTest.php
-│   ├── VolunteerTest.php
-│   └── AuthorizationTest.php
+│   ├── RateLimitTest.php
+│   ├── SessionSecurityTest.php
+│   ├── SoftDeleteTest.php
+│   ├── StateTransitionTest.php
+│   ├── ValidationTest.php
+│   ├── VolunteerRaceConditionTest.php
+│   └── [Future]:
+│       ├── Auth/
+│       ├── Admin/
+│       ├── Volunteer/
+│       ├── Content/
+│       ├── Api/
+│       ├── Security/
+│       └── E2E/
 ├── Unit/
-│   ├── HelperTest.php
-│   ├── PolicyTest.php
-│   └── ValidationTest.php
+│   ├── ExampleTest.php
+│   └── [Future]:
+│       ├── Models/
+│       ├── Services/
+│       ├── Policies/
+│       └── Helpers/
 ├── TestCase.php
 └── CreatesApplication.php
 ```
@@ -89,438 +109,186 @@ class TestCase extends BaseTestCase
 
 ### 4.1 Module Coverage
 
-| Modul | Feature Tests | Unit Tests | Priority | Target Coverage |
-|---|---|---|---|---|
-| **Authentication** | LoginTest, LogoutTest | PasswordHashTest | P0 | 100% |
-| **Authorization** | RoleAccessTest, PolicyTest | GateTest | P0 | 100% |
-| **Profil Ormada** | CRUDTest, ViewTest | - | P0 | 90% |
-| **Anggota Ormada** | CRUDTest, StatusTest, OwnerTest | - | P0 | 90% |
-| **Proposal** | CreateTest, StatusUpdateTest, FileUploadTest | - | P0 | 90% |
-| **Aspirasi** | CreateTest, TanggapanTest, PublicViewTest | - | P0 | 90% |
-| **Postingan** | CreateTest, PublishTest, DraftTest | - | P0 | 85% |
-| **Agenda** | CreateTest, PublishTest, KuotaTest | - | P0 | 90% |
-| **Volunteer** | DaftarTest, DuplicateTest, KuotaTest, StatusTest | - | P0 | 95% |
-| **Dashboard** | AdminTest, PemdaTest, PengurusTest | StatisticTest | P1 | 80% |
-| **Portal Publik** | ListTest, FilterTest, DetailTest | - | P1 | 80% |
+| Modul | Feature Tests | Unit Tests | Priority | Target Coverage | Current Status |
+|---|---|---|---|---|---|
+| **Authentication** | AdminLoginTest | - | P0 | 100% | ✅ 4 tests |
+| **Authorization** | PrivacyTest, SessionSecurityTest | - | P0 | 100% | ✅ Implemented |
+| **Profil Ormada** | - | - | P0 | 90% | ⚠️ Needs tests |
+| **Anggota Ormada** | - | - | P0 | 90% | ⚠️ Needs tests |
+| **Proposal** | ProposalTest | - | P0 | 90% | ✅ Implemented |
+| **Aspirasi** | AspirasiTest | - | P0 | 90% | ✅ Implemented |
+| **Postingan** | PostinganTest | - | P0 | 85% | ✅ Implemented |
+| **Agenda** | AgendaTest, AgendaUpcomingTest | - | P0 | 90% | ✅ Implemented |
+| **Volunteer** | VolunteerRaceConditionTest | - | P0 | 95% | ✅ Implemented |
+| **Dashboard** | PublicDashboardTest | - | P1 | 80% | ✅ Implemented |
+| **Validation** | ValidationTest | - | P0 | 90% | ✅ Implemented |
+| **State Transition** | StateTransitionTest | - | P1 | 85% | ✅ Implemented |
+| **Soft Delete** | SoftDeleteTest | - | P1 | 85% | ✅ Implemented |
+| **Rate Limiting** | RateLimitTest | - | P0 | 95% | ✅ Implemented |
 
 ### 4.2 Scenario Coverage
 
-| Scenario | Description | Type | Priority |
-|---|---|---|---|
-| Happy Path | User biasa melakukan aksi sesuai ekspektasi | Feature | P0 |
-| Validation Error | Input invalid, missing field, format salah | Feature | P0 |
-| Authorization Denied | User akses resource milik orang lain | Feature | P0 |
-| Guest Access | Tamu akses halaman yang butuh login | Feature | P0 |
-| Role-based Access | Test setiap role punya access sesuai matriks | Feature | P0 |
-| File Upload | Success, invalid type, exceed size | Feature | P0 |
-| Pagination | Kurang/page, lebih/page, edge case | Feature | P1 |
-| Soft Delete | Data removed tapi bisa di-restore | Feature | P1 |
-| Search & Filter | Query filter berfungsi | Feature | P1 |
+| Scenario | Description | Type | Priority | Status |
+|---|---|---|---|---|
+| Happy Path | User biasa melakukan aksi sesuai ekspektasi | Feature | P0 | ✅ Covered |
+| Validation Error | Input invalid, missing field, format salah | Feature | P0 | ✅ ValidationTest |
+| Authorization Denied | User akses resource milik orang lain | Feature | P0 | ✅ PrivacyTest |
+| Guest Access | Tamu akses halaman yang butuh login | Feature | P0 | ✅ SessionSecurityTest |
+| Role-based Access | Test setiap role punya access sesuai matriks | Feature | P0 | ✅ Multiple tests |
+| File Upload | Success, invalid type, exceed size | Feature | P0 | ⚠️ Partial |
+| Pagination | Kurang/page, lebih/page, edge case | Feature | P1 | ⚠️ Needs tests |
+| Soft Delete | Data removed tapi bisa di-restore | Feature | P1 | ✅ SoftDeleteTest |
+| Search & Filter | Query filter berfungsi | Feature | P1 | ⚠️ Needs tests |
+| Race Condition | Concurrent requests causing quota overflow | Feature | P0 | ✅ VolunteerRaceConditionTest |
+| State Transition | Valid/invalid status changes | Feature | P1 | ✅ StateTransitionTest |
+| Rate Limiting | Throttle enforcement | Feature | P0 | ✅ RateLimitTest |
 
-## 5. Test Cases Detail
+## 5. Existing Test Cases Analysis
 
-### 5.1 Authentication
+### 5.1 AdminLoginTest.php
+**Tests**: 4
+- ✅ test_admin_can_login_using_email_and_password
+- ✅ test_login_rejects_invalid_password
+- ✅ test_login_rehashes_old_password
+- ✅ test_admin_can_logout
 
-**File**: `tests/Feature/AdminLoginTest.php`
+**Coverage**: Authentication flow, password hashing, session management
 
-```php
-class AdminLoginTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    // Test 1: Login sukses
-    public function test_admin_can_login_using_email_and_password()
-    {
-        // Create user
-        $admin = Admin::create([...]);
-        
-        // Post login
-        $response = $this->post(route('login'), [
-            'email' => $admin->email,
-            'password' => 'password'
-        ]);
-        
-        // Assertions
-        $response->assertRedirect(route('dashboard'));
-        $this->assertAuthenticatedAs($admin);
-        $this->assertNotNull($admin->fresh()->terakhir_masuk);
-    }
-    
-    // Test 2: Invalid password
-    public function test_login_rejects_invalid_password()
-    {
-        // Create user
-        Admin::create([...]);
-        
-        // Post wrong password
-        $response = $this->from(route('login'))
-            ->post(route('login'), [
-                'email' => 'test@example.com',
-                'password' => 'wrong'
-            ]);
-        
-        // Assertions
-        $response->assertSessionHasErrors('email');
-        $this->assertGuest();
-    }
-    
-    // Test 3: Password rehash
-    public function test_login_rehashes_old_password()
-    {
-        // Create with old rounds
-        Hash::setRounds(10);
-        $admin = Admin::create(['password' => bcrypt('pass')]);
-        
-        // Set new rounds
-        Hash::setRounds(12);
-        
-        // Login
-        $this->post(route('login'), [...]);
+### 5.2 AgendaTest.php
+**Tests**: Multiple CRUD tests
+- ✅ Agenda creation, update, delete
+- ✅ Publish/unpublish workflow
+- ✅ Authorization checks
+- ✅ Calendar events API
 
-        // Assert rehashed
-        $this->assertTrue(Hash::needsRehash($admin->password));
-        $this->assertFalse(Hash::needsRehash($admin->fresh()->password));
-    }
-    
-    // Test 4: Logout
-    public function test_admin_can_logout()
-    {
-        $admin = Admin::create([...]);
-        $this->actingAs($admin)
-            ->post(route('logout'))
-            ->assertRedirect(route('login'));
-        $this->assertGuest();
-    }
-}
-```
+**Coverage**: Agenda management, publish workflow, authorization
 
-### 5.2 Authorization
+### 5.3 AgendaUpcomingTest.php
+**Tests**: Upcoming agenda logic
+- ✅ Filter upcoming agendas
+- ✅ Date validation
+- ✅ Public access to upcoming events
 
-**File**: `tests/Feature/AuthorizationTest.php`
+**Coverage**: Business logic for agenda display
 
-```php
-class AuthorizationTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    // Test: Pengurus tidak bisa akses dashboard Pemda
-    public function test_pengurus_cannot_access_pemda_dashboard()
-    {
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada', ...]);
-        $this->actingAs($pengurus)
-            ->get(route('pemda.dashboard'))
-            ->assertStatus(403);
-    }
-    
-    // Test: Pengurus tidak bisa edit proposal orang lain
-    public function test_pengurus_cannot_edit_others_proposal()
-    {
-        $owner = Admin::create(['peran' => 'pengurus_ormada']);
-        $other = Admin::create(['peran' => 'pengurus_ormada']);
-        $proposal = Proposal::create(['pengurus_id' => $owner->id, ...]);
-        
-        $this->actingAs($other)
-            ->put(route('pengurus.proposal.update', $proposal))
-            ->assertStatus(403);
-    }
-    
-    // Test: Guest bisa lihat postingan published
-    public function test_guest_can_view_published_postingan()
-    {
-        $postingan = Postingan::create(['status' => 'published', ...]);
-        $this->get(route('postingan.show', $postingan))
-            ->assertStatus(200);
-    }
-    
-    // Test: Guest tidak bisa create postingan
-    public function test_guest_cannot_create_postingan()
-    {
-        $this->get(route('pengurus.postingan.create'))
-            ->assertRedirect(route('login'));
-    }
-}
-```
+### 5.4 AspirasiTest.php
+**Tests**: Aspirasi management
+- ✅ Create aspirasi
+- ✅ View aspirasi (public & authenticated)
+- ✅ Authorization checks
+- ✅ Tanggapan workflow
 
-### 5.3 CRUD Operations
+**Coverage**: Aspirasi CRUD, response workflow, public access
 
-**File**: `tests/Feature/ProfilOrmadaTest.php`
+### 5.5 PostinganTest.php
+**Tests**: Postingan management
+- ✅ Create, edit, delete postingan
+- ✅ Draft/publish workflow
+- ✅ Filter by kategori
+- ✅ Authorization checks
 
-```php
-class ProfilOrmadaTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    // Create
-    public function test_pengurus_can_create_profil()
-    {
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada']);
-        $this->actingAs($pengurus)
-            ->post(route('pengurus.profil.store'), [
-                'nama_ormada' => 'Ormada A',
-                'alamat' => 'Jl. Test',
-                // ...
-            ])
-            ->assertRedirect();
-        
-        $this->assertDatabaseHas('profil_ormada', [
-            'pengurus_id' => $pengurus->id,
-            'nama_ormada' => 'Ormada A'
-        ]);
-    }
-    
-    // Unique constraint (one profil per pengurus)
-    public function test_pengurus_cannot_have_multiple_profil()
-    {
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada']);
-        ProfilOrmada::create(['pengurus_id' => $pengurus->id]);
-        
-        $this->actingAs($pengurus)
-            ->post(route('pengurus.profil.store'), [...])
-            ->assertSessionHasErrors();
-    }
-    
-    // Read (own)
-    public function test_pengurus_can_view_own_profil()
-    {
-        $profil = ProfilOrmada::factory()->create();
-        $this->actingAs($profil->pengurus)
-            ->get(route('pengurus.profil.show', $profil))
-            ->assertStatus(200);
-    }
-    
-    // Read (public)
-    public function test_guest_can_view_published_profil()
-    {
-        $profil = ProfilOrmada::factory()->create();
-        $this->get(route('ormada.show', $profil))
-            ->assertStatus(200);
-    }
-    
-    // Update (own)
-    public function test_pengurus_can_update_own_profil()
-    {
-        $profil = ProfilOrmada::factory()->create();
-        $this->actingAs($profil->pengurus)
-            ->put(route('pengurus.profil.update', $profil), [
-                'nama_ormada' => 'Updated Name'
-            ])
-            ->assertRedirect();
-        
-        $this->assertEquals('Updated Name', $profil->fresh()->nama_ormada);
-    }
-    
-    // Cannot update others
-    public function test_pengurus_cannot_update_others_profil()
-    {
-        $profil = ProfilOrmada::factory()->create();
-        $other = Admin::factory()->create(['peran' => 'pengurus_ormada']);
-        
-        $this->actingAs($other)
-            ->put(route('pengurus.profil.update', $profil), [...])
-            ->assertStatus(403);
-    }
-}
-```
+**Coverage**: Postingan CRUD, publish workflow, categorization
 
-### 5.4 File Upload
+### 5.6 ProposalTest.php
+**Tests**: Proposal management
+- ✅ Create proposal with file upload
+- ✅ Status updates (diajukan → diproses_pemda → dana_cair/ditolak)
+- ✅ Authorization (pengurus creates, pemda processes)
+- ✅ File validation (type, size)
 
-**File**: `tests/Feature/ProposalTest.php`
+**Coverage**: Proposal workflow, file upload, status transitions
 
-```php
-class ProposalTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    // Success upload
-    public function test_pengurus_can_upload_proposal_with_valid_document()
-    {
-        Storage::fake('documents');
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada']);
-        $pemda = Admin::create(['peran' => 'pemda']);
-        
-        $file = UploadedFile::fake()->create('proposal.pdf', 100);
-        
-        $this->actingAs($pengurus)
-            ->post(route('pengurus.proposal.store'), [
-                'pemda_tujuan_id' => $pemda->id,
-                'judul' => 'Proposal Bantuan',
-                'dokumen' => $file,
-                // ...
-            ])
-            ->assertRedirect();
-        
-        $this->assertDatabaseHas('proposal', [
-            'pengurus_id' => $pengurus->id,
-            'pemda_tujuan_id' => $pemda->id,
-        ]);
-        
-        Storage::disk('documents')->assertExists($file->hashName());
-    }
-    
-    // Invalid type
-    public function test_proposal_rejects_invalid_file_type()
-    {
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada']);
-        $file = UploadedFile::fake()->create('proposal.exe', 100);
-        
-        $this->actingAs($pengurus)
-            ->post(route('pengurus.proposal.store'), [
-                'dokumen' => $file,
-                // ...
-            ])
-            ->assertSessionHasErrors('dokumen');
-    }
-    
-    // Exceed size
-    public function test_proposal_rejects_file_exceeds_max_size()
-    {
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada']);
-        $file = UploadedFile::fake()->create('proposal.pdf', 6000); // 6MB
-        
-        $this->actingAs($pengurus)
-            ->post(route('pengurus.proposal.store'), [
-                'dokumen' => $file,
-                // ...
-            ])
-            ->assertSessionHasErrors('dokumen');
-    }
-    
-    // Status workflow
-    public function test_pemda_can_update_proposal_status()
-    {
-        $pengurus = Admin::create(['peran' => 'pengurus_ormada']);
-        $pemda = Admin::create(['peran' => 'pemda']);
-        $proposal = Proposal::create([
-            'pengurus_id' => $pengurus->id,
-            'pemda_tujuan_id' => $pemda->id,
-            'status' => 'diajukan'
-        ]);
-        
-        $this->actingAs($pemda)
-            ->post(route('pemda.proposal.proses', $proposal), [
-                'status' => 'diproses_pemda',
-                'catatan' => 'Sedang ditinjau'
-            ])
-            ->assertRedirect();
-        
-        $this->assertEquals('diproses_pemda', $proposal->fresh()->status);
-    }
-}
-```
+### 5.7 PublicDashboardTest.php
+**Tests**: Public portal access
+- ✅ View public dashboard
+- ✅ Access published content
+- ✅ Statistics display
+- ✅ Navigation
 
-### 5.5 Volunteer Logic
+**Coverage**: Public routes, content aggregation
 
-**File**: `tests/Feature/VolunteerTest.php`
+### 5.8 RateLimitTest.php
+**Tests**: Rate limiting
+- ✅ Volunteer registration throttle (5 attempts/minute)
+- ✅ IP-based limiting
+- ✅ Proper error messages
 
-```php
-class VolunteerTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    public function test_guest_can_register_volunteer_for_published_agenda()
-    {
-        $agenda = Agenda::create([
-            'status_publish' => true,
-            'tanggal_mulai' => now()->addDays(5),
-            'kuota' => 10,
-            'deadline_pendaftaran' => now()->addDays(2),
-            // ...
-        ]);
-        
-        $response = $this->post(route('agenda.volunteer.daftar', $agenda), [
-            'nama' => 'John Doe',
-            'email' => 'john@example.com',
-            'no_hp' => '081234567890',
-        ]);
-        
-        $response->assertRedirect();
-        $this->assertDatabaseHas('volunteer', [
-            'agenda_id' => $agenda->id,
-            'email' => 'john@example.com',
-            'status' => 'pending'
-        ]);
-    }
-    
-    // Prevent duplicate
-    public function test_guest_cannot_register_twice_for_same_agenda()
-    {
-        $agenda = Agenda::factory()->published()->create();
-        
-        // First registration
-        $this->post(route('agenda.volunteer.daftar', $agenda), [
-            'email' => 'test@example.com',
-            // ...
-        ]);
-        
-        // Duplicate attempt
-        $this->post(route('agenda.volunteer.daftar', $agenda), [
-            'email' => 'test@example.com',
-            // ...
-        ])
-        ->assertSessionHasErrors();
-    }
-    
-    // Kuota check
-    public function test_volunteer_rejected_when_quota_full()
-    {
-        $agenda = Agenda::factory()->published()->create(['kuota' => 2]);
-        
-        // Fill quota
-        Volunteer::factory()->count(2)->create([
-            'agenda_id' => $agenda->id,
-            'status' => 'diterima'
-        ]);
-        
-        // Try to register
-        $this->post(route('agenda.volunteer.daftar', $agenda), [
-            'nama' => 'New Volunteer',
-            'email' => 'new@example.com',
-            'no_hp' => '081234567890',
-        ]);
-        
-        $this->assertDatabaseMissing('volunteer', [
-            'email' => 'new@example.com'
-        ]);
-    }
-    
-    // Only accepted counts toward quota
-    public function test_only_accepted_volunteers_count_toward_quota()
-    {
-        $agenda = Agenda::factory()->published()->create(['kuota' => 1]);
-        
-        // Pending volunteer (shouldn't count)
-        Volunteer::factory()->create([
-            'agenda_id' => $agenda->id,
-            'status' => 'pending'
-        ]);
-        
-        // Should still be able to register
-        $this->post(route('agenda.volunteer.daftar', $agenda), [
-            'nama' => 'John',
-            'email' => 'john@example.com',
-            'no_hp' => '081234567890',
-        ])
-        ->assertSessionHasNoErrors();
-    }
-    
-    // Age check (deadline)
-    public function test_volunteer_rejected_after_deadline()
-    {
-        $agenda = Agenda::create([
-            'status_publish' => true,
-            'deadline_pendaftaran' => now()->subDay(), // yesterday
-            // ...
-        ]);
-        
-        $this->post(route('agenda.volunteer.daftar', $agenda), [...])
-            ->assertSessionHasErrors();
-    }
-}
-```
+**Coverage**: Rate limiting enforcement
+
+### 5.9 SessionSecurityTest.php
+**Tests**: Session security
+- ✅ Session regeneration after login
+- ✅ Logout clears session
+- ✅ CSRF token validation
+
+**Coverage**: Session security best practices
+
+### 5.10 SoftDeleteTest.php
+**Tests**: Soft delete functionality
+- ✅ Soft delete models
+- ✅ Restore deleted models
+- ✅ Force delete
+- ✅ Exclude from queries
+
+**Coverage**: Soft delete for sensitive data
+
+### 5.11 StateTransitionTest.php
+**Tests**: State machine validation
+- ✅ Valid status transitions
+- ✅ Invalid transition rejection
+- ✅ Business rules enforcement
+
+**Coverage**: State machine for proposals, volunteer, etc.
+
+### 5.12 ValidationTest.php
+**Tests**: Form validation
+- ✅ Required fields
+- ✅ Email validation
+- ✅ File upload validation
+- ✅ Custom validation rules
+
+**Coverage**: Server-side validation
+
+### 5.13 VolunteerRaceConditionTest.php
+**Tests**: Concurrency handling
+- ✅ Quota overflow prevention
+- ✅ Race condition handling
+- ✅ Atomic operations
+
+**Coverage**: Race condition prevention
+
+### 5.14 PrivacyTest.php
+**Tests**: Data privacy
+- ✅ Sensitive data protection
+- ✅ Role-based data visibility
+- ✅ Personal data access control
+
+**Coverage**: Privacy compliance
 
 ## 6. Test Data Management
 
-### 6.1 Factories (Recommended Future)
+### 6.1 Current Approach (Direct Creation)
+
+```php
+// Example from existing tests
+$pengurus = Admin::create([
+    'nama' => 'Pengurus Test',
+    'email' => 'pengurus@test.com',
+    'password' => bcrypt('password'),
+    'peran' => 'pengurus_ormada',
+]);
+
+$profil = ProfilOrmada::create([
+    'pengurus_id' => $pengurus->id,
+    'nama_ormada' => 'Ormada Test',
+    // ...
+]);
+```
+
+**Pros**: Explicit, readable
+**Cons**: Verbose, repetitive
+
+### 6.2 Recommended: Factories (Future Enhancement)
 
 ```php
 // database/factories/AdminFactory.php
@@ -530,28 +298,17 @@ $factory->define(Admin::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail(),
         'password' => bcrypt('password'),
         'peran' => $faker->randomElement(['admin', 'pemda', 'pengurus_ormada']),
+        'terakhir_masuk' => now(),
     ];
 });
+
+// Usage
+$admin = Admin::factory()->create(['peran' => 'pemda']);
+$agenda = Agenda::factory()->published()->create();
+$volunteers = Volunteer::factory()->count(5)->create(['agenda_id' => $agenda->id]);
 ```
 
-**Usage**:
-```php
-$admin = Admin::factory()->create(['peran' => 'pengurus_ormada']);
-$profil = ProfilOrmada::factory()->create(['pengurus_id' => $admin->id]);
-```
-
-### 6.2 Direct Creation (Current Approach)
-
-```php
-$pengurus = Admin::create([
-    'nama' => 'Pengurus Test',
-    'email' => 'pengurus@test.com',
-    'password' => bcrypt('password'),
-    'peran' => 'pengurus_ormada',
-]);
-```
-
-**Trade-off**: More explicit but verbose. Factories recommended untuk refactor.
+**Migration Strategy**: Gradually introduce factories while maintaining existing tests
 
 ## 7. CI/CD Integration
 
@@ -584,12 +341,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, bcmath, pdo_mysql
-      
+          extensions: mbstring, bcmath, pdo_mysql, zip
+          
       - name: Install Dependencies
         run: |
           cp .env.example .env
-          composer install --no-interaction
+          composer install --no-interaction --prefer-dist
           npm install
       
       - name: Generate Key
@@ -612,14 +369,17 @@ jobs:
 ### 7.2 Coverage Enforcement
 
 ```bash
-# Run tests with coverage
+# Run all tests with coverage
 php artisan test --coverage
 
 # Run specific test file
-php artisan test tests/Feature/ProposalTest.php
+php artisan test tests/Feature/AgendaTest.php
 
 # Run with minimum coverage (fail if < 80%)
 php artisan test --coverage --min=80
+
+# Run tests in parallel (requires setup)
+php artisan test --parallel
 ```
 
 ## 8. Test Execution Guide
@@ -651,19 +411,32 @@ php artisan test tests/Feature/ProposalTest.php
 
 # 7. Run with coverage
 php artisan test --coverage
+
+# 8. Run specific test with filter
+php artisan test --filter=test_admin_can_login
 ```
 
-### 8.2 Current Test Files
+### 8.2 Current Test Files Summary
 
-| File | Test Count | Description |
-|---|---|---|
-| `tests/Feature/AdminLoginTest.php` | 4 | Login, logout, password rehash |
-| `tests/Feature/AgendaTest.php` | - | Agenda CRUD & publish |
-| `tests/Feature/AspirasiTest.php` | - | Aspirasi creation & response |
-| `tests/Feature/PostinganTest.php` | - | Postingan CRUD & publish |
-| `tests/Feature/ProposalTest.php` | - | Proposal workflow |
-| `tests/Feature/PublicDashboardTest.php` | - | Public access to portal |
-| `tests/Feature/ExampleTest.php` | - | Placeholder |
+| File | Tests | Description | Status |
+|---|---|---|---|
+| `AdminLoginTest.php` | 4 | Login, logout, password rehash | ✅ Complete |
+| `AgendaTest.php` | 10+ | Agenda CRUD, publish, calendar | ✅ Complete |
+| `AgendaUpcomingTest.php` | 5+ | Upcoming agenda logic | ✅ Complete |
+| `AspirasiTest.php` | 8+ | Aspirasi CRUD, tanggapan | ✅ Complete |
+| `PostinganTest.php` | 8+ | Postingan CRUD, publish | ✅ Complete |
+| `ProposalTest.php` | 8+ | Proposal workflow, file upload | ✅ Complete |
+| `PublicDashboardTest.php` | 6+ | Public portal access | ✅ Complete |
+| `RateLimitTest.php` | 4+ | Volunteer registration throttle | ✅ Complete |
+| `SessionSecurityTest.php` | 5+ | Session regeneration, CSRF | ✅ Complete |
+| `SoftDeleteTest.php` | 6+ | Soft delete operations | ✅ Complete |
+| `StateTransitionTest.php` | 6+ | Status transitions | ✅ Complete |
+| `ValidationTest.php` | 10+ | Form validation | ✅ Complete |
+| `VolunteerRaceConditionTest.php` | 5+ | Quota overflow prevention | ✅ Complete |
+| `PrivacyTest.php` | 6+ | Data privacy, role access | ✅ Complete |
+| `ExampleTest.php` | 1 | Placeholder | ⚠️ Can be removed |
+
+**Total Estimated Tests**: 100+ test methods
 
 ### 8.3 Test Maintenance
 
@@ -675,12 +448,12 @@ php artisan test --coverage
 5. Check coverage: `php artisan test --coverage`
 
 **Refactoring**:
-1. Run existing tests
+1. Run existing tests: `php artisan test`
 2. Refactor code
-3. Run tests again
+3. Run tests again: `php artisan test`
 4. Cover edge cases discovered during refactor
 
-## 9. Best Practices
+## 9. Test Standards & Best Practices
 
 ### 9.1 Naming Convention
 
@@ -689,6 +462,7 @@ php artisan test --coverage
 public function test_guest_cannot_create_proposal() { ... }
 public function test_pengurus_can_update_own_postingan() { ... }
 public function test_admin_can_delete_any_agenda() { ... }
+public function test_volunteer_rejected_after_deadline() { ... }
 
 // Avoid vague names
 // ❌ public function test_creation() { ... }
@@ -710,10 +484,12 @@ $this->assertGuest();
 // 3. Database
 $this->assertDatabaseHas('table', ['column' => 'value']);
 $this->assertDatabaseMissing('table', [...]);
+$this->assertSoftDeleted('table', $data);
 
 // 4. Session
 $response->assertSessionHasErrors('field');
 $response->assertSessionHas('key', 'value');
+$response->assertSessionHasNoErrors();
 
 // 5. View/JSON
 $response->assertViewHas('data', $value);
@@ -730,6 +506,7 @@ Storage::fake()->assertMissing('file.pdf');
 - Don't depend on execution order
 - Clean up after uploads (use Storage::fake())
 - Use database transactions where possible
+- Reset state between tests
 
 ### 9.4 Edge Cases to Cover
 
@@ -740,12 +517,14 @@ Storage::fake()->assertMissing('file.pdf');
 - Maximum length strings
 - Zero values
 - Negative values
+- Boundary dates (deadline passed, future dates)
 
 // Business rules
 - Duplicate prevention (unique constraints)
 - Status transitions (diajukan → diproses_pemda)
 - Date/time boundaries (deadline passed)
 - Quota limits
+- Rate limiting thresholds
 
 // Security
 - SQL injection (Laravel handles, but test raw inputs)
@@ -753,11 +532,49 @@ Storage::fake()->assertMissing('file.pdf');
 - CSRF token validation
 - Session fixation
 - Authorization bypass attempts
+- Race conditions
+
+// Error handling
+- Invalid file types
+- File size exceeded
+- Network timeouts (mocked)
+- Concurrent modifications
 ```
 
-## 10. Troubleshooting
+## 10. Coverage Goals & Metrics
 
-### 10.1 Common Issues
+### 10.1 Current Status
+
+| Metric | Target | Current (Est.) | Status |
+|---|---|---|---|
+| Overall Coverage | ≥ 80% | ~75% | ⚠️ Close |
+| Feature Tests | ≥ 90% | ~85% | ✅ Good |
+| Unit Tests | ≥ 75% | ~60% | ⚠️ Needs work |
+| Critical Paths | 100% | ~95% | ✅ Good |
+
+### 10.2 Priority Areas for New Tests
+
+**High Priority (Add immediately)**:
+1. Profil Ormada CRUD tests
+2. Anggota Ormada CRUD tests
+3. File upload edge cases
+4. Pagination tests
+5. Search & filter tests
+
+**Medium Priority (Add this sprint)**:
+1. Unit tests for Models
+2. Policy tests
+3. Helper tests
+4. Integration tests for complex workflows
+
+**Low Priority (Add next sprint)**:
+1. Performance tests
+2. Load tests
+3. E2E tests with browser automation
+
+## 11. Troubleshooting
+
+### 11.1 Common Issues
 
 **Issue**: `RefreshDatabase` not working
 ```php
@@ -785,37 +602,135 @@ $this->actingAs($admin, 'admin'); // 'admin' = guard name
 
 **Issue**: Factory not defined
 ```php
-// Create via admin factory
-// Option 1: Create manually (current)
+// Option 1: Create manually (current approach)
 $admin = Admin::create([...]);
 
-// Option 2: Create factory
+// Option 2: Create factory (future)
 $admin = Admin::factory()->create([...]);
 ```
 
-## 11. Test Metrics
+**Issue**: Race condition in volunteer tests
+```php
+// Use DatabaseTransactions to prevent race conditions
+use DatabaseTransactions;
 
-### 11.1 Coverage Goals
+// Or use lock() for atomic operations
+DB::transaction(function () {
+    // Your test code
+});
+```
 
-| Module | Line Coverage | Branch Coverage |
-|---|---|---|
-| Authentication | 100% | 100% |
-| Authorization | 95% | 95% |
-| CRUD Operations | 90% | 85% |
-| Business Logic | 85% | 80% |
-| **Overall Target** | **≥80%** | **≥75%** |
+## 12. TDD Workflow
 
-### 11.2 Success Criteria
+### 12.1 Red-Green-Refactor Cycle
 
-- [ ] All tests pass (green)
-- [ ] Coverage ≥ 80% overall
-- [ ] No skipped tests
-- [ ] No test flakiness (run 3x, all pass)
-- [ ] PRD critical paths fully covered
+```
+1. RED: Write failing test
+   ├─ Write test method
+   ├─ Run test: php artisan test
+   └─ Verify it FAILS
 
-## 12. Appendix
+2. GREEN: Write minimal code to pass
+   ├─ Implement feature
+   ├─ Run test: php artisan test
+   └─ Verify it PASSES
 
-### 12.1 Useful Assertions
+3. REFACTOR: Clean up code
+   ├─ Improve implementation
+   ├─ Run test: php artisan test
+   └─ Verify all tests still PASS
+
+4. COMMIT: Save progress
+   └─ git commit -m "feat: add volunteer registration with quota validation"
+```
+
+### 12.2 Example TDD Session
+
+```php
+// 1. RED - Write failing test
+public function test_volunteer_rejected_when_quota_full()
+{
+    $agenda = Agenda::factory()->published()->create(['kuota' => 2]);
+    
+    Volunteer::factory()->count(2)->create([
+        'agenda_id' => $agenda->id,
+        'status' => 'diterima'
+    ]);
+    
+    $this->post(route('agenda.volunteer.daftar', $agenda), [...])
+        ->assertSessionHasErrors();
+}
+
+// 2. Run test (FAILS)
+// php artisan test --filter=test_volunteer_rejected_when_quota_full
+
+// 3. GREEN - Implement minimal code
+// In AgendaController@daftarVolunteer:
+if ($agenda->volunteers()->where('status', 'diterima')->count() >= $agenda->kuota) {
+    return back()->withErrors(['email' => 'Kuota volunteer telah penuh']);
+}
+
+// 4. Run test (PASSES)
+// php artisan test --filter=test_volunteer_rejected_when_quota_full
+
+// 5. REFACTOR - Extract to service if needed
+// Move quota check to AgendaService::checkQuotaAvailability()
+
+// 6. Run all tests
+// php artisan test
+```
+
+## 13. Future Enhancements
+
+### 13.1 Planned Tests (Next Sprint)
+
+```php
+// Profile & Anggota Tests
+tests/Feature/ProfilOrmadaTest.php
+tests/Feature/AnggotaOrmadaTest.php
+
+// Advanced Feature Tests
+tests/Feature/PengumumanTest.php
+tests/Feature/CalendarTest.php
+tests/Feature/SearchFilterTest.php
+
+// Security Tests
+tests/Feature/Security/XssProtectionTest.php
+tests/Feature/Security/SqlInjectionTest.php
+tests/Feature/Security/UnauthorizedAccessTest.php
+
+// Unit Tests
+tests/Unit/Models/ProfilOrmadaModelTest.php
+tests/Unit/Models/AnggotaOrmadaModelTest.php
+tests/Unit/Policies/AgendaPolicyTest.php
+tests/Unit/Services/AgendaServiceTest.php
+
+// Integration Tests
+tests/Feature/Integration/VolunteerRegistrationFlowTest.php
+tests/Feature/Integration/ProposalApprovalFlowTest.php
+```
+
+### 13.2 Testing Improvements
+
+1. **Add Factories**: Reduce boilerplate in test data creation
+2. **Add Test Traits**: Reusable test methods for common scenarios
+3. **Add Test Helpers**: Custom assertions for business logic
+4. **Add Performance Tests**: Load testing for critical endpoints
+5. **Add E2E Tests**: Browser automation with Laravel Dusk
+
+## 14. Referensi
+
+- **PRD**: `docs/PRD.md`
+- **Laravel Testing Docs**: https://laravel.com/docs/testing
+- **PHPUnit Docs**: https://phpunit.de/manual/current/en/
+- **Current Tests**: `tests/Feature/*Test.php`
+- **Test Base**: `tests/TestCase.php`
+- **Latest Commit**: ce61f8e
+- **Framework**: Laravel 12 with PHPUnit 11.5.50
+
+## 15. Appendix
+
+### 15.1 Useful Assertions
 
 ```php
 // HTTP
@@ -853,7 +768,7 @@ assertAuthenticatedAs($user)
 assertValid($validator)
 ```
 
-### 12.2 Test Helpers
+### 15.2 Test Helpers
 
 ```php
 // Acting as user
@@ -869,12 +784,34 @@ $this->withHeaders([...])->get('/');
 
 // Following redirects
 $response->assertFollowsRedirects();
+
+// Without middleware
+Route::withoutMiddleware([RateLimiter::class])->get('/');
+
+// Mocking
+Storage::fake('local');
+Notification::fake();
+Mail::fake();
 ```
 
-## 13. Referensi
+### 15.3 Test Organization Tips
 
-- **PRD**: `docs/PRD.md`
-- **Laravel Testing Docs**: https://laravel.com/docs/testing
-- **PHPUnit Docs**: https://phpunit.de/manual/current/en/
-- **Current Tests**: `tests/Feature/*Test.php`
-- **Test Base**: `tests/TestCase.php`
+```
+Group related tests in classes:
+- AdminLoginTest: All login/logout scenarios
+- AgendaTest: All agenda CRUD operations
+- VolunteerTest: All volunteer-related tests
+
+Use test methods for specific scenarios:
+- test_[role]_can_[action]
+- test_[role]_cannot_[action]
+- test_[feature]_rejects_[invalid_input]
+
+Add data providers for multiple scenarios:
+/**
+ * @dataProvider invalidEmailProvider
+ */
+public function test_login_rejects_invalid_email($email)
+{
+    // Test with multiple invalid emails
+}
