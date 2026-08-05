@@ -52,6 +52,8 @@ class AgendaController extends Controller
 
         if ($user->isPemda()) {
             $view = 'pemda.agenda.create';
+        } elseif ($user->isPengurusOrmada()) {
+            $view = 'pengurus.agenda.create';
         } else {
             $view = 'admin.agenda.create';
         }
@@ -144,6 +146,8 @@ class AgendaController extends Controller
 
         if ($user->isPemda()) {
             $view = 'pemda.agenda.edit';
+        } elseif ($user->isPengurusOrmada()) {
+            $view = 'pengurus.agenda.edit';
         } else {
             $view = 'admin.agenda.edit';
         }
