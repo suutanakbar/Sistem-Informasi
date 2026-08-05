@@ -53,8 +53,8 @@ class Volunteer extends Model
 
     public const ALLOWED_TRANSITIONS = [
         self::STATUS_PENDING => [self::STATUS_DITERIMA, self::STATUS_DITOLAK],
-        self::STATUS_DITERIMA => [self::STATUS_DITOLAK, self::STATUS_PENDING],
-        self::STATUS_DITOLAK => [self::STATUS_DITERIMA, self::STATUS_PENDING],
+        self::STATUS_DITERIMA => [],
+        self::STATUS_DITOLAK => [],
     ];
 
     public function canTransitionTo(string $newStatus): bool
