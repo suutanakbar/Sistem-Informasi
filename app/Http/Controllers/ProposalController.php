@@ -34,6 +34,24 @@ class ProposalController extends Controller
         $statusOptions = ['diajukan', 'diproses_pemda', 'dana_cair', 'ditolak'];
         $jenisBantuanOptions = ['dana', 'izin', 'tempat', 'fasilitas'];
 
+        // Statistik untuk pemda dan pengurus
+        $stats = null;
+        if ($user->isPemda()) {
+            $stats = [
+                'total' => Proposal::where('dinas_tujuan_id', $user->id)->count(),
+                'diajukan' => Proposal::where('dinas_tujuan_id', $user->id)->where('status', 'diajukan')->count(),
+                'diproses_pemda' => Proposal::where('dinas_tujuan_id', $user->id)->where('status', 'diproses_pemda')->count(),
+                'dana_cair' => Proposal::where('dinas_tujuan_id', $user->id)->where('status', 'dana_cair')->count(),
+            ];
+        } elseif ($user->isPengurusOrmada()) {
+            $stats = [
+                'total' => Proposal::where('admin_id', $user->id)->count(),
+                'diajukan' => Proposal::where('admin_id', $user->id)->where('status', 'diajukan')->count(),
+                'diproses_pemda' => Proposal::where('admin_id', $user->id)->where('status', 'diproses_pemda')->count(),
+                'dana_cair' => Proposal::where('admin_id', $user->id)->where('status', 'dana_cair')->count(),
+            ];
+        }
+
         if ($user->isPengurusOrmada()) {
             $view = 'pengurus.proposal.index';
         } elseif ($user->isPemda()) {
@@ -42,7 +60,7 @@ class ProposalController extends Controller
             $view = 'admin.proposal.index';
         }
         
-        return view($view, compact('proposals', 'statusOptions', 'jenisBantuanOptions'));
+        return view($view, compact('proposals', 'statusOptions', 'jenisBantuanOptions', 'stats'));
     }
 
     public function create(Request $request): View
