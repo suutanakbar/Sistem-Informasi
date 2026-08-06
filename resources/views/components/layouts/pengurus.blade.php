@@ -68,5 +68,8 @@
             </main>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

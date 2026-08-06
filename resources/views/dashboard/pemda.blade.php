@@ -81,4 +81,23 @@
             <p class="mt-2 text-sm text-zinc-500">Berita dan postingan yang sudah dibuat.</p>
         </section>
     </div>
+    @push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        if (calendarEl) {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '{{ route("agenda.calendar") }}',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }
+            });
+            calendar.render();
+        }
+    });
+    </script>
+    @endpush
 </x-layouts.pemda>

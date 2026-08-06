@@ -90,6 +90,25 @@
             <p class="mt-2 text-sm text-zinc-500">Berita dan postingan yang sudah dibuat.</p>
         </section>
     </div>
+    <?php $__env->startPush('scripts'); ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        if (calendarEl) {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '<?php echo e(route("agenda.calendar")); ?>',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }
+            });
+            calendar.render();
+        }
+    });
+    </script>
+    <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal990183e42b3bc9a3478730eaf04b4592)): ?>
@@ -99,4 +118,5 @@
 <?php if (isset($__componentOriginal990183e42b3bc9a3478730eaf04b4592)): ?>
 <?php $component = $__componentOriginal990183e42b3bc9a3478730eaf04b4592; ?>
 <?php unset($__componentOriginal990183e42b3bc9a3478730eaf04b4592); ?>
-<?php endif; ?><?php /**PATH C:\project\magang\resources\views/dashboard/pemda.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+<?php /**PATH C:\project\magang\resources\views/dashboard/pemda.blade.php ENDPATH**/ ?>

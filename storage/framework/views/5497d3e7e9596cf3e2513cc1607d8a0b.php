@@ -93,6 +93,25 @@
             </div>
         </section>
     </div>
+    <?php $__env->startPush('scripts'); ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        if (calendarEl) {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '<?php echo e(route("agenda.calendar")); ?>',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }
+            });
+            calendar.render();
+        }
+    });
+    </script>
+    <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal71c8a89aeda48b8a852a6b7cf016f61e)): ?>
@@ -102,4 +121,5 @@
 <?php if (isset($__componentOriginal71c8a89aeda48b8a852a6b7cf016f61e)): ?>
 <?php $component = $__componentOriginal71c8a89aeda48b8a852a6b7cf016f61e; ?>
 <?php unset($__componentOriginal71c8a89aeda48b8a852a6b7cf016f61e); ?>
-<?php endif; ?><?php /**PATH C:\project\magang\resources\views/dashboard/pengurus.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+<?php /**PATH C:\project\magang\resources\views/dashboard/pengurus.blade.php ENDPATH**/ ?>
