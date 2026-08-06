@@ -19,6 +19,10 @@ class PublicDashboardController extends Controller
         $agendas = Agenda::query()
             ->with('admin')
             ->published()
+            ->where(function ($query) {
+                $query->where('waktu_selesai', '>=', now())
+                      ->orWhereNull('waktu_selesai');
+            })
             ->where('waktu_mulai', '>=', now()->subMonths(1))
             ->where('waktu_mulai', '<=', now()->addMonths(3))
             ->orderBy('waktu_mulai')
@@ -257,11 +261,6 @@ class PublicDashboardController extends Controller
     public function showAgenda(Agenda $agenda): View
     {
         abort_if(!$agenda->is_published, 404);
-        
-        // Block access to agendas that have ended
-        if ($agenda->waktu_selesai && $agenda->waktu_selesai < now()) {
-            abort(404);
-        }
 
         $agenda->load('admin');
         
