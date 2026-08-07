@@ -37,7 +37,14 @@ function initCalendar(elementId, eventsUrl) {
             right: 'dayGridMonth,timeGridWeek,timeGridDay',
         },
         locale: 'id',
-        events: eventsUrl,
+        eventSources: [
+            {
+                url: eventsUrl,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }
+        ],
         height: 'auto',
         eventContent: function(arg) {
             const event = arg.event;

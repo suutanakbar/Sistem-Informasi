@@ -91,7 +91,14 @@
         if (calendarEl) {
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: '{{ route("agenda.calendar") }}',
+                eventSources: [
+                    {
+                        url: '{{ route("agenda.calendar") }}',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }
+                ],
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',

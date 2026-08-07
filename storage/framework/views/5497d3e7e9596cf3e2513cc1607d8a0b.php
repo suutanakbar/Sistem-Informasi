@@ -100,7 +100,14 @@
         if (calendarEl) {
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: '<?php echo e(route("agenda.calendar")); ?>',
+                eventSources: [
+                    {
+                        url: '<?php echo e(route("agenda.calendar")); ?>',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }
+                ],
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
