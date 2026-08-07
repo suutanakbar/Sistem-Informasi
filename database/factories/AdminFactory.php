@@ -9,14 +9,12 @@ use Illuminate\Support\Str;
 
 class AdminFactory extends Factory
 {
-    protected static ?string $password;
-
     public function definition(): array
     {
         return [
             'nama' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => 'password',
             'peran' => fake()->randomElement(['admin', 'pemda', 'pengurus_ormada']),
             'terakhir_masuk' => now(),
         ];

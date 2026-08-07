@@ -29,8 +29,6 @@ class AdminController extends Controller
             'peran' => ['required', 'in:admin,pemda,pengurus_ormada'],
         ]);
 
-        $validated['password'] = bcrypt($validated['password']);
-
         Admin::create($validated);
 
         return redirect()->route('admin.index')
@@ -51,9 +49,7 @@ class AdminController extends Controller
             'peran' => ['required', 'in:admin,pemda,pengurus_ormada'],
         ]);
 
-        if (!empty($validated['password'])) {
-            $validated['password'] = bcrypt($validated['password']);
-        } else {
+        if (empty($validated['password'])) {
             unset($validated['password']);
         }
 

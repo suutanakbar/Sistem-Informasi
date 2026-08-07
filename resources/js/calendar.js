@@ -5,6 +5,22 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 window.FullCalendar = { Calendar };
 
+function escapeHtml(text) {
+    if (text == null) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function sanitizeImageUrl(url) {
+    if (!url) return null;
+    if (typeof url !== 'string') return null;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    return null;
+}
+
 function initCalendar(elementId, eventsUrl) {
     const calendarEl = document.getElementById(elementId);
 
@@ -26,19 +42,39 @@ function initCalendar(elementId, eventsUrl) {
         eventContent: function(arg) {
             const event = arg.event;
             const foto = event.extendedProps.foto;
-            
+            const container = document.createElement('div');
+
+            container.className = 'fc-event-custom';
+
             if (foto) {
-                return {
-                    html: `<div class="fc-event-custom" style="padding: 2px;">
-                        <img src="${foto}" style="width: 100%; height: 40px; object-fit: cover; border-radius: 3px; margin-bottom: 2px;">
-                        <div style="font-size: 11px; font-weight: 600; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${event.title}</div>
-                    </div>`
-                };
+                const image = document.createElement('img');
+
+                const safeFoto = sanitizeImageUrl(foto);
+                if (safeFoto) {
+                    image.src = safeFoto;
+                    image.style.cssText = 'width: 100%; height: 40px; object-fit: cover; border-radius: 3px; margin-bottom: 2px;';
+                    container.style.padding = '2px';
+                    container.appendChild(image);
+                }
             }
-            
-            return {
-                html: `<div class="fc-event-custom">${event.title}</div>`
-            };
+
+            const title = document.createElement('div');
+
+            title.textContent = event.title;
+
+            if (foto) {
+                title.style.cssText = 'font-size: 11px; font-weight: 600; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;';
+            }
+
+            container.appendChild(title);
+
+            // Add extended props safely
+            const kategori = document.createElement('div');
+            kategori.textContent = 'Kategori: ' + (event.extendedProps.kategori || '');
+            kategori.style.cssText = 'font-size: 10px; color: #666; margin-top: 2px;';
+            container.appendChild(kategori);
+
+            return { domNodes: [container] };
         },
         eventClick: function (info) {
             const props = info.event.extendedProps;
@@ -53,23 +89,24 @@ function initCalendar(elementId, eventsUrl) {
                   })
                 : null;
 
-            let detail = `<strong>${info.event.title}</strong><br><br>`;
+            const safeTitle = escapeHtml(info.event.title);
+            const safeKategori = escapeHtml(props.kategori);
+            const safeTempat = escapeHtml(props.tempat);
+            const safeDeskripsi = escapeHtml(props.deskripsi);
+            
+            let detail = `${safeTitle}\n\n`;
             
             if (props.type === 'deadline') {
-                detail += `<strong>Tipe:</strong> <span style="color:#ef4444">Deadline Pendaftaran Volunteer</span><br>`;
-                detail += `<strong>Deadline:</strong> ${start}<br>`;
+                detail += `Tipe: Deadline Pendaftaran Volunteer\n`;
+                detail += `Deadline: ${start}\n`;
             } else {
-                detail += `<strong>Kategori:</strong> ${props.kategori}<br>`;
-                detail += `<strong>Tempat:</strong> ${props.tempat}<br>`;
-                detail += `<strong>Waktu:</strong> ${start}`;
+                detail += `Kategori: ${safeKategori}\n`;
+                detail += `Tempat: ${safeTempat}\n`;
+                detail += `Waktu: ${start}`;
                 if (end) {
                     detail += ` - ${end}`;
                 }
-                detail += `<br><br><em>${props.deskripsi}</em>`;
-                
-                if (props.foto) {
-                    detail += `<br><img src="${props.foto}" style="max-width: 200px; max-height: 150px; margin-top: 8px; border-radius: 4px;">`;
-                }
+                detail += `\n\nDeskripsi: ${safeDeskripsi}`;
             }
 
             alert(detail);
@@ -113,14 +150,19 @@ window.initPublicCalendarFromGlobal = function() {
                   })
                 : null;
 
-            let detail = `<strong>${info.event.title}</strong><br><br>`;
-            detail += `<strong>Kategori:</strong> ${props.kategori}<br>`;
-            detail += `<strong>Tempat:</strong> ${props.tempat}<br>`;
-            detail += `<strong>Waktu:</strong> ${start}`;
+            const safeTitle = escapeHtml(info.event.title);
+            const safeKategori = escapeHtml(props.kategori);
+            const safeTempat = escapeHtml(props.tempat);
+            const safeDeskripsi = escapeHtml(props.deskripsi);
+            
+            let detail = `${safeTitle}\n\n`;
+            detail += `Kategori: ${safeKategori}\n`;
+            detail += `Tempat: ${safeTempat}\n`;
+            detail += `Waktu: ${start}`;
             if (end) {
                 detail += ` - ${end}`;
             }
-            detail += `<br><br><em>${props.deskripsi}</em>`;
+            detail += `\n\nDeskripsi: ${safeDeskripsi}`;
 
             if (props.detail_url) {
                 window.location.href = props.detail_url;

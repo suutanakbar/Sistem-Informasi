@@ -9,7 +9,6 @@ use App\Models\Postingan;
 use App\Models\ProfilOrmada;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class ClearAndDummySeeder extends Seeder
 {
@@ -37,7 +36,7 @@ class ClearAndDummySeeder extends Seeder
         $admin = Admin::factory()->create([
             'nama' => 'Admin Utama',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
             'peran' => 'admin',
             'terakhir_masuk' => now(),
         ]);
@@ -46,7 +45,7 @@ class ClearAndDummySeeder extends Seeder
         $pemda = Admin::factory()->create([
             'nama' => 'Dinas Pemuda dan Olahraga',
             'email' => 'pemda@example.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
             'peran' => 'pemda',
             'terakhir_masuk' => now(),
         ]);
@@ -57,7 +56,7 @@ class ClearAndDummySeeder extends Seeder
             $pengurus[] = Admin::factory()->create([
                 'nama' => "Pengurus Ormada $i",
                 'email' => "pengurus$i@example.com",
-                'password' => Hash::make('password'),
+                'password' => 'password',
                 'peran' => 'pengurus_ormada',
                 'terakhir_masuk' => now(),
             ]);

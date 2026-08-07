@@ -25,12 +25,13 @@ class Admin extends Authenticatable
         'terakhir_masuk',
     ];
 
-    protected $hidden = [];
+    protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {
         return [
             'terakhir_masuk' => 'datetime',
+            'password' => 'hashed',
         ];
     }
 
