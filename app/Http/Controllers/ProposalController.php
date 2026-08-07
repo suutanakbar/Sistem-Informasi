@@ -175,21 +175,29 @@ class ProposalController extends Controller
             'catatan_pemda' => ['nullable', 'string'],
         ]);
 
-        // State transition guard
-        if (!$proposal->canTransitionTo($validated['status'])) {
-            $currentStatus = $proposal->status;
-            $newStatus = $validated['status'];
-            
-            if (in_array($currentStatus, [Proposal::STATUS_DANA_CAIR, Proposal::STATUS_DITOLAK])) {
-                return back()->with('error', "Proposal dengan status '{$currentStatus}' adalah final dan tidak dapat diubah.");
+        // Use transaction with locking to prevent race condition
+        $result = \Illuminate\Support\Facades\DB::transaction(function () use ($proposal, $validated) {
+            // Lock row proposal untuk mencegah race condition
+            $lockedProposal = Proposal::where('id', $proposal->id)->lockForUpdate()->first();
+
+            // State transition guard (re-check setelah lock)
+            if (!$lockedProposal->canTransitionTo($validated['status'])) {
+                $currentStatus = $lockedProposal->status;
+                $newStatus = $validated['status'];
+                
+                if (in_array($currentStatus, [Proposal::STATUS_DANA_CAIR, Proposal::STATUS_DITOLAK])) {
+                    return back()->with('error', "Proposal dengan status '{$currentStatus}' adalah final dan tidak dapat diubah.");
+                }
+                
+                return back()->with('error', "Transisi status dari '{$currentStatus}' ke '{$newStatus}' tidak diizinkan.");
             }
-            
-            return back()->with('error', "Transisi status dari '{$currentStatus}' ke '{$newStatus}' tidak diizinkan.");
-        }
 
-        $proposal->update($validated);
+            $lockedProposal->update($validated);
 
-        return back()->with('status', 'Status proposal berhasil diperbarui.');
+            return back()->with('status', 'Status proposal berhasil diperbarui.');
+        });
+
+        return $result;
     }
 
     public function destroy(Request $request, Proposal $proposal): RedirectResponse

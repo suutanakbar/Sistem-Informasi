@@ -22,7 +22,7 @@ class Pengumuman extends Model
         'foto',
         'file',
         'tanggal_publish',
-        'dibuat_oleh',
+        'admin_id',
     ];
 
     protected function casts(): array
@@ -34,7 +34,7 @@ class Pengumuman extends Model
 
     public function pembuat(): BelongsTo
     {
-        return $this->belongsTo(Admin::class, 'dibuat_oleh');
+        return $this->belongsTo(Admin::class, 'admin_id');
     }
 
     public function scopePublik(Builder $query): Builder

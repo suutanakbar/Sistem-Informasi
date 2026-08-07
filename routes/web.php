@@ -14,15 +14,6 @@ use App\Http\Controllers\VolunteerController;
 
 Route::get('/', [PublicDashboardController::class, 'index'])->name('public.home');
 
-// Serve images from public/storage directory (real files, not symlink)
-Route::get('/storage/{path}', function ($path) {
-    $filePath = public_path('storage/' . $path);
-    if (!file_exists($filePath)) {
-        abort(404);
-    }
-    return response()->file($filePath);
-})->where('path', '.*');
-
 Route::get('/publik/aspirasi', [PublicDashboardController::class, 'aspirasi'])->name('public.aspirasi');
 Route::get('/publik/postingan', [PublicDashboardController::class, 'postingan'])->name('public.postingan');
 Route::get('/publik/postingan/{postingan}', [PublicDashboardController::class, 'showPostingan'])->name('public.postingan.show');
@@ -39,6 +30,9 @@ Route::post('/agenda/{agenda}/daftar-volunteer', [AgendaController::class, 'daft
     ->middleware('throttle:5,1')
     ->name('agenda.daftar-volunteer');
 
+// Note: Insecure /storage/{path} route has been removed from this file.
+// Use Laravel's storage:link and web server static file serving instead.
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -51,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin routes - full access
     Route::middleware('role:admin')->group(function () {
-        Route::resource('admin', \App\Http\Controllers\AdminController::class);
+        Route::resource('admin', \App\Http\Controllers\AdminController::class)->except(['show']);
     });
 
     // Profil Ormada routes - accessible by admin, pemda, and pengurus

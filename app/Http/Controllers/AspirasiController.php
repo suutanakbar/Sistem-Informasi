@@ -79,14 +79,19 @@ class AspirasiController extends Controller
         $user = $request->user();
         abort_unless($user->isPengurusOrmada() || $user->isAdmin(), 403);
 
-        $validated = $this->validateAspirasi($request);
+        $validated = $this->validateAspirasi($request, $user);
         
         // Set profil ormada (server-side, tidak percaya input client)
-        $profil = $user->profilOrmada()->first();
-        if (!$profil) {
-            return redirect()->route('aspirasi.create')->with('error', 'Anda belum memiliki profil ormada.');
+        if ($user->isPengurusOrmada()) {
+            $profil = $user->profilOrmada()->first();
+            if (!$profil) {
+                return redirect()->route('aspirasi.create')->with('error', 'Anda belum memiliki profil ormada.');
+            }
+            $validated['profil_ormada_id'] = $profil->id;
+        } else {
+            // Admin: gunakan profil yang dipilih dari form
+            $validated['profil_ormada_id'] = $validated['profil_ormada_id'];
         }
-        $validated['profil_ormada_id'] = $profil->id;
 
         // Handle file upload
         if ($request->hasFile('file')) {
@@ -149,7 +154,7 @@ class AspirasiController extends Controller
             403
         );
 
-        $validated = $this->validateAspirasi($request, $aspirasi);
+        $validated = $this->validateAspirasi($request, $user, $aspirasi);
 
         // Handle file upload
         if ($request->hasFile('file')) {
@@ -202,15 +207,20 @@ class AspirasiController extends Controller
         return back()->with('status', 'Tanggapan berhasil disimpan.');
     }
 
-    private function validateAspirasi(Request $request, ?Aspirasi $aspirasi = null): array
+    private function validateAspirasi(Request $request, ?Admin $user = null, ?Aspirasi $aspirasi = null): array
     {
         $rules = [
             'topik_aspirasi' => ['required', 'string', 'max:255'],
             'detail_aspirasi' => ['required', 'string'],
             'file' => [$aspirasi ? 'nullable' : 'nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
-            // profil_ormada_id ditentukan server-side, tidak perlu validasi dari client
-            'profil_ormada_id' => ['nullable', 'exists:profil_ormada,id'],
         ];
+
+        // Admin harus memilih profil ormada saat create, tidak perlu saat update
+        if ($user && $user->isAdmin() && !$aspirasi) {
+            $rules['profil_ormada_id'] = ['required', 'exists:profil_ormada,id'];
+        } else {
+            $rules['profil_ormada_id'] = ['nullable', 'exists:profil_ormada,id'];
+        }
 
         return $request->validate($rules);
     }

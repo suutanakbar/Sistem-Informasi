@@ -31,7 +31,7 @@ class DashboardController extends Controller
         if ($user->isPemda()) {
             return view('dashboard.pemda', [
                 'totalOrmada' => ProfilOrmada::count(),
-                'totalAnggota' => AnggotaOrmada::where('status_aktif', 'aktif')->count(),
+                'totalAnggota' => AnggotaOrmada::whereIn('status_aktif', ['mahasiswa', 'fungsionaris'])->count(),
                 'agendaMendatang' => \App\Models\Agenda::where('waktu_mulai', '>=', now())->count(),
                 'proposalMenunggu' => \App\Models\Proposal::where('status', 'diajukan')->count(),
             ]);
