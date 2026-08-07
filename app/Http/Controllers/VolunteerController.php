@@ -41,7 +41,7 @@ class VolunteerController extends Controller
         abort_unless($user->isPemda() || $user->isAdmin(), 403);
 
         $validated = $request->validate([
-            'status' => ['required', 'in:diterima,ditolak,pending'],
+            'status' => ['required', 'in:diterima,ditolak'],
             'catatan_penolakan' => ['nullable', 'string', 'max:1000'],
         ]);
 

@@ -154,7 +154,7 @@
                         <label for="status_volunteer" class="block text-sm font-medium text-gray-700">Status</label>
                         <select name="status_volunteer" id="status_volunteer" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                             <option value="">Semua Status</option>
-                            <option value="menunggu" {{ request('status_volunteer') === 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                            <option value="pending" {{ request('status_volunteer') === 'pending' ? 'selected' : '' }}>Menunggu</option>
                             <option value="diterima" {{ request('status_volunteer') === 'diterima' ? 'selected' : '' }}>Diterima</option>
                             <option value="ditolak" {{ request('status_volunteer') === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                         </select>
@@ -190,7 +190,7 @@
                                     @endif
                                 </td>
                                 <td class="px-5 py-3 text-right text-sm font-medium">
-                                    @if($volunteer->status === 'menunggu')
+                                    @if($volunteer->status === 'pending')
                                         <form action="{{ route('volunteer.update-status', $volunteer) }}" method="POST" class="inline-block" onsubmit="return confirm('Terima volunteer ini?')">
                                             @csrf
                                             @method('PATCH')
