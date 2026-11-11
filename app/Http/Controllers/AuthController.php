@@ -13,7 +13,10 @@ class AuthController extends Controller
     public function showLogin(Request $request): View|RedirectResponse
     {
         if ($request->user()) {
-            return redirect()->route('dashboard');
+            if ($request->user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('orda.dashboard');
         }
 
         return view('auth.login');
@@ -39,11 +42,18 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $request->user()->forceFill([
+        $user = $request->user();
+
+        $user->forceFill([
             'terakhir_masuk' => now(),
         ])->save();
 
-        return redirect()->intended(route('dashboard'));
+        // Mengarahkan langsung berdasarkan role tanpa menyimpan memori rute API lama (intended)
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('orda.dashboard');
     }
 
     public function logout(Request $request): RedirectResponse
